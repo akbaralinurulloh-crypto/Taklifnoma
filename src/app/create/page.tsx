@@ -10,7 +10,7 @@ export default async function CreatePage() {
   const tracks = await loadTracks();
   return (
     <main className="flex-1">
-      <header className="border-b border-[#e4d9c3] bg-white">
+      <header className="border-b border-[#cfdcd9] bg-white">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
           <Link href="/" className="font-serif text-xl text-ink">
             Taklifnoma

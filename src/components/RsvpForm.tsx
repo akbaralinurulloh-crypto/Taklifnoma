@@ -43,11 +43,11 @@ export function RsvpForm({ slug }: { slug: string }) {
   }
 
   return (
-    <form onSubmit={submit} className="mx-auto max-w-[420px] rounded-xl border border-[#e4d9c3] bg-white p-5 text-ink">
+    <form onSubmit={submit} className="mx-auto max-w-[420px] rounded-xl border border-[#cfdcd9] bg-white p-5 text-ink">
       <h2 className="font-serif text-lg">Kelishingizni tasdiqlang</h2>
       <label className="mt-3 block text-sm">
         Ismingiz
-        <input value={name} maxLength={80} onChange={(e) => setName(e.target.value)} className="mt-1 w-full rounded-lg border border-[#d8cdb8] px-3 py-2" autoComplete="name" />
+        <input value={name} maxLength={80} onChange={(e) => setName(e.target.value)} className="mt-1 w-full rounded-lg border border-[#bccbc8] px-3 py-2" autoComplete="name" />
       </label>
       <div className="mt-3 flex gap-4 text-sm">
         <label className="flex items-center gap-2">

@@ -56,16 +56,19 @@ async function checkMusic(repo: Repo, musicId: string | null | undefined): Promi
   return m.id;
 }
 
+/** To'y sanasi 3 oydan ko'proq o'tib ketgan bo'lsa rad etiladi (yaqinda o'tgan sana mumkin). */
+export function checkNotTooOld(iso: string, now: Date) {
+  const limit = new Date(now.getTime());
+  limit.setUTCMonth(limit.getUTCMonth() - 3);
+  if (new Date(iso).getTime() < limit.getTime()) {
+    throw validationError({ date: "To‘y sanasi 3 oydan ko‘proq o‘tib ketgan bo‘lmasligi kerak" });
+  }
+}
+
 function checkPhotoPath(p: unknown): string | null {
   if (p === null || p === undefined || p === "") return null;
   if (typeof p !== "string" || !PHOTO_RE.test(p)) throw validationError({ photo: "Rasm manzili noto‘g‘ri" });
   return p;
-}
-
-function futureOnly(iso: string, now: Date) {
-  if (new Date(iso).getTime() < now.getTime()) {
-    throw validationError({ date: "To‘y sanasi o‘tib ketgan bo‘lmasligi kerak" });
-  }
 }
 
 export async function createInvitation(repo: Repo, raw: unknown, now = new Date()) {
@@ -87,7 +90,7 @@ export async function createInvitation(repo: Repo, raw: unknown, now = new Date(
   const first = await replay();
   if (first) return first;
 
-  futureOnly(iso, now);
+  checkNotTooOld(iso, now);
   const musicId = await checkMusic(repo, data.musicId);
   const photoPath = checkPhotoPath(body.photoPath);
 
@@ -151,7 +154,7 @@ export async function updateInvitation(repo: Repo, token: string, raw: unknown, 
   const row = await getForEdit(repo, token);
   const body = asBody(raw);
   const { data, iso } = parseFields(body);
-  if (iso !== row.wedding_at) futureOnly(iso, now);
+  if (iso !== row.wedding_at) checkNotTooOld(iso, now);
   const musicId = await checkMusic(repo, data.musicId);
 
   let photoPath = row.photo_path;

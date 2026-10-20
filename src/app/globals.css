@@ -1,12 +1,13 @@
 @import "tailwindcss";
 
 :root {
-  --ivory: #fbf8f1;
-  --beige: #efe6d6;
-  --gold: #b08d3c;
-  --gold-dark: #8a6d26;
-  --ink: #2a2622;
-  --muted: #6b6258;
+  --ivory: #f4f7f6;
+  --beige: #e3ecea;
+  --gold: #14a39e;
+  --gold-dark: #0d7c7a;
+  --ink: #0f2a43;
+  --muted: #4f6474;
+  --saffron: #f0a62b;
   --background: var(--ivory);
   --foreground: var(--ink);
 }
@@ -22,6 +23,7 @@
   --color-muted: var(--muted);
   --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
   --font-serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  --color-saffron: var(--saffron);
 }
 
 body {
@@ -29,3 +31,42 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans);
 }
+
+/* ---- Taklifnoma animatsiyalari (faqat CSS, server renderida ham ishlaydi) ---- */
+@keyframes tk-rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+@keyframes tk-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes tk-float { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-9px) rotate(3deg); } }
+@keyframes tk-twinkle { 0%, 100% { opacity: .2; transform: scale(.7); } 50% { opacity: 1; transform: scale(1.15); } }
+@keyframes tk-shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+@keyframes tk-spin { to { transform: rotate(360deg); } }
+@keyframes tk-pulse-ring { 0% { box-shadow: 0 0 0 0 var(--ring, rgba(244,114,182,.45)); } 100% { box-shadow: 0 0 0 22px rgba(244,114,182,0); } }
+@keyframes tk-fall { 0% { transform: translate3d(0,-12%,0) rotate(0deg); opacity: 0; } 10% { opacity: .9; } 100% { transform: translate3d(var(--sway, 24px),110vh,0) rotate(320deg); opacity: 0; } }
+@keyframes tk-draw { from { stroke-dashoffset: var(--len, 400); } to { stroke-dashoffset: 0; } }
+@keyframes tk-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@keyframes tk-glow { 0%, 100% { box-shadow: 0 0 0 rgba(217,182,93,0); } 50% { box-shadow: 0 0 26px rgba(217,182,93,.35); } }
+@keyframes tk-slide-line { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+.tk-rise { opacity: 0; animation: tk-rise .9s cubic-bezier(.2,.7,.2,1) forwards; animation-delay: var(--d, 0s); }
+.tk-fade { opacity: 0; animation: tk-fade 1.2s ease forwards; animation-delay: var(--d, 0s); }
+.tk-float { animation: tk-float 6s ease-in-out infinite; animation-delay: var(--d, 0s); }
+.tk-twinkle { animation: tk-twinkle 3.2s ease-in-out infinite; animation-delay: var(--d, 0s); }
+.tk-spin { animation: tk-spin 40s linear infinite; }
+.tk-spin-rev { animation: tk-spin 55s linear infinite reverse; }
+.tk-pulse-ring { animation: tk-pulse-ring 2.6s ease-out infinite; }
+.tk-fall { animation: tk-fall var(--t, 12s) linear infinite; animation-delay: var(--d, 0s); }
+.tk-draw { stroke-dasharray: var(--len, 400); stroke-dashoffset: var(--len, 400); animation: tk-draw 2.4s ease forwards; animation-delay: var(--d, 0s); }
+.tk-marquee { display: flex; width: max-content; animation: tk-marquee 22s linear infinite; }
+.tk-glow { animation: tk-glow 4s ease-in-out infinite; }
+.tk-line { transform-origin: left; transform: scaleX(0); animation: tk-slide-line 1.4s ease forwards; animation-delay: var(--d, 0s); }
+.tk-shimmer {
+  background-size: 200% 100%;
+  animation: tk-shimmer 5s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tk-rise, .tk-fade, .tk-draw, .tk-line { opacity: 1; animation: none; transform: none; stroke-dashoffset: 0; }
+  .tk-float, .tk-twinkle, .tk-spin, .tk-spin-rev, .tk-pulse-ring, .tk-fall, .tk-marquee, .tk-glow, .tk-shimmer { animation: none; }
+}
+
+/* Dizayn lentasi: kontent konteyner (72rem) bilan tekis boshlanadi */
+.tk-strip { padding-inline: max(1rem, calc((100vw - 72rem) / 2 + 1rem)); scroll-padding-inline: max(1rem, calc((100vw - 72rem) / 2 + 1rem)); }

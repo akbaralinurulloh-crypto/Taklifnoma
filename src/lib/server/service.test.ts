@@ -66,10 +66,25 @@ describe("createInvitation", () => {
     expect(repo._invitations).toHaveLength(0);
   });
 
-  it("mavjud bo'lmagan va o'tib ketgan sanani rad etadi", async () => {
+  it("mavjud bo'lmagan sanani rad etadi", async () => {
     const e1 = await expectAppError(createInvitation(repo, { ...body, date: "2027-02-31" }, NOW), 400);
     expect(e1.fields?.date).toBeTruthy();
-    await expectAppError(createInvitation(repo, { ...body, date: "2026-05-20" }, NOW), 400);
+  });
+
+  it("3 oygacha o'tgan sanani qabul qiladi, 3 oydan eskisini rad etadi", async () => {
+    const d = (m: number, day: number) => {
+      const x = new Date(NOW.getTime());
+      x.setUTCMonth(x.getUTCMonth() + m);
+      x.setUTCDate(day);
+      return x.toISOString().slice(0, 10);
+    };
+    const recent = d(-2, 15);
+    const { row } = await createInvitation(repo, { ...body, idempotencyKey: "key-recent-aaaaaaaaaa", editToken: makeEditToken().token, date: recent }, NOW);
+    expect(row.wedding_at.startsWith(recent)).toBe(true);
+    const fresh = (n: string) => ({ idempotencyKey: `key-${n}-aaaaaaaaaaaa`, editToken: makeEditToken().token });
+    const e = await expectAppError(createInvitation(repo, { ...body, ...fresh("old1"), date: d(-4, 1) }, NOW), 400);
+    expect(e.fields?.date).toMatch(/3 oydan/);
+    await expectAppError(createInvitation(repo, { ...body, ...fresh("old2"), date: "2020-05-20" }, NOW), 400);
   });
 
   it("noma'lum musiqa va noto'g'ri rasm yo'lini rad etadi", async () => {
@@ -124,14 +139,14 @@ describe("tahrirlash va o'chirish", () => {
   it("noto'g'ri token bilan tahrirlab bo'lmaydi", async () => {
     await createInvitation(repo, body, NOW);
     await expectAppError(getForEdit(repo, makeEditToken().token), 404);
-    await expectAppError(updateInvitation(repo, makeEditToken().token, fields, NOW), 404);
+    await expectAppError(updateInvitation(repo, makeEditToken().token, fields), 404);
     await expectAppError(getForEdit(repo, "qisqa"), 404);
   });
 
   it("o'zgarishlar ommaviy sahifada aks etadi va eski rasm tozalash uchun qaytariladi", async () => {
     const photoPath = "photos/123e4567-e89b-12d3-a456-426614174000.jpg";
     const { row } = await createInvitation(repo, { ...body, photoPath }, NOW);
-    const { removedPhoto } = await updateInvitation(repo, token, { ...fields, venueName: "Yangi zal", design: "classic", photoPath: null }, NOW);
+    const { removedPhoto } = await updateInvitation(repo, token, { ...fields, venueName: "Yangi zal", design: "classic", photoPath: null });
     expect(removedPhoto).toBe(photoPath);
     const pub = await getPublicBySlug(repo, row.slug, urls);
     expect(pub?.venueName).toBe("Yangi zal");
@@ -142,14 +157,14 @@ describe("tahrirlash va o'chirish", () => {
   it("rasm maydoni berilmasa, mavjud rasm saqlanadi", async () => {
     const photoPath = "photos/123e4567-e89b-12d3-a456-426614174000.jpg";
     await createInvitation(repo, { ...body, photoPath }, NOW);
-    const { row, removedPhoto } = await updateInvitation(repo, token, fields, NOW);
+    const { row, removedPhoto } = await updateInvitation(repo, token, fields);
     expect(row.photo_path).toBe(photoPath);
     expect(removedPhoto).toBeNull();
   });
 
   it("tahrirlashda ham validatsiya ishlaydi", async () => {
     await createInvitation(repo, body, NOW);
-    await expectAppError(updateInvitation(repo, token, { ...fields, brideName: "" }, NOW), 400);
+    await expectAppError(updateInvitation(repo, token, { ...fields, brideName: "" }), 400);
   });
 
   it("o'chirilgan taklifnoma ommaviy ochilmaydi va tahrirlanmaydi", async () => {
@@ -163,7 +178,7 @@ describe("tahrirlash va o'chirish", () => {
     const { row } = await createInvitation(repo, body, NOW);
     await adminUnpublish(repo, row.id);
     expect(await getPublicBySlug(repo, row.slug, urls)).toBeNull();
-    await updateInvitation(repo, token, { ...fields, venueName: "Boshqa" }, NOW);
+    await updateInvitation(repo, token, { ...fields, venueName: "Boshqa" });
     expect(await getPublicBySlug(repo, row.slug, urls)).toBeNull();
   });
 });

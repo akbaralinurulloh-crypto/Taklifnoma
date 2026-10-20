@@ -23,6 +23,13 @@ loyihasi yo‘q. Tashqi xizmatlarsiz bajarilishi mumkin bo‘lgan hamma narsa yo
 | Client bundle’da service-role kaliti | topilmadi |
 | Playwright (brauzer) | **bloklangan**: Chromium yuklab olinmadi (tarmoq cheklovi) |
 
+## Yangilanish (2026-10-21)
+
+- Sana qoidasi yumshatildi: to‘y sanasi 3 oydan ko‘proq o‘tib ketgan bo‘lsa rad etiladi, yaqinda o‘tgan sana qabul qilinadi (mavjud bo‘lmagan sana, masalan 31-fevral, baribir rad etiladi). Servis testlari yangilandi.
+- Oltita dizayn animatsiya va bezaklar bilan boyitildi (faqat CSS; `prefers-reduced-motion` hurmat qilinadi).
+- Vercel’da haqiqiy joylashtirish: `/api/health` → `status: ok, config: ok, database: ok` (Supabase bilan ulanish tasdiqlandi).
+- Chromium’da (390 px) oltita dizayn rendi ko‘zdan kechirildi: gorizontal skroll yo‘q, konsol xatosi yo‘q. Haqiqiy rasm bilan, planshet va kompyuter o‘lchamlarida tekshiruv o‘tkazilmagan.
+
 ## 21-bo‘lim jadvali
 
 | Funksiya | Holati | Dalil yoki test |

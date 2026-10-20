@@ -18,3 +18,9 @@ export function Photo({ url, alt, className = "" }: { url: string | null; alt: s
     <img src={url} alt={alt} className={`object-cover ${className}`} />
   );
 }
+
+/** Animatsiya kechikishi (CSS o'zgaruvchisi). */
+export const delay = (s: number) => ({ "--d": `${s}s` }) as React.CSSProperties;
+
+/** Ism bosh harflari (rasm bo'lmaganda monogramma uchun). */
+export const initials = (a: string, b: string) => `${a.trim().charAt(0)}${b.trim().charAt(0)}`.toUpperCase();

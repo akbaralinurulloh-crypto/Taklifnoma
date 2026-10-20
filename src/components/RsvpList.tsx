@@ -42,7 +42,7 @@ export function RsvpList({ token }: { token: string }) {
       {rsvps && rsvps.length > 0 && (
         <>
           <p className="mt-2 text-sm text-muted">Kelaman: {yes} · Kela olmayman: {no}</p>
-          <ul className="mt-3 divide-y divide-[#e4d9c3] rounded-xl border border-[#e4d9c3] bg-white">
+          <ul className="mt-3 divide-y divide-[#cfdcd9] rounded-xl border border-[#cfdcd9] bg-white">
             {rsvps.map((r) => (
               <li key={r.guestName + r.createdAt} className="flex justify-between px-4 py-2 text-sm">
                 <span>{r.guestName}</span>

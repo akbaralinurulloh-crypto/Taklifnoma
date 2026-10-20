@@ -31,7 +31,7 @@ export function CopyField({ label, value }: { label: string; value: string }) {
     <div>
       <label className="block text-sm font-medium text-ink">
         {label}
-        <input ref={input} readOnly value={value} onFocus={(e) => e.currentTarget.select()} className="mt-1 w-full rounded-lg border border-[#d8cdb8] bg-white px-3 py-2 text-sm" />
+        <input ref={input} readOnly value={value} onFocus={(e) => e.currentTarget.select()} className="mt-1 w-full rounded-lg border border-[#bccbc8] bg-white px-3 py-2 text-sm" />
       </label>
       <button type="button" onClick={copy} className="mt-2 rounded-full border border-gold-dark px-4 py-1.5 text-sm text-gold-dark hover:bg-beige">
         Nusxalash
@@ -53,7 +53,7 @@ export function PublishedPanel({ url, editUrl, title }: { url: string; editUrl: 
 
   const text = `${title} to‘yiga taklifnoma`;
   return (
-    <div className="mx-auto max-w-xl rounded-2xl border border-[#e4d9c3] bg-white p-6 shadow-sm">
+    <div className="mx-auto max-w-xl rounded-2xl border border-[#cfdcd9] bg-white p-6 shadow-sm">
       <h2 className="font-serif text-2xl text-ink">Taklifnoma nashr qilindi</h2>
       <p className="mt-1 text-sm text-muted">Ma’lumotlar serverda saqlandi va qayta o‘qib tasdiqlandi.</p>
 
@@ -73,14 +73,14 @@ export function PublishedPanel({ url, editUrl, title }: { url: string; editUrl: 
           <a
             href={`https://wa.me/?text=${encodeURIComponent(`${text} ${url}`)}`}
             target="_blank" rel="noopener noreferrer"
-            className="rounded-full border border-[#d8cdb8] px-5 py-2 text-sm hover:bg-beige"
+            className="rounded-full border border-[#bccbc8] px-5 py-2 text-sm hover:bg-beige"
           >
             WhatsApp
           </a>
           <a
             href={`https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`}
             target="_blank" rel="noopener noreferrer"
-            className="rounded-full border border-[#d8cdb8] px-5 py-2 text-sm hover:bg-beige"
+            className="rounded-full border border-[#bccbc8] px-5 py-2 text-sm hover:bg-beige"
           >
             Telegram
           </a>
@@ -88,7 +88,7 @@ export function PublishedPanel({ url, editUrl, title }: { url: string; editUrl: 
             <button
               type="button"
               onClick={() => navigator.share({ title: text, url }).catch(() => undefined)}
-              className="rounded-full border border-[#d8cdb8] px-5 py-2 text-sm hover:bg-beige"
+              className="rounded-full border border-[#bccbc8] px-5 py-2 text-sm hover:bg-beige"
             >
               Boshqa ilova orqali
             </button>
