@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import { cache } from "react";
 import { InvitationView } from "@/components/InvitationView";
 import { RsvpForm } from "@/components/RsvpForm";
+import { OpenCover } from "@/components/guest/OpenCover";
+import { GuestActions } from "@/components/guest/GuestActions";
 import { Unconfigured } from "@/components/Unconfigured";
 import { getRepo } from "@/lib/server/deps";
 import { AppError } from "@/lib/server/errors";
@@ -45,11 +47,21 @@ export default async function PublicInvitationPage({ params }: Props) {
   if (!data) notFound();
 
   return (
-    <main className="flex-1 bg-neutral-100 py-0 sm:py-6">
-      <InvitationView data={data} />
-      <div className="mt-6 px-4 pb-10">
-        <RsvpForm slug={slug} />
-      </div>
+    <main className="flex-1 bg-[#dfe8e1] py-0 sm:py-6">
+      <OpenCover groom={data.groomName} bride={data.brideName}>
+        <InvitationView data={data} />
+        <div className="mx-auto mt-6 max-w-[420px] space-y-6 px-4 pb-10">
+          {data.weddingAt && (
+            <GuestActions
+              title={`${data.groomName} va ${data.brideName} to‘yi`}
+              weddingAt={data.weddingAt}
+              location={`${data.venueName}, ${data.venueAddress}`}
+              url={`${(process.env.NEXT_PUBLIC_SITE_URL ?? "").replace(/\/$/, "")}/i/${slug}`}
+            />
+          )}
+          <RsvpForm slug={slug} />
+        </div>
+      </OpenCover>
     </main>
   );
 }

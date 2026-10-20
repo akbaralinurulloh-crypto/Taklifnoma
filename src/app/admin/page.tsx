@@ -46,7 +46,7 @@ export default async function AdminPage() {
 
       <section className="mt-6 grid grid-cols-3 gap-3" aria-label="Ko‘rsatkichlar">
         {([["Nashr qilingan", counts.published], ["Nashrdan olingan", counts.draft], ["O‘chirilgan", counts.deleted]] as const).map(([l, n]) => (
-          <div key={l} className="rounded-xl border border-[#cfdcd9] bg-white p-4">
+          <div key={l} className="rounded-xl border border-[#cfe0d5] bg-white p-4">
             <p className="text-2xl font-semibold text-ink">{n}</p>
             <p className="text-xs text-muted">{l}</p>
           </div>
@@ -55,7 +55,7 @@ export default async function AdminPage() {
 
       <section className="mt-10" aria-labelledby="inv">
         <h2 id="inv" className="font-serif text-xl text-ink">Taklifnomalar (oxirgi 100 ta)</h2>
-        <div className="mt-3 overflow-x-auto rounded-xl border border-[#cfdcd9] bg-white">
+        <div className="mt-3 overflow-x-auto rounded-xl border border-[#cfe0d5] bg-white">
           <table className="w-full text-left text-sm">
             <thead className="bg-beige/60 text-xs uppercase tracking-wider text-muted">
               <tr>
@@ -66,7 +66,7 @@ export default async function AdminPage() {
                 <th className="px-3 py-2">Amal</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#cfdcd9]">
+            <tbody className="divide-y divide-[#cfe0d5]">
               {invitations.length === 0 && (
                 <tr><td colSpan={5} className="px-3 py-4 text-muted">Hozircha taklifnomalar yo‘q.</td></tr>
               )}
@@ -92,7 +92,7 @@ export default async function AdminPage() {
 
       <section className="mt-10" aria-labelledby="mus">
         <h2 id="mus" className="font-serif text-xl text-ink">Audio katalogi</h2>
-        <ul className="mt-3 divide-y divide-[#cfdcd9] rounded-xl border border-[#cfdcd9] bg-white">
+        <ul className="mt-3 divide-y divide-[#cfe0d5] rounded-xl border border-[#cfe0d5] bg-white">
           {music.length === 0 && <li className="px-4 py-3 text-sm text-muted">Katalog bo‘sh.</li>}
           {music.map((m) => (
             <li key={m.id} className="flex items-center justify-between px-4 py-2 text-sm">

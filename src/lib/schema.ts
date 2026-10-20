@@ -8,6 +8,10 @@ export const DESIGNS = [
   "minimalist",
   "modern",
   "luxury",
+  "registon",
+  "bahor",
+  "tun",
+  "chipta",
 ] as const;
 export type Design = (typeof DESIGNS)[number];
 
@@ -18,6 +22,10 @@ export const DESIGN_LABELS: Record<Design, string> = {
   minimalist: "Minimalistik",
   modern: "Zamonaviy",
   luxury: "Hashamatli",
+  registon: "Registon",
+  bahor: "Bahor",
+  tun: "Yulduzli tun",
+  chipta: "Chipta",
 };
 
 export const DESIGN_DESCRIPTIONS: Record<Design, string> = {
@@ -27,6 +35,10 @@ export const DESIGN_DESCRIPTIONS: Record<Design, string> = {
   minimalist: "Ortiqcha bezaksiz, ko‘p bo‘sh joy, sodda tipografika.",
   modern: "Editorial uslub, katta tipografika, dadil kompozitsiya.",
   luxury: "To‘q fon, oltin aksentlar va nafis chiziqlar.",
+  registon: "Samarqand feruza koshinlari, mehrob shaklidagi rasm va sakkiz qirrali yulduz.",
+  bahor: "Yam-yashil novdalar, yumshoq ranglar va tabiat nafasi.",
+  tun: "Yulduzli osmon, oy va yaltirab turuvchi yulduzlar.",
+  chipta: "To‘y chiptasi ko‘rinishida: teshikli chiziq, shtrix-kod va yorqin rang.",
 };
 
 export const MAX_PHOTO_BYTES = 8 * 1024 * 1024;

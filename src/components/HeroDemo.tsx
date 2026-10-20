@@ -58,7 +58,7 @@ export function HeroDemo({ children }: { children?: React.ReactNode }) {
                 setAuto(false);
                 setGroom(e.target.value);
               }}
-              className="mt-1 w-full rounded-lg border border-[#bccbc8] bg-white px-3 py-2.5 text-base text-ink outline-none focus:border-gold-dark focus:ring-2 focus:ring-gold/30"
+              className="mt-1 w-full rounded-lg border border-[#b7cdbf] bg-white px-3 py-2.5 text-base text-ink outline-none focus:border-gold-dark focus:ring-2 focus:ring-gold/30"
             />
           </label>
           <label className="block text-sm text-muted">
@@ -70,7 +70,7 @@ export function HeroDemo({ children }: { children?: React.ReactNode }) {
                 setAuto(false);
                 setBride(e.target.value);
               }}
-              className="mt-1 w-full rounded-lg border border-[#bccbc8] bg-white px-3 py-2.5 text-base text-ink outline-none focus:border-gold-dark focus:ring-2 focus:ring-gold/30"
+              className="mt-1 w-full rounded-lg border border-[#b7cdbf] bg-white px-3 py-2.5 text-base text-ink outline-none focus:border-gold-dark focus:ring-2 focus:ring-gold/30"
             />
           </label>
         </div>
@@ -84,7 +84,7 @@ export function HeroDemo({ children }: { children?: React.ReactNode }) {
               aria-pressed={design === d}
               onClick={() => pick(d)}
               className={`rounded-full border px-4 py-2 text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-dark ${
-                design === d ? "border-ink bg-ink text-white" : "border-[#bccbc8] bg-white text-ink hover:border-ink"
+                design === d ? "border-ink bg-ink text-white" : "border-[#b7cdbf] bg-white text-ink hover:border-ink"
               }`}
             >
               {DESIGN_LABELS[d]}

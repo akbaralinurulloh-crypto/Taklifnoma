@@ -1,29 +1,22 @@
 import Link from "next/link";
-import { InvitationView } from "@/components/InvitationView";
+import { PhonePreview } from "@/components/site/PhonePreview";
+import { SiteFooter } from "@/components/site/SiteFooter";
+import { SiteHeader } from "@/components/site/SiteHeader";
+import { sampleInvitation } from "@/lib/sample";
 import { DESIGNS, DESIGN_DESCRIPTIONS, DESIGN_LABELS } from "@/lib/schema";
-import type { PublicInvitation } from "@/lib/types";
 import { HeroDemo } from "@/components/HeroDemo";
 import { backendConfigured } from "@/lib/server/tracks";
 
 export const dynamic = "force-dynamic"; // server sozlamasi holati har so‘rovda tekshiriladi
-
-// Faqat dizaynlarni ko'rsatish uchun namuna ma'lumot (haqiqiy taklifnoma emas).
-const SAMPLE: Omit<PublicInvitation, "design"> = {
-  groomName: "Aziz",
-  brideName: "Madina",
-  weddingAt: "2030-06-12T13:00:00.000Z",
-  venueName: "Registon to‘yxonasi",
-  venueAddress: "Namangan sh., Navoiy ko‘chasi 12",
-  extraText: "Sizni to‘yimizda ko‘rishdan baxtiyormiz.",
-  photoUrl: null,
-  music: null,
-};
 
 const BENEFITS = [
   ["Telefon uchun yaratilgan", "Taklifnoma 360 px kenglikdagi ekranda ham to‘liq va o‘qiladigan ko‘rinadi."],
   ["To‘ygacha hisoblagich", "Kun, soat, daqiqa va soniya Toshkent vaqti bo‘yicha sanaladi."],
   ["Xaritada ko‘rish", "Mehmon manzil ustiga bosadi va yo‘nalish ochiladi."],
   ["Musiqa", "Yor-yor yoki o‘zingiz tanlagan kuy, mehmon xohlasa yoqadi."],
+  ["Konvert ochiladi", "Mehmon avval yopiq konvertni ko‘radi, muhrni bosganda taklifnoma ochiladi."],
+  ["Taqvimga qo‘shish", "Bir bosishda to‘y sanasi mehmonning telefon taqvimiga tushadi."],
+  ["Kelaman / kelmayman", "Mehmon javobini yozadi, siz javoblar ro‘yxatini tahrirlash sahifasida ko‘rasiz."],
 ] as const;
 
 const STEPS = [
@@ -40,7 +33,6 @@ const FAQ = [
 ] as const;
 
 export default function Home() {
-  const contact = process.env.NEXT_PUBLIC_CONTACT_EMAIL;
   const ready = backendConfigured();
   return (
     <>
@@ -50,21 +42,7 @@ export default function Home() {
         </div>
       )}
 
-      <div aria-hidden className="h-1.5 bg-[repeating-linear-gradient(90deg,#0d7c7a_0_28px,#0f2a43_28px_56px,#f0a62b_56px_70px,#fff_70px_76px)]" />
-      <header className="bg-white/80 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
-          <span className="flex items-center gap-2 font-serif text-2xl text-ink">
-            <svg viewBox="0 0 24 28" aria-hidden className="h-6 w-5">
-              <path d="M12 1C20 8 22 18 12 27 2 18 4 8 12 1z" fill="#0d7c7a" />
-              <path d="M12 8c4 3 5 8 0 12-5-4-4-9 0-12z" fill="#f0a62b" />
-            </svg>
-            Taklifnoma
-          </span>
-          <Link href="/create" className="rounded-full bg-ink px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-gold-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-dark">
-            Taklifnoma yaratish
-          </Link>
-        </div>
-      </header>
+      <SiteHeader />
 
       <main className="flex-1">
         <section className="mx-auto max-w-6xl px-4 pb-16 pt-12 sm:pt-16">
@@ -85,25 +63,24 @@ export default function Home() {
         </section>
 
         <section className="bg-beige/70 py-16" aria-labelledby="designs">
-          <div className="mx-auto max-w-6xl px-4">
-            <h2 id="designs" className="font-serif text-3xl text-ink">Oltita dizayn</h2>
-            <p className="mt-2 max-w-md text-sm text-muted">
-              Har biri o‘z kompozitsiyasi va animatsiyasiga ega. Quyida namuna ma’lumotlar bilan ko‘rsatilgan.
-            </p>
+          <div className="mx-auto flex max-w-6xl flex-wrap items-end justify-between gap-3 px-4">
+            <div>
+              <h2 id="designs" className="font-serif text-3xl text-ink">O‘nta dizayn</h2>
+              <p className="mt-2 max-w-md text-sm text-muted">
+                Har biri o‘z kompozitsiyasi va animatsiyasiga ega. Bosing va to‘liq ko‘ring.
+              </p>
+            </div>
+            <Link href="/dizaynlar" className="text-sm font-medium text-gold-dark underline underline-offset-4">
+              Barcha dizaynlarni ko‘rish
+            </Link>
           </div>
-          <div className="mt-8 flex tk-strip snap-x snap-mandatory gap-6 overflow-x-auto pb-4">
+          <div className="tk-strip mt-8 flex snap-x snap-mandatory gap-6 overflow-x-auto pb-4">
             {DESIGNS.map((d) => (
-              <figure key={d} className="w-[250px] shrink-0 snap-start">
-                <div aria-hidden className="pointer-events-none relative h-[430px] w-[250px] select-none overflow-hidden rounded-2xl border border-[#cfdcd9] bg-white shadow-[0_20px_40px_-24px_rgba(15,42,67,.5)]">
-                  <div className="absolute left-0 top-0 w-[420px] origin-top-left scale-[0.595]">
-                    <InvitationView data={{ ...SAMPLE, design: d }} />
-                  </div>
-                </div>
-                <figcaption className="mt-3">
-                  <span className="block font-serif text-lg text-ink">{DESIGN_LABELS[d]}</span>
-                  <span className="block text-xs leading-relaxed text-muted">{DESIGN_DESCRIPTIONS[d]}</span>
-                </figcaption>
-              </figure>
+              <div key={d} className="w-[250px] shrink-0 snap-start">
+                <PhonePreview data={sampleInvitation(d)} href={`/namuna/${d}`} label={`${DESIGN_LABELS[d]} namunasini ochish`} />
+                <span className="mt-3 block font-serif text-lg text-ink">{DESIGN_LABELS[d]}</span>
+                <span className="block text-xs leading-relaxed text-muted">{DESIGN_DESCRIPTIONS[d]}</span>
+              </div>
             ))}
           </div>
         </section>
@@ -137,7 +114,7 @@ export default function Home() {
 
         <section className="mx-auto max-w-3xl px-4 py-16" aria-labelledby="faq">
           <h2 id="faq" className="font-serif text-3xl text-ink">Ko‘p beriladigan savollar</h2>
-          <div className="mt-8 divide-y divide-[#cfdcd9] border-y border-[#cfdcd9]">
+          <div className="mt-8 divide-y divide-[#cfe0d5] border-y border-[#cfe0d5]">
             {FAQ.map(([q, a]) => (
               <details key={q} className="group py-4">
                 <summary className="cursor-pointer list-none font-medium text-ink marker:content-none focus-visible:outline-2 focus-visible:outline-gold-dark">
@@ -151,20 +128,7 @@ export default function Home() {
         </section>
       </main>
 
-      <footer className="border-t border-[#cfdcd9] bg-white">
-        <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-6 text-sm text-muted sm:flex-row sm:items-center sm:justify-between">
-          <span>© Taklifnoma</span>
-          <nav className="flex flex-wrap gap-4" aria-label="Pastki menyu">
-            {contact && (
-              <a href={`mailto:${contact}`} className="underline underline-offset-4">
-                Aloqa: {contact}
-              </a>
-            )}
-            <Link href="/maxfiylik" className="underline underline-offset-4">Maxfiylik siyosati</Link>
-            <Link href="/shartlar" className="underline underline-offset-4">Foydalanish shartlari</Link>
-          </nav>
-        </div>
-      </footer>
+      <SiteFooter />
     </>
   );
 }

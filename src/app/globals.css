@@ -1,13 +1,13 @@
 @import "tailwindcss";
 
 :root {
-  --ivory: #f4f7f6;
-  --beige: #e3ecea;
-  --gold: #14a39e;
-  --gold-dark: #0d7c7a;
-  --ink: #0f2a43;
-  --muted: #4f6474;
-  --saffron: #f0a62b;
+  --ivory: #f3f7f2;
+  --beige: #e0ece4;
+  --gold: #2f9a73;
+  --gold-dark: #1f6f54;
+  --ink: #14302a;
+  --muted: #4a6158;
+  --saffron: #ee6a2b;
   --background: var(--ivory);
   --foreground: var(--ink);
 }
@@ -70,3 +70,9 @@ body {
 
 /* Dizayn lentasi: kontent konteyner (72rem) bilan tekis boshlanadi */
 .tk-strip { padding-inline: max(1rem, calc((100vw - 72rem) / 2 + 1rem)); scroll-padding-inline: max(1rem, calc((100vw - 72rem) / 2 + 1rem)); }
+
+@keyframes tk-shoot { 0% { transform: translate3d(0,0,0) rotate(35deg); opacity: 0; } 4% { opacity: 1; } 14% { transform: translate3d(220px,154px,0) rotate(35deg); opacity: 0; } 100% { transform: translate3d(220px,154px,0) rotate(35deg); opacity: 0; } }
+.tk-shoot { animation: tk-shoot 9s ease-in infinite; animation-delay: var(--d, 0s); }
+@keyframes tk-sway { 0%, 100% { transform: rotate(-3deg); } 50% { transform: rotate(3deg); } }
+.tk-sway { animation: tk-sway 7s ease-in-out infinite; transform-origin: 50% 100%; animation-delay: var(--d, 0s); }
+@media (prefers-reduced-motion: reduce) { .tk-shoot, .tk-sway { animation: none; } }

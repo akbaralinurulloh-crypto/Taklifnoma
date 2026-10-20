@@ -38,6 +38,8 @@ export type WizardProps = {
   mode?: "create" | "edit";
   initial?: { form: Form; photoUrl: string | null; slug: string };
   editToken?: string;
+  /** /create?dizayn=... orqali kelgan dizayn: qoralamadagi dizaynni bosib o'tadi. */
+  initialDesign?: Design;
 };
 
 const EMPTY: Form = {
@@ -59,7 +61,7 @@ const STEP1_FIELDS = ["groomName", "brideName", "date", "time", "venueName", "ve
 type Photo = { previewUrl: string; name: string; file?: File };
 
 const inputCls =
-  "mt-1 w-full rounded-lg border border-[#bccbc8] bg-white px-3 py-2 text-base text-ink outline-none focus:border-gold focus:ring-2 focus:ring-gold/30";
+  "mt-1 w-full rounded-lg border border-[#b7cdbf] bg-white px-3 py-2 text-base text-ink outline-none focus:border-gold focus:ring-2 focus:ring-gold/30";
 
 function Field({ label, error, children, hint }: { label: string; error?: string; hint?: string; children: React.ReactNode }) {
   return (
@@ -76,7 +78,7 @@ function Field({ label, error, children, hint }: { label: string; error?: string
   );
 }
 
-export function CreateWizard({ tracks, backendConfigured, siteUrl, mode = "create", initial, editToken }: WizardProps) {
+export function CreateWizard({ tracks, backendConfigured, siteUrl, mode = "create", initial, editToken, initialDesign }: WizardProps) {
   const isEdit = mode === "edit";
   const [form, setForm] = useState<Form>(initial?.form ?? EMPTY);
   const [baseline, setBaseline] = useState<Form>(initial?.form ?? EMPTY);
@@ -116,9 +118,11 @@ export function CreateWizard({ tracks, backendConfigured, siteUrl, mode = "creat
             venueName: str(p.venueName),
             venueAddress: str(p.venueAddress),
             extraText: str(p.extraText),
-            design: DESIGNS.includes(p.design as Design) ? (p.design as Design) : "classic",
+            design: initialDesign ?? (DESIGNS.includes(p.design as Design) ? (p.design as Design) : "classic"),
             musicId: null,
           });
+        } else if (initialDesign) {
+          setForm((f) => ({ ...f, design: initialDesign }));
         }
       } catch {
         /* localStorage mavjud emas yoki buzilgan: qoralamasiz davom etamiz */
@@ -126,7 +130,7 @@ export function CreateWizard({ tracks, backendConfigured, siteUrl, mode = "creat
       setDraftLoaded(true);
     }, 0);
     return () => clearTimeout(id);
-  }, [isEdit]);
+  }, [isEdit, initialDesign]);
 
   useEffect(() => {
     if (isEdit || !draftLoaded || result) return;
@@ -364,7 +368,7 @@ export function CreateWizard({ tracks, backendConfigured, siteUrl, mode = "creat
                   setStep(i);
                 }}
                 aria-current={i === step ? "step" : undefined}
-                className={`rounded-full px-3 py-1.5 ${i === step ? "bg-gold-dark text-white" : "bg-beige text-ink hover:bg-[#c9d8d5]"}`}
+                className={`rounded-full px-3 py-1.5 ${i === step ? "bg-gold-dark text-white" : "bg-beige text-ink hover:bg-[#c5d9cc]"}`}
               >
                 {i + 1}. {label}
               </button>
@@ -372,7 +376,7 @@ export function CreateWizard({ tracks, backendConfigured, siteUrl, mode = "creat
           ))}
         </ol>
 
-        <div className="mt-6 rounded-2xl border border-[#cfdcd9] bg-white p-5 shadow-sm">
+        <div className="mt-6 rounded-2xl border border-[#cfe0d5] bg-white p-5 shadow-sm">
           {step === 0 && (
             <div className="grid gap-4 sm:grid-cols-2">
               <Field label="Kuyovning ismi" error={err("groomName")}>
@@ -450,7 +454,7 @@ export function CreateWizard({ tracks, backendConfigured, siteUrl, mode = "creat
                 {DESIGNS.map((d) => (
                   <label
                     key={d}
-                    className={`cursor-pointer rounded-xl border p-4 ${form.design === d ? "border-gold bg-[#eaf3f1] ring-2 ring-gold/40" : "border-[#cfdcd9] hover:bg-beige/40"}`}
+                    className={`cursor-pointer rounded-xl border p-4 ${form.design === d ? "border-gold bg-[#e8f3ec] ring-2 ring-gold/40" : "border-[#cfe0d5] hover:bg-beige/40"}`}
                   >
                     <input type="radio" name="design" value={d} checked={form.design === d} onChange={() => set("design", d)} className="sr-only" />
                     <span className="block font-serif text-lg text-ink">{DESIGN_LABELS[d]}</span>
@@ -478,7 +482,7 @@ export function CreateWizard({ tracks, backendConfigured, siteUrl, mode = "creat
                     </label>
                   </li>
                   {tracks.map((t) => (
-                    <li key={t.id} className="rounded-lg border border-[#cfdcd9] p-3">
+                    <li key={t.id} className="rounded-lg border border-[#cfe0d5] p-3">
                       <label className="flex items-center gap-2 text-sm font-medium">
                         <input type="radio" name="music" checked={form.musicId === t.id} onChange={() => set("musicId", t.id)} />
                         {t.title}
@@ -554,7 +558,7 @@ export function CreateWizard({ tracks, backendConfigured, siteUrl, mode = "creat
               )}
 
               {isEdit && (
-                <div className="mt-8 border-t border-[#cfdcd9] pt-6">
+                <div className="mt-8 border-t border-[#cfe0d5] pt-6">
                   <h3 className="text-sm font-medium text-red-800">Taklifnomani o‘chirish</h3>
                   <p className="mt-1 text-xs text-muted">O‘chirilgach ommaviy havola ishlamaydi va qayta tiklanmaydi.</p>
                   {!confirmDelete ? (
@@ -567,7 +571,7 @@ export function CreateWizard({ tracks, backendConfigured, siteUrl, mode = "creat
                       <button type="button" onClick={remove} disabled={saving} className="rounded-full bg-red-700 px-5 py-2 text-sm text-white disabled:opacity-50">
                         Ha, o‘chirish
                       </button>
-                      <button type="button" onClick={() => setConfirmDelete(false)} className="rounded-full border border-[#bccbc8] px-5 py-2 text-sm">
+                      <button type="button" onClick={() => setConfirmDelete(false)} className="rounded-full border border-[#b7cdbf] px-5 py-2 text-sm">
                         Bekor qilish
                       </button>
                     </div>
@@ -582,7 +586,7 @@ export function CreateWizard({ tracks, backendConfigured, siteUrl, mode = "creat
               type="button"
               onClick={() => setStep((s) => Math.max(s - 1, 0))}
               disabled={step === 0}
-              className="rounded-full border border-[#bccbc8] px-5 py-2 text-sm disabled:opacity-40"
+              className="rounded-full border border-[#b7cdbf] px-5 py-2 text-sm disabled:opacity-40"
             >
               Orqaga
             </button>
@@ -597,7 +601,7 @@ export function CreateWizard({ tracks, backendConfigured, siteUrl, mode = "creat
 
       <aside className={`${step === 4 ? "block" : "hidden lg:block"} self-start lg:sticky lg:top-4`} aria-label="Jonli ko‘rinish">
         <p className="mb-2 text-xs uppercase tracking-widest text-muted">Jonli ko‘rinish</p>
-        <div className="max-h-[80vh] overflow-y-auto rounded-2xl border border-[#cfdcd9] bg-white shadow-sm">
+        <div className="max-h-[80vh] overflow-y-auto rounded-2xl border border-[#cfe0d5] bg-white shadow-sm">
           <InvitationView data={preview} />
         </div>
       </aside>

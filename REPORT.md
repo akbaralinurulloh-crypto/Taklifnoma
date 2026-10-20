@@ -86,3 +86,12 @@ npm install && cp .env.example .env.local && npm run dev
 ```
 
 Production deployment qadamlari: README 4-bo‘lim.
+
+## Yangilanish (2026-10-21, ikkinchi): 10 dizayn va yangi sayt tuzilishi
+- Dizaynlar 6 tadan 10 taga chiqdi: Registon, Bahor, Yulduzli tun, Chipta qo'shildi. Rang palitrasi zumrad + olovrang.
+- Yangi sahifalar: `/dizaynlar` (galereya), `/namuna/[dizayn]` (to'liq namuna), `sitemap.xml`, `robots.txt`.
+- `/create?dizayn=...` tanlangan dizaynni oldindan tanlaydi.
+- Mehmon sahifasi (`/i/[slug]`): konvert qopqog'i (muhrni bosganda ochiladi), "Taqvimga qo'shish" (.ics, davomiyligi taxminan 4 soat), "Havolani ulashish".
+- **Migratsiya 0003** (`supabase/migrations/0003_more_designs.sql`) Supabase'da qo'lda ishga tushirilishi shart, aks holda yangi dizaynlarni saqlab bo'lmaydi.
+- Tekshirildi: lint, tsc, 123 test, build; 390 va 1280 px da gorizontal siljish yo'q. Haqiqiy bazadagi `/i/[slug]` qopqog'i brauzerda faqat vaqtinchalik sahifada sinaldi (haqiqiy slug bilan emas).
+- Cheklovlar o'zgarmadi: xotiradagi rate-limit, rasm tozalash yo'q, foydalanuvchi hisoblari yo'q, huquqiy sahifalar qoralama, musiqa katalogi bo'sh.
