@@ -8,7 +8,7 @@ import { sampleInvitation } from "@/lib/sample";
 
 export const metadata: Metadata = {
   title: "Taklifnoma dizaynlari",
-  description: "O‘nta to‘y taklifnomasi shabloni: konvert, mum muhr, yurak, darvoza, milliy atlas va boshqalar.",
+  description: "O‘n beshta to‘y taklifnomasi shabloni: konvert, mum muhr, yurak, darvoza, milliy atlas va boshqalar.",
 };
 
 export default function DesignsPage() {
@@ -17,7 +17,7 @@ export default function DesignsPage() {
       <SiteHeader />
       <main className="flex-1">
         <section className="mx-auto max-w-6xl px-4 pb-6 pt-12">
-          <h1 className="font-serif text-4xl leading-tight text-ink sm:text-5xl">O‘nta dizayn</h1>
+          <h1 className="font-serif text-4xl leading-tight text-ink sm:text-5xl">O‘n beshta dizayn</h1>
           <p className="mt-3 max-w-xl text-muted">
             Har birining o‘z tuzilmasi, ranglari va animatsiyasi bor. Namunani to‘liq ochib ko‘ring yoki darhol shu dizaynda yarating.
           </p>
@@ -29,7 +29,7 @@ export default function DesignsPage() {
               <h2 className="mt-4 font-serif text-2xl text-ink">{DESIGN_LABELS[d]}</h2>
               <p className="mt-1 max-w-[300px] text-sm leading-relaxed text-muted">{DESIGN_DESCRIPTIONS[d]}</p>
               <div className="mt-3 flex flex-wrap gap-2">
-                <Link href={`/namuna/${d}`} className="rounded-full border border-[#b7cdbf] px-4 py-2 text-sm text-ink hover:border-ink">Namunani ko‘rish</Link>
+                <Link href={`/namuna/${d}`} className="rounded-full border border-[#e8b7c5] px-4 py-2 text-sm text-ink hover:border-ink">Namunani ko‘rish</Link>
                 <Link href={`/create?dizayn=${d}`} className="rounded-full bg-gold-dark px-4 py-2 text-sm text-white hover:bg-ink">Shu dizaynda yaratish</Link>
               </div>
             </article>

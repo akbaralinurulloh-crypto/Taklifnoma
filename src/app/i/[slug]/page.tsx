@@ -55,7 +55,7 @@ export default async function PublicInvitationPage({ params, searchParams }: Pro
   if (!data) notFound();
 
   return (
-    <main className="flex-1 bg-[#dfe8e1] py-0 sm:py-6">
+    <main className="flex-1 bg-[#fbe6eb] py-0 sm:py-6">
       <>
         <InvitationView data={{ ...data, music: data.music ?? defaultTrack(data.design) }} gate lang={lang} slug={slug} guest={guest} langHref={`/i/${slug}?${q.toString()}`} />
         <div className="mx-auto mt-6 max-w-[420px] space-y-6 px-4 pb-10">

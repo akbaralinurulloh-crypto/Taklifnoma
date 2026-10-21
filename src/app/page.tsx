@@ -7,6 +7,7 @@ import { SiteHeader } from "@/components/site/SiteHeader";
 import { DESIGNS, DESIGN_DESCRIPTIONS, DESIGN_LABELS } from "@/lib/schema";
 import { sampleInvitation } from "@/lib/sample";
 import { backendConfigured } from "@/lib/server/tracks";
+import { FAQ, FEATURES, STEPS } from "@/lib/site-content";
 
 export const dynamic = "force-dynamic"; // server sozlamasi holati har so‘rovda tekshiriladi
 
@@ -18,30 +19,6 @@ const GATE_LABEL: Record<GateKind, string> = {
   swipe: "Surib ochish",
   button: "Karta",
 };
-
-const FEATURES = [
-  ["✉", "Ochilish marosimi", "Mehmon avval yopiq konvert, muhr yoki yurakni ko‘radi va o‘zi ochadi."],
-  ["▦", "Taqvim va sanoq", "To‘y kuni taqvimda belgilanadi, kun, soat, daqiqa va soniya sanab turadi."],
-  ["☰", "To‘y dasturi", "Kutib olish, nikoh, ziyofat: har bir bosqichning vaqti chiroyli chiziqda."],
-  ["⌖", "Xaritada yo‘nalish", "Manzil ustiga bosilganda xarita ochiladi, adashib qolish yo‘q."],
-  ["✓", "Kelaman / kelmayman", "Mehmon javobini yuboradi, siz javoblar ro‘yxatini tahrirlash sahifasida ko‘rasiz."],
-  ["♫", "Musiqa", "Litsenziyasi tasdiqlangan kuy, mehmon xohlasa yoqadi."],
-  ["⊕", "Taqvimga qo‘shish", "Bir bosishda to‘y mehmonning telefon taqvimiga tushadi."],
-  ["❖", "Ota-ona nomidan", "Kiyim kodi va ota-ona taklif matni uchun alohida joy."],
-] as const;
-
-const STEPS = [
-  ["Shablonni tanlang", "O‘nta dizayndan o‘zingizga yoqqanini tanlang: konvert, muhr, yurak yoki darvoza."],
-  ["Ma’lumotlarni kiriting", "Ismlar, sana, dastur, manzil va juftlik rasmi. O‘ng tomonda taklifnoma o‘sha zahoti o‘zgaradi."],
-  ["Havolani yuboring", "Saqlang va tayyor havolani WhatsApp yoki Telegram orqali mehmonlarga jo‘nating."],
-] as const;
-
-const FAQ = [
-  ["Taklifnomani ro‘yxatdan o‘tmasdan yaratsam bo‘ladimi?", "Ha. Tahrirlash uchun alohida maxfiy havola beriladi, ommaviy havola orqali taklifnomani o‘zgartirib bo‘lmaydi."],
-  ["Musiqa qanday tanlanadi?", "Faqat litsenziyasi tasdiqlangan audio fayllar katalogidan. Katalog to‘lgunga qadar taklifnomani musiqasiz yaratish mumkin."],
-  ["Mehmonlar taklifnomani qanday ochadi?", "Nashr qilingach beriladigan noyob havola orqali: ilova o‘rnatish shart emas. Avval konvert (yoki muhr) ko‘rinadi, bosilganda taklifnoma ochiladi."],
-  ["Yaratgandan keyin o‘zgartirsam bo‘ladimi?", "Ha. Maxfiy tahrirlash havolasi orqali ismlar, sana, dastur va dizaynni istalgan vaqt o‘zgartirasiz, havola o‘zgarmaydi."],
-] as const;
 
 export default function Home() {
   const ready = backendConfigured();
@@ -55,9 +32,9 @@ export default function Home() {
       <SiteHeader />
 
       <main className="flex-1">
-        <section className="mx-auto max-w-6xl px-4 pb-16 pt-12 sm:pt-16">
+        <section className="st-hero-bg"><div className="mx-auto max-w-6xl px-4 pb-16 pt-12 sm:pt-16">
           <HeroDemo>
-            <p className="inline-block rounded-full bg-[#e8f3ec] px-4 py-1.5 text-xs font-medium tracking-wide text-gold-dark">
+            <p className="inline-block rounded-full bg-[#fde4ea] px-4 py-1.5 text-xs font-medium tracking-wide text-gold-dark">
               Yaratish bepul · ro‘yxatdan o‘tish shart emas
             </p>
             <h1 className="mt-5 max-w-2xl font-serif text-[clamp(2.3rem,5.4vw,3.8rem)] leading-[1.05] tracking-tight text-ink">
@@ -67,15 +44,23 @@ export default function Home() {
               Ismlar, sana va dasturni kiriting, shablonni tanlang va havolani WhatsApp yoki Telegram orqali yuboring.
             </p>
             <div className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-3">
-              <Link href="/create" className="rounded-full bg-saffron px-8 py-3.5 font-medium text-white shadow-sm transition-colors hover:bg-[#d4561c] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-dark">
+              <Link href="/create" className="rounded-full bg-saffron px-8 py-3.5 font-medium text-white shadow-sm transition-colors hover:bg-[#b81a58] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-dark">
                 Hoziroq yaratish
               </Link>
               <Link href="/dizaynlar" className="text-sm font-medium text-gold-dark underline underline-offset-4">Shablonlarni ko‘rish</Link>
             </div>
           </HeroDemo>
+        </div></section>
+
+        <section aria-label="Qisqacha" className="border-y border-[#f3d3dc] bg-white">
+          <ul className="mx-auto grid max-w-6xl grid-cols-2 gap-4 px-4 py-6 text-center sm:grid-cols-4">
+            {[["15", "dizayn"], ["2", "til: o‘zbek, rus"], ["♫", "dizaynga mos musiqa"], ["0 so‘m", "yaratish bepul"]].map(([n, l]) => (
+              <li key={l}><p className="font-serif text-3xl text-gold-dark">{n}</p><p className="text-xs text-muted">{l}</p></li>
+            ))}
+          </ul>
         </section>
 
-        <section className="bg-[#f1f7f3] py-16" aria-labelledby="designs">
+        <section className="bg-[#fff0f3] py-16" aria-labelledby="designs">
           <div className="mx-auto max-w-6xl px-4">
             <div className="flex flex-wrap items-end justify-between gap-3">
               <div>
@@ -86,7 +71,7 @@ export default function Home() {
             </div>
             <ul className="mt-10 grid grid-cols-2 gap-x-4 gap-y-10 sm:grid-cols-3 lg:grid-cols-5">
               {DESIGNS.map((d) => (
-                <li key={d} className="flex flex-col items-center text-center">
+                <li key={d} className="st-card flex flex-col items-center rounded-2xl p-2 text-center">
                   <PhonePreview data={sampleInvitation(d)} width={170} height={300} href={`/namuna/${d}`} label={`${DESIGN_LABELS[d]} namunasini ochish`} />
                   <span className="mt-3 font-serif text-lg text-ink">{DESIGN_LABELS[d]}</span>
                   <span className="mt-1 rounded-full bg-white px-3 py-0.5 text-[11px] text-gold-dark shadow-sm">{GATE_LABEL[THEMES[d].gate]}</span>
@@ -98,11 +83,11 @@ export default function Home() {
         </section>
 
         <section className="mx-auto max-w-6xl px-4 py-16" aria-labelledby="features">
-          <h2 id="features" className="font-serif text-3xl text-ink">Taklifnomada nimalar bor</h2>
+          <div className="flex flex-wrap items-end justify-between gap-3"><h2 id="features" className="font-serif text-3xl text-ink">Taklifnomada nimalar bor</h2><Link href="/imkoniyatlar" className="text-sm font-medium text-gold-dark underline underline-offset-4">Hammasi</Link></div>
           <ul className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {FEATURES.map(([icon, t, d]) => (
-              <li key={t} className="rounded-2xl border border-[#cfe0d5] bg-white p-5 shadow-sm">
-                <span aria-hidden className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#e8f3ec] text-xl text-gold-dark">{icon}</span>
+            {FEATURES.slice(0, 8).map(([icon, t, d]) => (
+              <li key={t} className="st-card rounded-2xl border border-[#f3d3dc] bg-white p-5 shadow-sm">
+                <span aria-hidden className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#fde4ea] text-xl text-gold-dark">{icon}</span>
                 <h3 className="mt-4 font-serif text-xl text-ink">{t}</h3>
                 <p className="mt-1 text-sm leading-relaxed text-muted">{d}</p>
               </li>
@@ -118,15 +103,15 @@ export default function Home() {
                 Har mehmon taklifnoma ichida ismini yozib “kelaman” yoki “kelmayman” deydi. Javoblar sizning maxfiy tahrirlash
                 sahifangizda ro‘yxat bo‘lib turadi: kim kelishi, kim kelolmasligi bir qarashda ko‘rinadi.
               </p>
-              <Link href="/create" className="mt-6 inline-block rounded-full bg-saffron px-7 py-3 text-sm font-medium text-white hover:bg-[#d4561c]">Boshlash</Link>
+              <Link href="/create" className="mt-6 inline-block rounded-full bg-saffron px-7 py-3 text-sm font-medium text-white hover:bg-[#b81a58]">Boshlash</Link>
             </div>
             <div className="rounded-2xl bg-white p-5 text-ink shadow-xl" aria-label="Namuna ko‘rinishi">
               <p className="text-xs uppercase tracking-widest text-muted">Javoblar ro‘yxati (namuna)</p>
-              <ul className="mt-3 divide-y divide-[#e3eee7] text-sm">
+              <ul className="mt-3 divide-y divide-[#f6dde3] text-sm">
                 {[["Jasur Karimov", "Keladi"], ["Dilnoza Aliyeva", "Keladi"], ["Bobur Rashidov", "Kelolmaydi"]].map(([n, r]) => (
                   <li key={n} className="flex items-center justify-between py-3">
                     <span>{n}</span>
-                    <span className={`rounded-full px-3 py-0.5 text-xs ${r === "Keladi" ? "bg-[#e8f3ec] text-gold-dark" : "bg-[#fde8dc] text-[#b24213]"}`}>{r}</span>
+                    <span className={`rounded-full px-3 py-0.5 text-xs ${r === "Keladi" ? "bg-[#fde4ea] text-gold-dark" : "bg-[#fff1d6] text-[#8a5a00]"}`}>{r}</span>
                   </li>
                 ))}
               </ul>
@@ -134,8 +119,8 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="mx-auto max-w-6xl px-4 py-16" aria-labelledby="how">
-          <h2 id="how" className="font-serif text-3xl text-ink">Qanday ishlaydi</h2>
+        <section id="how" className="mx-auto max-w-6xl scroll-mt-20 px-4 py-16" aria-labelledby="how-t">
+          <h2 id="how-t" className="font-serif text-3xl text-ink">Qanday ishlaydi</h2>
           <ol className="mt-10 grid gap-8 sm:grid-cols-3">
             {STEPS.map(([t, d], i) => (
               <li key={t} className="relative border-t-2 border-saffron pt-4">
@@ -147,10 +132,10 @@ export default function Home() {
           </ol>
         </section>
 
-        <section className="mx-auto max-w-3xl px-4 pb-16" aria-labelledby="faq">
-          <h2 id="faq" className="font-serif text-3xl text-ink">Ko‘p beriladigan savollar</h2>
-          <div className="mt-8 divide-y divide-[#cfe0d5] border-y border-[#cfe0d5]">
-            {FAQ.map(([q, a]) => (
+        <section id="faq" className="mx-auto max-w-3xl scroll-mt-20 px-4 pb-16" aria-labelledby="faq-t">
+          <h2 id="faq-t" className="font-serif text-3xl text-ink">Ko‘p beriladigan savollar</h2>
+          <div className="mt-8 divide-y divide-[#f3d3dc] border-y border-[#f3d3dc]">
+            {FAQ.slice(0, 5).map(([q, a]) => (
               <details key={q} className="group py-4">
                 <summary className="cursor-pointer list-none font-medium text-ink marker:content-none focus-visible:outline-2 focus-visible:outline-gold-dark">
                   <span className="mr-2 inline-block text-gold-dark transition-transform group-open:rotate-45">+</span>
@@ -160,11 +145,12 @@ export default function Home() {
               </details>
             ))}
           </div>
+          <p className="mt-4 text-center text-sm"><Link href="/savollar" className="font-medium text-gold-dark underline underline-offset-4">Barcha savollar</Link></p>
         </section>
 
-        <section className="bg-[#e8f3ec] py-14 text-center">
+        <section className="bg-[#fde4ea] py-14 text-center">
           <h2 className="font-serif text-3xl text-ink">To‘yingizga taklifnomani bugun tayyorlang</h2>
-          <Link href="/create" className="mt-6 inline-block rounded-full bg-saffron px-9 py-3.5 font-medium text-white hover:bg-[#d4561c]">Hoziroq yaratish</Link>
+          <Link href="/create" className="mt-6 inline-block rounded-full bg-saffron px-9 py-3.5 font-medium text-white hover:bg-[#b81a58]">Hoziroq yaratish</Link>
         </section>
       </main>
 

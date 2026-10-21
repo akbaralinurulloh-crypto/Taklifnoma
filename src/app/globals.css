@@ -1,13 +1,13 @@
 @import "tailwindcss";
 
 :root {
-  --ivory: #f3f7f2;
-  --beige: #e0ece4;
-  --gold: #2f9a73;
-  --gold-dark: #1f6f54;
-  --ink: #14302a;
-  --muted: #4a6158;
-  --saffron: #ee6a2b;
+  --ivory: #fff7f9;
+  --beige: #fde4ea;
+  --gold: #e11d63;
+  --gold-dark: #a61e4d;
+  --ink: #2b1620;
+  --muted: #6b4a57;
+  --saffron: #e11d63;
   --background: var(--ivory);
   --foreground: var(--ink);
 }
@@ -22,7 +22,7 @@
   --color-ink: var(--ink);
   --color-muted: var(--muted);
   --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-  --font-serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  --font-serif: "Playfair Display", "Iowan Old Style", Georgia, serif;
   --color-saffron: var(--saffron);
 }
 
@@ -166,3 +166,11 @@ body {
 [data-rv="left"] .iv-ttl::after { left: 0; transform: none; background: linear-gradient(90deg, var(--accent), transparent); }
 
 @media (prefers-reduced-motion: reduce) { .iv-aurora i { animation: none; } .iv-ttl::after { transition: none; } }
+
+/* Sayt: yumshoq ko'rinish animatsiyalari */
+@keyframes st-up { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: none; } }
+.st-up { animation: st-up .8s cubic-bezier(.2,.7,.2,1) both; animation-delay: var(--d, 0s); }
+.st-card { transition: transform .35s cubic-bezier(.2,.7,.2,1), box-shadow .35s; }
+.st-card:hover { transform: translateY(-5px); box-shadow: 0 22px 40px -22px rgb(166 30 77 / .45); }
+.st-hero-bg { background: radial-gradient(60% 50% at 85% 10%, rgb(225 29 99 / .14), transparent 70%), radial-gradient(50% 40% at 5% 90%, rgb(255 180 120 / .18), transparent 70%); }
+@media (prefers-reduced-motion: reduce) { .st-up { animation: none; } .st-card { transition: none; } .st-card:hover { transform: none; } }

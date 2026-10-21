@@ -24,7 +24,7 @@ export function PhonePreview({
   const scale = width / 420;
   return (
     <div className={`group relative transition-transform hover:-translate-y-1 ${className}`} style={{ width, height }}>
-      <div aria-hidden className="pointer-events-none relative h-full w-full select-none overflow-hidden rounded-2xl border border-[#cfe0d5] bg-white shadow-[0_20px_40px_-24px_rgba(20,48,42,.55)]">
+      <div aria-hidden className="pointer-events-none relative h-full w-full select-none overflow-hidden rounded-2xl border border-[#f3d3dc] bg-white shadow-[0_20px_40px_-24px_rgba(20,48,42,.55)]">
         <div className="absolute left-0 top-0 origin-top-left" style={{ width: 420, transform: `scale(${scale})` }}>
           <InvitationView data={data} motion={false} />
         </div>
