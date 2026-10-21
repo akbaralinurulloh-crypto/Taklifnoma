@@ -95,3 +95,14 @@ Production deployment qadamlari: README 4-bo‘lim.
 - **Migratsiya 0003** (`supabase/migrations/0003_more_designs.sql`) Supabase'da qo'lda ishga tushirilishi shart, aks holda yangi dizaynlarni saqlab bo'lmaydi.
 - Tekshirildi: lint, tsc, 123 test, build; 390 va 1280 px da gorizontal siljish yo'q. Haqiqiy bazadagi `/i/[slug]` qopqog'i brauzerda faqat vaqtinchalik sahifada sinaldi (haqiqiy slug bilan emas).
 - Cheklovlar o'zgarmadi: xotiradagi rate-limit, rasm tozalash yo'q, foydalanuvchi hisoblari yo'q, huquqiy sahifalar qoralama, musiqa katalogi bo'sh.
+
+## Yangilanish (2026-10-21, uchinchi): taklifnoma tizimi noldan qayta qurildi
+- **Yangi taklifnoma tuzilmasi** (hamma shablonda bir xil ketma-ketlik): ochilish ekrani → bosh ekran → ota-ona taklifi va "Assalomu alaykum" → to'y kuni va oylik taqvim → to'ygacha sanoq → to'y dasturi → manzil/xarita → kiyim kodi → "Sizni kutamiz".
+- **10 ta yangi shablon**: Anor, Osmon, Zarrin, Oq va qora, Zaytun, Shokolad, Gul chizma, Muhr, Firuza, Atlas. Har birining o'z rangi va ochilish usuli: karta, konvert, mum muhr, yurak, darvoza, surib ochish.
+- Bezaklar (atirgul, novda, lenta, ipak, bulut, koshin, atlas, kaptar) shu loyiha uchun chizilgan vektor shakllar. Boshqa saytlardan rasm olinmagan.
+- Shriftlar o'z serverimizdan (@fontsource: Great Vibes, Playfair Display, Cormorant Garamond), tashqi CDN yo'q.
+- Yaratish formasiga qo'shildi: ota-ona matni, kiyim kodi, to'y dasturi (8 qatorgacha). Dizayn tanlashda har shablonning jonli kichik ko'rinishi chiqadi.
+- Bosh sahifa qayta yozildi (shablonlar, imkoniyatlar, mehmonlar javobi, qanday ishlaydi, savollar).
+- **Migratsiya 0004** (`supabase/migrations/0004_new_invitation_fields.sql`) Supabase'da qo'lda ishga tushirilishi SHART: yangi ustunlar qo'shadi, eski dizayn nomli taklifnomalarni "osmon" ga o'tkazadi.
+- Tekshirildi: lint, tsc, 129 test, build; 390 px da 10 shablonning ochilish va asosiy qismi brauzerda ko'rildi, gorizontal siljish va konsol xatosi yo'q.
+- **Hali qilinmagan:** foto galereya (bir nechta rasm yuklash), mehmonlarga shaxsiy havola, tilaklar kitobi, rus tili, QR-kod, narx/to'lov. Juftlik surati yuklangan holat brauzerda hali ko‘rilmagan: faqat suratsiz holat ko‘rildi.

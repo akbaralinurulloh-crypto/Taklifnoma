@@ -3,7 +3,6 @@ import { notFound } from "next/navigation";
 import { cache } from "react";
 import { InvitationView } from "@/components/InvitationView";
 import { RsvpForm } from "@/components/RsvpForm";
-import { OpenCover } from "@/components/guest/OpenCover";
 import { GuestActions } from "@/components/guest/GuestActions";
 import { Unconfigured } from "@/components/Unconfigured";
 import { getRepo } from "@/lib/server/deps";
@@ -48,8 +47,8 @@ export default async function PublicInvitationPage({ params }: Props) {
 
   return (
     <main className="flex-1 bg-[#dfe8e1] py-0 sm:py-6">
-      <OpenCover groom={data.groomName} bride={data.brideName}>
-        <InvitationView data={data} />
+      <>
+        <InvitationView data={data} gate />
         <div className="mx-auto mt-6 max-w-[420px] space-y-6 px-4 pb-10">
           {data.weddingAt && (
             <GuestActions
@@ -61,7 +60,7 @@ export default async function PublicInvitationPage({ params }: Props) {
           )}
           <RsvpForm slug={slug} />
         </div>
-      </OpenCover>
+      </>
     </main>
   );
 }

@@ -76,3 +76,21 @@ body {
 @keyframes tk-sway { 0%, 100% { transform: rotate(-3deg); } 50% { transform: rotate(3deg); } }
 .tk-sway { animation: tk-sway 7s ease-in-out infinite; transform-origin: 50% 100%; animation-delay: var(--d, 0s); }
 @media (prefers-reduced-motion: reduce) { .tk-shoot, .tk-sway { animation: none; } }
+
+/* ===== Taklifnoma (mehmon ko'radigan sahifa) ===== */
+.iv { background: var(--bg); color: var(--ink); font-family: "Cormorant Garamond", "Playfair Display", Georgia, serif; }
+.f-script { font-family: "Great Vibes", "Snell Roundhand", cursive; font-weight: 400; }
+.f-display { font-family: "Playfair Display", Georgia, serif; }
+.f-body { font-family: "Cormorant Garamond", Georgia, serif; font-weight: 600; }
+.iv-muted { color: var(--muted); }
+.iv-accent { color: var(--accent); }
+.iv-paper { background: var(--paper); }
+.iv-accent-bg { background: var(--accent); color: var(--on); }
+.iv-line { border-color: color-mix(in srgb, var(--accent) 35%, transparent); }
+@keyframes iv-in { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+.iv-in { animation: iv-in .9s cubic-bezier(.2,.7,.2,1) both; animation-delay: var(--d, 0s); }
+@keyframes iv-pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+.iv-pulse { animation: iv-pulse 1.8s ease-in-out infinite; }
+@keyframes iv-drift { 0%,100% { transform: translateX(0); } 50% { transform: translateX(14px); } }
+.iv-drift { animation: iv-drift 9s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { .iv-in, .iv-pulse, .iv-drift { animation: none; } .iv-gate * { transition-duration: 1ms !important; } }

@@ -15,6 +15,7 @@ import {
 import type { PublicInvitation } from "@/lib/types";
 import { ApiError, api, randomToken } from "@/lib/client-api";
 import { InvitationView } from "@/components/InvitationView";
+import { PhonePreview } from "@/components/site/PhonePreview";
 import { PublishedPanel } from "./ShareLinks";
 
 export type Track = { id: string; title: string; url: string };
@@ -27,6 +28,9 @@ export type Form = {
   venueName: string;
   venueAddress: string;
   extraText: string;
+  parents: string;
+  dressCode: string;
+  program: { time: string; title: string }[];
   design: Design;
   musicId: string | null;
 };
@@ -50,13 +54,19 @@ const EMPTY: Form = {
   venueName: "",
   venueAddress: "",
   extraText: "",
-  design: "classic",
+  parents: "",
+  dressCode: "",
+  program: [],
+  design: "osmon",
   musicId: null,
 };
 
 const DRAFT_KEY = "taklifnoma:draft:v1";
 const STEPS = ["Ma’lumotlar", "Rasm", "Dizayn", "Musiqa", "Ko‘rinish", "Saqlash"] as const;
-const STEP1_FIELDS = ["groomName", "brideName", "date", "time", "venueName", "venueAddress", "extraText"] as const;
+const STEP1_FIELDS = ["groomName", "brideName", "date", "time", "venueName", "venueAddress", "extraText", "parents", "dressCode", "program"] as const;
+
+/** Bo'sh qatorlar tashlab yuboriladi. */
+const cleanProgram = (rows: Form["program"]) => rows.filter((r) => r.time.trim() || r.title.trim()).map((r) => ({ time: r.time.trim(), title: r.title.trim() }));
 
 type Photo = { previewUrl: string; name: string; file?: File };
 
@@ -118,7 +128,12 @@ export function CreateWizard({ tracks, backendConfigured, siteUrl, mode = "creat
             venueName: str(p.venueName),
             venueAddress: str(p.venueAddress),
             extraText: str(p.extraText),
-            design: initialDesign ?? (DESIGNS.includes(p.design as Design) ? (p.design as Design) : "classic"),
+            parents: str(p.parents),
+            dressCode: str(p.dressCode),
+            program: Array.isArray(p.program)
+              ? p.program.slice(0, 8).map((r) => ({ time: str((r as { time?: unknown })?.time), title: str((r as { title?: unknown })?.title) }))
+              : [],
+            design: initialDesign ?? (DESIGNS.includes(p.design as Design) ? (p.design as Design) : "osmon"),
             musicId: null,
           });
         } else if (initialDesign) {
@@ -161,7 +176,7 @@ export function CreateWizard({ tracks, backendConfigured, siteUrl, mode = "creat
 
   const errors = useMemo(() => {
     const out: Record<string, string> = {};
-    const parsed = invitationInputSchema.safeParse(form);
+    const parsed = invitationInputSchema.safeParse({ ...form, program: cleanProgram(form.program) });
     if (!parsed.success) {
       for (const issue of parsed.error.issues) {
         const key = String(issue.path[0]);
@@ -246,6 +261,9 @@ export function CreateWizard({ tracks, backendConfigured, siteUrl, mode = "creat
         venueName: form.venueName,
         venueAddress: form.venueAddress,
         extraText: form.extraText,
+        parents: form.parents,
+        dressCode: form.dressCode,
+        program: cleanProgram(form.program),
         design: form.design,
         musicId: form.musicId,
       };
@@ -325,6 +343,9 @@ export function CreateWizard({ tracks, backendConfigured, siteUrl, mode = "creat
     venueName: form.venueName.trim() || "To‘yxona nomi",
     venueAddress: form.venueAddress.trim(),
     extraText: form.extraText.trim() || null,
+    parents: form.parents.trim() || null,
+    dressCode: form.dressCode.trim() || null,
+    program: cleanProgram(form.program).filter((r) => /^([01]\d|2[0-3]):[0-5]\d$/.test(r.time) && r.title),
     photoUrl: photo?.previewUrl ?? null,
     design: form.design,
     music: track ? { title: track.title, url: track.url } : null,
@@ -407,6 +428,50 @@ export function CreateWizard({ tracks, backendConfigured, siteUrl, mode = "creat
                   <span className="mt-1 block text-right text-xs font-normal text-muted">{form.extraText.length}/600</span>
                 </Field>
               </div>
+              <div className="sm:col-span-2">
+                <Field label="Ota-ona nomidan taklif (ixtiyoriy)" error={err("parents")} hint="Masalan: Karim va Dilfuza oilalari nomidan">
+                  <input className={inputCls} value={form.parents} maxLength={200} onChange={(e) => set("parents", e.target.value)} />
+                </Field>
+              </div>
+              <div className="sm:col-span-2">
+                <Field label="Kiyim kodi (ixtiyoriy)" error={err("dressCode")} hint="Masalan: janoblar klassik kostyumda, xonimlar pastel ranglarda">
+                  <textarea className={`${inputCls} min-h-20`} value={form.dressCode} maxLength={300} onChange={(e) => set("dressCode", e.target.value)} />
+                </Field>
+              </div>
+              <div className="sm:col-span-2">
+                <p className="text-sm font-medium text-ink">To‘y dasturi (ixtiyoriy)</p>
+                <p className="mt-1 text-xs text-muted">Vaqt va nomini yozing, masalan: 16:00 Mehmonlarni kutib olish. Ko‘pi bilan 8 ta qator.</p>
+                <ul className="mt-3 space-y-2">
+                  {form.program.map((row, i) => (
+                    <li key={i} className="flex gap-2">
+                      <input
+                        type="time"
+                        aria-label={`Dastur ${i + 1}: vaqt`}
+                        className={`${inputCls} mt-0 w-32 shrink-0`}
+                        value={row.time}
+                        onChange={(e) => set("program", form.program.map((r, j) => (j === i ? { ...r, time: e.target.value } : r)))}
+                      />
+                      <input
+                        aria-label={`Dastur ${i + 1}: nomi`}
+                        className={`${inputCls} mt-0`}
+                        value={row.title}
+                        maxLength={60}
+                        placeholder="Masalan: Nikoh marosimi"
+                        onChange={(e) => set("program", form.program.map((r, j) => (j === i ? { ...r, title: e.target.value } : r)))}
+                      />
+                      <button type="button" aria-label={`Dastur ${i + 1} qatorini o‘chirish`} className="rounded-lg border border-[#b7cdbf] px-3 text-red-700" onClick={() => set("program", form.program.filter((_, j) => j !== i))}>
+                        ×
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+                {err("program") && <p role="alert" className="mt-2 text-xs text-red-700">{err("program")}</p>}
+                {form.program.length < 8 && (
+                  <button type="button" className="mt-3 rounded-full border border-[#b7cdbf] px-4 py-2 text-sm" onClick={() => set("program", [...form.program, { time: "", title: "" }])}>
+                    + Qator qo‘shish
+                  </button>
+                )}
+              </div>
             </div>
           )}
 
@@ -450,14 +515,15 @@ export function CreateWizard({ tracks, backendConfigured, siteUrl, mode = "creat
           {step === 2 && (
             <fieldset>
               <legend className="text-sm font-medium text-ink">Dizaynni tanlang</legend>
-              <div className="mt-3 grid gap-3 sm:grid-cols-2">
+              <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3">
                 {DESIGNS.map((d) => (
                   <label
                     key={d}
                     className={`cursor-pointer rounded-xl border p-4 ${form.design === d ? "border-gold bg-[#e8f3ec] ring-2 ring-gold/40" : "border-[#cfe0d5] hover:bg-beige/40"}`}
                   >
                     <input type="radio" name="design" value={d} checked={form.design === d} onChange={() => set("design", d)} className="sr-only" />
-                    <span className="block font-serif text-lg text-ink">{DESIGN_LABELS[d]}</span>
+                    <PhonePreview data={{ ...preview, design: d }} width={150} height={250} className="mx-auto" />
+                    <span className="mt-3 block font-serif text-lg text-ink">{DESIGN_LABELS[d]}</span>
                     <span className="mt-1 block text-xs text-muted">{DESIGN_DESCRIPTIONS[d]}</span>
                   </label>
                 ))}

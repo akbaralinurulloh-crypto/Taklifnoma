@@ -22,7 +22,7 @@ describe.skipIf(!enabled)("Supabase integratsiyasi (haqiqiy baza)", () => {
 
   const fields = {
     groomName: "Test", brideName: "Integratsiya", date: "2099-05-20", time: "18:30",
-    venueName: "Zal", venueAddress: "Namangan", design: "luxury",
+    venueName: "Zal", venueAddress: "Namangan", design: "zarrin",
   };
 
   afterAll(async () => {
@@ -34,7 +34,7 @@ describe.skipIf(!enabled)("Supabase integratsiyasi (haqiqiy baza)", () => {
     slug = row.slug;
     id = row.id;
     const pub = await getPublicBySlug(repo, slug, defaultUrls);
-    expect(pub).toMatchObject({ groomName: "Test", design: "luxury", weddingAt: "2099-05-20T13:30:00.000Z" });
+    expect(pub).toMatchObject({ groomName: "Test", design: "zarrin", weddingAt: "2099-05-20T13:30:00.000Z" });
   });
 
   it("takroriy so'rov dublikat yaratmaydi (UNIQUE cheklov)", async () => {

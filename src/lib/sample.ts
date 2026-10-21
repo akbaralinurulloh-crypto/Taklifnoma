@@ -10,6 +10,13 @@ export function sampleInvitation(design: Design, over: Partial<PublicInvitation>
     venueName: "Registon to‘yxonasi",
     venueAddress: "Namangan sh., Navoiy ko‘chasi 12",
     extraText: "Sizni to‘yimizda ko‘rishdan baxtiyormiz.",
+    parents: "Karim va Dilfuza oilalari nomidan",
+    dressCode: "Janoblar klassik kostyumda, xonimlar pastel ranglardagi libosda.",
+    program: [
+      { time: "16:00", title: "Mehmonlarni kutib olish" },
+      { time: "17:00", title: "Nikoh marosimi" },
+      { time: "18:00", title: "Ziyofat va raqs" },
+    ],
     photoUrl: null,
     music: null,
     design,

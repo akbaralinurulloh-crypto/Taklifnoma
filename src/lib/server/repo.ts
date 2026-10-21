@@ -1,4 +1,4 @@
-import type { Design } from "@/lib/schema";
+import type { Design, ProgramItem } from "@/lib/schema";
 
 export type InvitationStatus = "draft" | "published" | "deleted";
 
@@ -11,6 +11,9 @@ export type InvitationRow = {
   venue_name: string;
   venue_address: string;
   extra_text: string | null;
+  parents: string | null;
+  dress_code: string | null;
+  program: ProgramItem[];
   photo_path: string | null;
   design: Design;
   music_id: string | null;
@@ -27,7 +30,7 @@ export type InvitationPatch = Partial<
   Pick<
     InvitationRow,
     | "groom_name" | "bride_name" | "wedding_at" | "venue_name" | "venue_address"
-    | "extra_text" | "photo_path" | "design" | "music_id" | "status" | "published_at"
+    | "extra_text" | "parents" | "dress_code" | "program" | "photo_path" | "design" | "music_id" | "status" | "published_at"
   >
 >;
 

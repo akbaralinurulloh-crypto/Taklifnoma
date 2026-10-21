@@ -12,7 +12,10 @@ const base: PublicInvitation = {
   venueAddress: "Namangan sh., Navoiy ko‘chasi 12",
   extraText: "Sizni kutamiz",
   photoUrl: "https://cdn.test/photo.jpg",
-  design: "classic",
+  design: "osmon",
+  parents: "Karim va Dilfuza oilalari nomidan",
+  dressCode: "Klassik kostyum",
+  program: [{ time: "16:00", title: "Kutib olish" }],
   music: { title: "Yor-yor", url: "https://cdn.test/yor.mp3" },
 };
 const render = (d: Partial<PublicInvitation>) => renderToString(<InvitationView data={{ ...base, ...d }} />);
@@ -28,14 +31,19 @@ describe.each(DESIGNS)("template: %s", (design) => {
     expect(html).toContain("Yor-yor");
     expect(html).toMatch(/chorshanba/); // 2099-05-20 chorshanba (Toshkent vaqti bo‘yicha)
     expect(html).toContain("18:30");
+    expect(html).toContain("Karim va Dilfuza oilalari nomidan");
+    expect(html).toContain("Klassik kostyum");
+    expect(html).toContain("Kutib olish");
     expect(html).not.toMatch(/undefined|NaN|\[object/);
   });
 
   it("musiqa, rasm va manzil bo'lmasa, tegishli tugma/element umuman chiqmaydi", () => {
-    const html = render({ design, music: null, photoUrl: null, venueAddress: "", extraText: null });
+    const html = render({ design, music: null, photoUrl: null, venueAddress: "", extraText: null, parents: null, dressCode: null, program: [] });
     expect(html).not.toContain("Musiqani yoqish");
     expect(html).not.toContain("<img");
     expect(html).not.toContain("Xaritada ko‘rish");
+    expect(html).not.toContain("Kiyim kodi");
+    expect(html).not.toContain("To‘y dasturi");
   });
 
   it("xarita havolasi haqiqiy manzildan yasaladi", () => {
@@ -61,7 +69,7 @@ describe.each(DESIGNS)("template: %s", (design) => {
   });
 });
 
-describe("oltita dizayn haqiqatan turlicha", () => {
+describe("o'nta dizayn haqiqatan turlicha", () => {
   it("har bir dizaynning HTML tuzilmasi boshqalaridan farq qiladi (faqat rang emas)", () => {
     const strip = (h: string) => h.replace(/class="[^"]*"/g, "").replace(/style="[^"]*"/g, "");
     const structures = DESIGNS.map((d) => strip(render({ design: d })));

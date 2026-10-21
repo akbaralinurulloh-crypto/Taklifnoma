@@ -17,7 +17,7 @@ const valid = {
   time: "18:30",
   venueName: "Registon to'yxonasi",
   venueAddress: "Namangan sh., Navoiy ko'chasi 12",
-  design: "classic" as const,
+  design: "osmon" as const,
 };
 
 describe("invitationInputSchema", () => {
@@ -87,7 +87,7 @@ describe("mapsUrl va sniffImageType", () => {
 
 describe("o'zbekcha xato xabarlari (maydon umuman yuborilmasa ham)", () => {
   it("sana va vaqt yo'q bo'lsa inglizcha emas, o'zbekcha xabar beradi", () => {
-    const r = invitationInputSchema.safeParse({ groomName: "A", brideName: "B", venueName: "Z", venueAddress: "N", design: "classic" });
+    const r = invitationInputSchema.safeParse({ groomName: "A", brideName: "B", venueName: "Z", venueAddress: "N", design: "osmon" });
     expect(r.success).toBe(false);
     if (!r.success) {
       const msgs = Object.fromEntries(r.error.issues.map((i) => [String(i.path[0]), i.message]));
@@ -97,7 +97,7 @@ describe("o'zbekcha xato xabarlari (maydon umuman yuborilmasa ham)", () => {
     }
   });
   it("bo'sh sana satri ham 'kiritilishi shart' deb xabar beradi", () => {
-    const r = invitationInputSchema.safeParse({ groomName: "A", brideName: "B", date: "", time: "", venueName: "Z", venueAddress: "N", design: "classic" });
+    const r = invitationInputSchema.safeParse({ groomName: "A", brideName: "B", date: "", time: "", venueName: "Z", venueAddress: "N", design: "osmon" });
     expect(r.success).toBe(false);
     if (!r.success) {
       const first = (k: string) => r.error.issues.find((i) => i.path[0] === k)?.message;

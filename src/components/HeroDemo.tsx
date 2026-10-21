@@ -11,7 +11,7 @@ const SCALE = FRAME_W / 420;
 export function HeroDemo({ children }: { children?: React.ReactNode }) {
   const [groom, setGroom] = useState("Aziz");
   const [bride, setBride] = useState("Madina");
-  const [design, setDesign] = useState<Design>("classic");
+  const [design, setDesign] = useState<Design>("osmon");
   const [auto, setAuto] = useState(false);
 
   // Avtomatik almashish: faqat foydalanuvchi aralashmagan va animatsiyani cheklamagan bo'lsa.
@@ -39,6 +39,9 @@ export function HeroDemo({ children }: { children?: React.ReactNode }) {
     venueName: "Registon to‘yxonasi",
     venueAddress: "Namangan sh., Navoiy ko‘chasi 12",
     extraText: "Sizni to‘yimizda ko‘rishdan baxtiyormiz.",
+    parents: null,
+    dressCode: null,
+    program: [],
     photoUrl: null,
     design,
     music: null,

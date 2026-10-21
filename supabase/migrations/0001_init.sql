@@ -23,8 +23,8 @@ create table public.invitations (
   venue_address text not null check (char_length(btrim(venue_address)) between 1 and 240),
   extra_text text check (extra_text is null or char_length(extra_text) <= 600),
   photo_path text,
-  design text not null default 'classic'
-    check (design in ('classic','romantic','national','minimalist','modern','luxury','registon','bahor','tun','chipta')),
+  design text not null default 'osmon'
+    check (design in ('anor','osmon','zarrin','oqqora','zaytun','shokolad','gulchizma','muhr','firuza','atlas')),
   music_id uuid references public.music_tracks(id) on delete set null,
   status text not null default 'draft' check (status in ('draft','published','deleted')),
   edit_token_hash text not null,           -- faqat SHA-256 hash, ochiq token saqlanmaydi

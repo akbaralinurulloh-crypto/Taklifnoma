@@ -31,7 +31,7 @@ const params = <T extends object>(p: T) => ({ params: Promise.resolve(p) });
 
 const fields = {
   groomName: "Aziz", brideName: "Madina", date: "2099-05-20", time: "18:30",
-  venueName: "Zal", venueAddress: "Namangan", design: "modern",
+  venueName: "Zal", venueAddress: "Namangan", design: "anor",
 };
 let repo: ReturnType<typeof memoryRepo>;
 let token: string;
@@ -61,7 +61,7 @@ describe("yaratish va ommaviy ochish", () => {
     expect(body.path).toBe(`/i/${body.slug}`);
     const pub = await publicGET(json(`/api/public/${body.slug}`, "GET"), params({ slug: body.slug }));
     expect(pub.status).toBe(200);
-    expect(await pub.json()).toMatchObject({ groomName: "Aziz", design: "modern" });
+    expect(await pub.json()).toMatchObject({ groomName: "Aziz", design: "anor" });
   });
 
   it("takroriy so'rov 200 + replay bilan javob beradi va dublikat yaratmaydi", async () => {
@@ -103,7 +103,7 @@ describe("tahrirlash", () => {
     const get = await editGET(json(`/api/edit/${token}`, "GET"), params({ token }));
     expect(get.status).toBe(200);
     const view = await get.json();
-    expect(view.form).toMatchObject({ groomName: "Aziz", date: "2099-05-20", time: "18:30", design: "modern" });
+    expect(view.form).toMatchObject({ groomName: "Aziz", date: "2099-05-20", time: "18:30", design: "anor" });
     expect(JSON.stringify(view)).not.toMatch(/edit_token|idempotency|hash/);
 
     const put = await editPUT(json(`/api/edit/${token}`, "PUT", { ...fields, venueName: "Yangi zal" }), params({ token }));

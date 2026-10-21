@@ -1,4 +1,15 @@
 import type { Metadata, Viewport } from "next";
+import "@fontsource/great-vibes/latin-400.css";
+import "@fontsource/great-vibes/latin-ext-400.css";
+import "@fontsource/great-vibes/cyrillic-400.css";
+import "@fontsource/playfair-display/latin-400.css";
+import "@fontsource/playfair-display/latin-ext-400.css";
+import "@fontsource/playfair-display/latin-700.css";
+import "@fontsource/playfair-display/latin-ext-700.css";
+import "@fontsource/cormorant-garamond/latin-400.css";
+import "@fontsource/cormorant-garamond/latin-ext-400.css";
+import "@fontsource/cormorant-garamond/latin-600.css";
+import "@fontsource/cormorant-garamond/latin-ext-600.css";
 import "./globals.css";
 
 function siteBase() {

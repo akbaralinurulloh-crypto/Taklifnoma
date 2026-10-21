@@ -2,43 +2,43 @@
 import { z } from "zod";
 
 export const DESIGNS = [
-  "classic",
-  "romantic",
-  "national",
-  "minimalist",
-  "modern",
-  "luxury",
-  "registon",
-  "bahor",
-  "tun",
-  "chipta",
+  "anor",
+  "osmon",
+  "zarrin",
+  "oqqora",
+  "zaytun",
+  "shokolad",
+  "gulchizma",
+  "muhr",
+  "firuza",
+  "atlas",
 ] as const;
 export type Design = (typeof DESIGNS)[number];
 
 export const DESIGN_LABELS: Record<Design, string> = {
-  classic: "Klassik",
-  romantic: "Romantik",
-  national: "Milliy",
-  minimalist: "Minimalistik",
-  modern: "Zamonaviy",
-  luxury: "Hashamatli",
-  registon: "Registon",
-  bahor: "Bahor",
-  tun: "Yulduzli tun",
-  chipta: "Chipta",
+  anor: "Anor",
+  osmon: "Osmon",
+  zarrin: "Zarrin",
+  oqqora: "Oq va qora",
+  zaytun: "Zaytun",
+  shokolad: "Shokolad",
+  gulchizma: "Gul chizma",
+  muhr: "Muhr",
+  firuza: "Firuza",
+  atlas: "Atlas",
 };
 
 export const DESIGN_DESCRIPTIONS: Record<Design, string> = {
-  classic: "Fil suyagi va oltin, simmetrik an’anaviy kompozitsiya.",
-  romantic: "Mayin pushti ranglar, gul naqshlari, markazda katta rasm.",
-  national: "Milliy naqsh va adras ranglari, zamonaviy o‘qiluvchanlik.",
-  minimalist: "Ortiqcha bezaksiz, ko‘p bo‘sh joy, sodda tipografika.",
-  modern: "Editorial uslub, katta tipografika, dadil kompozitsiya.",
-  luxury: "To‘q fon, oltin aksentlar va nafis chiziqlar.",
-  registon: "Samarqand feruza koshinlari, mehrob shaklidagi rasm va sakkiz qirrali yulduz.",
-  bahor: "Yam-yashil novdalar, yumshoq ranglar va tabiat nafasi.",
-  tun: "Yulduzli osmon, oy va yaltirab turuvchi yulduzlar.",
-  chipta: "To‘y chiptasi ko‘rinishida: teshikli chiziq, shtrix-kod va yorqin rang.",
+  anor: "To‘q qizil rang, atirgullar va rasm ustidagi ismlar.",
+  osmon: "Havorang osmon, oltin muhrli konvert va yengil bulutlar.",
+  zarrin: "Oltin ipak mato va yurakka bosib ochiladigan taklifnoma.",
+  oqqora: "Oq-qora kino uslubi, qora parda surilib ochiladi.",
+  zaytun: "Zaytun yashil ipak, lentali konvert va oval kartalar.",
+  shokolad: "Shokolad va krem ranglari, lentali konvert.",
+  gulchizma: "Oq qog‘ozda qalam bilan chizilgan gullar.",
+  muhr: "Yashil mum muhrni bosganda konvert ochiladi.",
+  firuza: "Samarqand feruzasi: mehrob, sakkiz qirrali yulduz va darvoza.",
+  atlas: "Milliy atlas naqshlari: qizil, sariq va ko‘k ranglar.",
 };
 
 export const MAX_PHOTO_BYTES = 8 * 1024 * 1024;
@@ -55,6 +55,15 @@ const nonBlank = (label: string, max: number) =>
         .min(1, `${label} kiritilishi shart`)
         .max(max, `${label} ${max} belgidan oshmasligi kerak`),
     );
+
+const optionalText = (label: string, max: number) =>
+  z
+    .string()
+    .max(max, `${label} ${max} belgidan oshmasligi kerak`)
+    .optional()
+    .transform((v) => (v && v.trim() ? v.trim() : null));
+
+export type ProgramItem = { time: string; title: string };
 
 /** Forma maydonlari. Sana (YYYY-MM-DD) va vaqt (HH:mm) Asia/Tashkent bo'yicha. */
 export const invitationInputSchema = z.object({
@@ -77,6 +86,19 @@ export const invitationInputSchema = z.object({
     .transform((v) => (v && v.trim() ? v.trim() : null)),
   design: z.enum(DESIGNS, { error: "Dizayn noto'g'ri tanlangan" }),
   musicId: z.string({ error: "Musiqa noto'g'ri tanlangan" }).uuid("Musiqa noto'g'ri tanlangan").nullable().optional(),
+  parents: optionalText("Ota-ona matni", 200),
+  dressCode: optionalText("Kiyim kodi matni", 300),
+  program: z
+    .array(
+      z.object({
+        time: z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/, "Dastur vaqti SS:DD ko'rinishida bo'lsin"),
+        title: nonBlank("Dastur nomi", 60),
+      }),
+      { error: "Dastur noto'g'ri" },
+    )
+    .max(8, "Dasturda ko'pi bilan 8 ta qator bo'lishi mumkin")
+    .optional()
+    .transform((v) => v ?? []),
 });
 export type InvitationInput = z.input<typeof invitationInputSchema>;
 export type ValidInvitation = z.output<typeof invitationInputSchema>;

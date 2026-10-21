@@ -22,3 +22,16 @@ describe("whenText", () => {
     expect(whenText("noto'g'ri")).toBeNull();
   });
 });
+
+import { monthGrid } from "./format";
+describe("monthGrid", () => {
+  it("2030-yil iyun: 1-iyun shanba, 12-iyun belgilanadi", () => {
+    const g = monthGrid("2030-06-12T13:00:00.000Z")!;
+    expect(g.title).toBe("Iyun");
+    expect(g.day).toBe(12);
+    expect(g.cells.indexOf(1)).toBe(5); // Du Se Chor Pay Ju [Sha]
+    expect(g.cells.filter((c) => c !== null)).toHaveLength(30);
+    expect(g.cells.length % 7).toBe(0);
+  });
+  it("sana yo'q bo'lsa null", () => expect(monthGrid(null)).toBeNull());
+});

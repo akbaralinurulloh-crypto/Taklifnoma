@@ -8,7 +8,7 @@ import { sampleInvitation } from "@/lib/sample";
 
 export const metadata: Metadata = {
   title: "Taklifnoma dizaynlari",
-  description: "O‘nta alohida to‘y taklifnomasi dizayni: klassik, milliy, Registon, yulduzli tun va boshqalar.",
+  description: "O‘nta to‘y taklifnomasi shabloni: konvert, mum muhr, yurak, darvoza, milliy atlas va boshqalar.",
 };
 
 export default function DesignsPage() {

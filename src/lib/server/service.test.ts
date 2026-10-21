@@ -16,7 +16,7 @@ const fields = {
   time: "18:30",
   venueName: "Registon to‘yxonasi",
   venueAddress: "Namangan sh., Navoiy ko‘chasi 12",
-  design: "luxury",
+  design: "zarrin",
 };
 
 let repo: ReturnType<typeof memoryRepo>;
@@ -114,7 +114,7 @@ describe("ommaviy ko'rinish", () => {
     const { row } = await createInvitation(repo, { ...body, musicId: m.id, photoPath }, NOW);
     const pub = await getPublicBySlug(repo, row.slug, urls);
     expect(pub).toMatchObject({
-      groomName: "Aziz", design: "luxury",
+      groomName: "Aziz", design: "zarrin",
       photoUrl: `https://cdn.test/photos/${photoPath}`,
       music: { title: "Yor-yor", url: "https://cdn.test/music/tracks/a.mp3" },
     });
@@ -146,11 +146,11 @@ describe("tahrirlash va o'chirish", () => {
   it("o'zgarishlar ommaviy sahifada aks etadi va eski rasm tozalash uchun qaytariladi", async () => {
     const photoPath = "photos/123e4567-e89b-12d3-a456-426614174000.jpg";
     const { row } = await createInvitation(repo, { ...body, photoPath }, NOW);
-    const { removedPhoto } = await updateInvitation(repo, token, { ...fields, venueName: "Yangi zal", design: "classic", photoPath: null });
+    const { removedPhoto } = await updateInvitation(repo, token, { ...fields, venueName: "Yangi zal", design: "osmon", photoPath: null });
     expect(removedPhoto).toBe(photoPath);
     const pub = await getPublicBySlug(repo, row.slug, urls);
     expect(pub?.venueName).toBe("Yangi zal");
-    expect(pub?.design).toBe("classic");
+    expect(pub?.design).toBe("osmon");
     expect(pub?.photoUrl).toBeNull();
   });
 
@@ -203,5 +203,46 @@ describe("RSVP", () => {
     const { row } = await createInvitation(repo, body, NOW);
     await adminUnpublish(repo, row.id);
     await expectAppError(submitRsvp(repo, row.slug, { guestName: "Ali", response: "yes" }), 404);
+  });
+});
+
+describe("ota-ona, kiyim kodi va dastur", () => {
+  const extra = {
+    parents: "  Karim va Dilfuza oilalari nomidan ",
+    dressCode: "Klassik kostyum",
+    program: [{ time: "16:00", title: " Mehmonlarni kutib olish " }, { time: "17:30", title: "Nikoh" }],
+  };
+
+  it("saqlanadi, bo'sh joylar kesiladi va ommaviy ko'rinishda qaytadi", async () => {
+    const { row } = await createInvitation(repo, { ...body, ...extra }, NOW);
+    const pub = await getPublicBySlug(repo, row.slug, urls);
+    expect(pub).toMatchObject({
+      parents: "Karim va Dilfuza oilalari nomidan",
+      dressCode: "Klassik kostyum",
+      program: [{ time: "16:00", title: "Mehmonlarni kutib olish" }, { time: "17:30", title: "Nikoh" }],
+    });
+  });
+
+  it("berilmasa null va bo'sh ro'yxat bo'ladi", async () => {
+    const { row } = await createInvitation(repo, body, NOW);
+    expect(await getPublicBySlug(repo, row.slug, urls)).toMatchObject({ parents: null, dressCode: null, program: [] });
+  });
+
+  it("noto'g'ri dastur vaqti, bo'sh nom va 8 tadan ortiq qatorni rad etadi", async () => {
+    const e1 = await expectAppError(createInvitation(repo, { ...body, program: [{ time: "25:00", title: "X" }] }, NOW), 400);
+    expect(e1.fields?.program).toBeTruthy();
+    await expectAppError(createInvitation(repo, { ...body, idempotencyKey: "key-bbbbbbbbbbbbbbbb", editToken: makeEditToken().token, program: [{ time: "10:00", title: "  " }] }, NOW), 400);
+    const many = Array.from({ length: 9 }, (_, i) => ({ time: "10:0" + i, title: "Q" }));
+    await expectAppError(createInvitation(repo, { ...body, idempotencyKey: "key-cccccccccccccccc", editToken: makeEditToken().token, program: many }, NOW), 400);
+    expect(repo._invitations).toHaveLength(0);
+  });
+
+  it("tahrirlashda yangilanadi", async () => {
+    await createInvitation(repo, { ...body, ...extra }, NOW);
+    await updateInvitation(repo, token, { ...fields, parents: "", dressCode: "", program: [{ time: "18:00", title: "Ziyofat" }] }, NOW);
+    const row = repo._invitations[0];
+    expect(row.parents).toBeNull();
+    expect(row.dress_code).toBeNull();
+    expect(row.program).toEqual([{ time: "18:00", title: "Ziyofat" }]);
   });
 });

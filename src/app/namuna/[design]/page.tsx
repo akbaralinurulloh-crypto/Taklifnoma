@@ -38,7 +38,7 @@ export default async function SamplePage({ params }: Props) {
       </div>
 
       <p className="mx-auto max-w-md px-4 py-3 text-center text-xs text-muted">Namuna: ismlar va ma’lumotlar to‘qima.</p>
-      <InvitationView data={sampleInvitation(design)} />
+      <InvitationView data={sampleInvitation(design)} gate />
 
       <div className="fixed inset-x-0 bottom-0 z-30 border-t border-[#cfe0d5] bg-white/95 px-4 py-3 backdrop-blur">
         <div className="mx-auto flex max-w-md items-center gap-2">
