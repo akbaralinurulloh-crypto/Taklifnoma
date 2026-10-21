@@ -103,3 +103,47 @@ body {
 }
 .iv[data-dark="true"]::before { mix-blend-mode: screen; opacity: .05; }
 .iv-paper { box-shadow: 0 22px 40px -28px rgb(0 0 0 / .35), 0 2px 0 rgb(255 255 255 / .6) inset; }
+
+@keyframes iv-eq { 0%, 100% { height: 4px; } 50% { height: 16px; } }
+.iv-eq { animation: iv-eq .9s ease-in-out infinite; }
+
+/* ===== Taklifnoma animatsiyalari ===== */
+.iv-fx { position: absolute; will-change: transform; }
+.iv-fx-fall { top: -40px; animation: iv-fall var(--t) linear infinite; animation-delay: var(--d); }
+.iv-fx-rise { bottom: -40px; animation: iv-rise var(--t) ease-in infinite; animation-delay: var(--d); }
+.iv-fx-twinkle { animation: iv-twinkle var(--t) ease-in-out infinite; animation-delay: var(--d); }
+.iv-fx-fly { animation: iv-fly var(--t) ease-in-out infinite alternate; animation-delay: var(--d); }
+@keyframes iv-fall { 0% { transform: translate3d(0,-5vh,0) rotate(var(--r)); } 50% { transform: translate3d(var(--x),55vh,0) rotate(calc(var(--r) + 180deg)); } 100% { transform: translate3d(calc(var(--x) * -.6),112vh,0) rotate(calc(var(--r) + 380deg)); } }
+@keyframes iv-rise { 0% { transform: translate3d(0,0,0) scale(.6); opacity: 0; } 12% { opacity: .9; } 100% { transform: translate3d(var(--x),-112vh,0) scale(1.15); opacity: 0; } }
+@keyframes iv-twinkle { 0%, 100% { transform: scale(.3); opacity: .15; } 50% { transform: scale(1); opacity: 1; } }
+@keyframes iv-fly { 0% { transform: translate3d(-12vw,0,0) rotate(-8deg); } 35% { transform: translate3d(38vw,-12vh,0) rotate(10deg); } 70% { transform: translate3d(70vw,9vh,0) rotate(-6deg); } 100% { transform: translate3d(108vw,-6vh,0) rotate(8deg); } }
+@keyframes iv-flap { 0%, 100% { transform: scaleX(1); } 50% { transform: scaleX(.25); } }
+.iv-wing { animation: iv-flap .5s ease-in-out infinite; }
+.iv-shoot { position: absolute; width: 90px; height: 2px; background: linear-gradient(90deg, #fff, transparent); opacity: 0; transform: rotate(32deg); animation: iv-shoot 7s ease-in infinite; animation-delay: var(--d); }
+@keyframes iv-shoot { 0% { transform: translate3d(0,0,0) rotate(32deg); opacity: 0; } 3% { opacity: 1; } 12% { transform: translate3d(260px,164px,0) rotate(32deg); opacity: 0; } 100% { transform: translate3d(260px,164px,0) rotate(32deg); opacity: 0; } }
+
+.iv-rv { opacity: 0; transition: opacity .9s ease, transform .9s cubic-bezier(.2,.7,.2,1); }
+.iv-rv[data-rv="up"] { transform: translateY(46px) scale(.97); }
+.iv-rv[data-rv="left"] { transform: translateX(-42px); }
+.iv-rv[data-rv="zoom"] { transform: scale(.88); }
+.iv-rv.iv-rv-in { opacity: 1; transform: none; }
+
+@keyframes iv-ken { from { transform: scale(1); } to { transform: scale(1.12) translateY(-1.5%); } }
+.iv-ken { animation: iv-ken 16s ease-in-out infinite alternate; }
+@keyframes iv-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-9px); } }
+.iv-float { animation: iv-float 5.5s ease-in-out infinite; }
+@keyframes iv-names { from { letter-spacing: .32em; filter: blur(8px); opacity: 0; } to { letter-spacing: normal; filter: blur(0); opacity: 1; } }
+.iv-names { animation: iv-names 1.8s cubic-bezier(.2,.7,.2,1) both; animation-delay: var(--d, .1s); }
+@keyframes iv-beat { 0%, 100% { transform: scale(1); } 15% { transform: scale(1.18); } 30% { transform: scale(1); } 45% { transform: scale(1.12); } }
+.iv-beat { animation: iv-beat 1.8s ease-in-out infinite; }
+@keyframes iv-gleam { 0% { transform: translateX(-130%) skewX(-18deg); } 55%, 100% { transform: translateX(260%) skewX(-18deg); } }
+.iv-gleam { position: relative; overflow: hidden; }
+.iv-gleam::after { content: ""; position: absolute; inset: 0 auto 0 0; width: 40%; background: linear-gradient(90deg, transparent, rgb(255 255 255 / .35), transparent); animation: iv-gleam 6.5s ease-in-out infinite; pointer-events: none; }
+@keyframes iv-ring { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 45%, transparent); } 100% { box-shadow: 0 0 0 26px transparent; } }
+.iv-ring { animation: iv-ring 2.8s ease-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .iv-fxbox { display: none; }
+  .iv-rv { opacity: 1; transform: none; transition: none; }
+  .iv-ken, .iv-float, .iv-names, .iv-beat, .iv-gleam::after, .iv-ring, .iv-eq { animation: none; }
+}

@@ -102,7 +102,7 @@ export function HeroDemo({ children }: { children?: React.ReactNode }) {
           <span className="absolute left-1/2 top-3.5 z-10 h-1.5 w-16 -translate-x-1/2 rounded-full bg-white/25" />
           <div className="relative h-[540px] overflow-hidden rounded-[2rem] bg-white" style={{ width: FRAME_W }}>
             <div key={design} className="absolute left-0 top-0 origin-top-left" style={{ width: 420, transform: `scale(${SCALE})` }}>
-              <InvitationView data={data} />
+              <InvitationView data={data} motion={false} />
             </div>
           </div>
         </div>

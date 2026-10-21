@@ -161,3 +161,56 @@ for b in range(int(DUR / bar)):
     for k in range(4): T.put(doira(), t0 + k * beat, .24); T.put(doira(hi=True), t0 + k * beat + beat / 2, .14)
     T.put(kick(), t0, .3)
 T.render("atlas.mp3", .22, 1.8)
+
+# ---- Qo'shimcha 7 trek (yor-yor uslubidagi 3 ta va 4 ta original) ----
+def yoryor(name, root, bpm, inst, mel_pat, drone=True, wet=0.3):
+    """6/8 doira ritmi (dum-tak-tak dum-tak-tak) va sharqona (frigiy dominant) ohang. Original kompozitsiya."""
+    T = Track(DUR); beat = 60 / bpm; bar = 3 * beat  # 6/8 = 2 guruh x 3 ovoz
+    if drone: T.put(pad([root - 12, root - 5], DUR, 450), 0, .45)
+    for b in range(int(DUR / bar)):
+        t0 = b * bar
+        # doira: dum (past) - tak - tak
+        for k, (h, g) in enumerate([(False, .30), (True, .16), (True, .16), (False, .22), (True, .15), (True, .15)]):
+            T.put(doira(hi=h), t0 + k * beat / 2, g)
+        for k in range(6):
+            deg = mel_pat[(b * 6 + k) % len(mel_pat)]
+            if deg is None: continue
+            T.put(inst(scale_note(root + 12, PHR, deg), beat * 1.1), t0 + k * beat / 2, .45, pan=-.25 if k % 2 else .25)
+        if b % 4 == 3: T.put(string(scale_note(root, PHR, 4), bar * 1.6), t0, .2)
+    return T
+mA = [0, 1, 2, 1, 0, None, 2, 3, 4, 3, 2, 1, 1, 2, 1, 0, None, 0, 4, 4, 3, 2, 1, 0]
+mB = [0, None, 2, 4, 3, 2, 1, 2, 0, None, 0, 1, 2, 4, 5, 4, 2, 1, 4, 3, 2, 1, 0, None]
+mC = [2, 2, 3, 4, 2, 1, 0, 1, 2, None, 0, 0, 4, 3, 2, 3, 4, 5, 4, 2, 1, 2, 1, 0]
+yoryor("", 50, 150, lambda m, d: pluck(m, d, 8, .6), mA).render("yoryor1.mp3", .28, 2.0)
+yoryor("", 53, 138, lambda m, d: pluck(m, d, 6, .9, 0.00004), mB).render("yoryor2.mp3", .3, 2.2)
+yoryor("", 48, 162, lambda m, d: bell(m, d, 2.0, 1.6, 1.0), mC, wet=.25).render("yoryor3.mp3", .25, 1.8)
+# 4 Romantik ballada
+T = arp_track("", 60, MAJ, [0, 4, 5, 2, 3, 0, 3, 4], 68, lambda m, d: piano(m, d, 2.4), [0, 1, 2, 3, 2, 1, 2, 3], g=.5, pads=900,
+              bass=lambda m, d: piano(m, d, 3.0), melody=[[(9, 0), (8, 1.5), (7, 2.5)], [(6, 0), (7, 1), (9, 3)], [(8, 0), (9, 2), (11, 3)], [(10, 0), (9, 1.5), (7, 3)]], wet=.4, rv=3.0)
+T.render("ballada.mp3", .4, 3.0)
+# 5 To'y marshi (tantanali)
+T = Track(DUR); bpm = 104; beat = 60 / bpm; bar = 4 * beat; prog = [0, 4, 5, 3, 0, 4, 0, 0]
+for b in range(int(DUR / bar)):
+    t0 = b * bar; ch = prog[b % len(prog)]; chord = [scale_note(60, MAJ, ch + o) for o in (0, 2, 4)]
+    T.put(pad(chord, bar * 1.05, 1800), t0, .4)
+    for k in range(4):
+        T.put(piano(chord[0] - 12, beat * 0.9, 1.0), t0 + k * beat, .35)
+        T.put(bell(chord[k % 3] + 12, beat * 1.6, 2.0, 1.2, 1.6), t0 + k * beat, .3, pan=.2 if k % 2 else -.2)
+    T.put(doira(), t0, .28); T.put(doira(hi=True), t0 + 2 * beat, .2)
+T.render("marsh.mp3", .35, 2.6)
+# 6 Kelin kutib olish (iliq, o'rtacha)
+T = arp_track("", 57, MAJ, [0, 3, 4, 5], 88, lambda m, d: pluck(m, d, 7, .7), [0, 2, 1, 3, 2, 1, 3, 2], g=.45, pads=1000,
+              bass=lambda m, d: pluck(m, d * 1.4, 4, 1.2), melody=[[(8, 0), (9, 1), (8, 2), (7, 3)], [(6, 0), (7, 2), (4, 3)]], swing=.1, wet=.3)
+T.render("kelin.mp3", .3, 2.4)
+# 7 Raqs (tez, doira bilan)
+T = Track(DUR); bpm = 132; beat = 60 / bpm; bar = 4 * beat; root = 50
+T.put(pad([root - 12, root - 5], DUR, 500), 0, .4)
+mel = [0, 1, 2, 2, 1, 0, 4, 3, 2, 1, 0, 0, 5, 4, 3, 2]
+for b in range(int(DUR / bar)):
+    t0 = b * bar
+    for i in range(8):
+        T.put(pluck(scale_note(root + 12, PHR, mel[(b * 8 + i) % 16] + (7 if b % 8 >= 4 else 0)), beat * .8, 8, .45), t0 + i * beat / 2, .42, pan=.25 if i % 2 else -.25)
+    for k in range(4):
+        T.put(doira(), t0 + k * beat, .26); T.put(doira(hi=True), t0 + k * beat + beat / 2, .17)
+    T.put(kick(), t0, .22); T.put(kick(), t0 + 2 * beat, .2)
+T.render("raqs.mp3", .22, 1.6)

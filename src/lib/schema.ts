@@ -12,6 +12,11 @@ export const DESIGNS = [
   "muhr",
   "firuza",
   "atlas",
+  "gulbarg",
+  "yulduz",
+  "kapalak",
+  "oltin",
+  "yurak",
 ] as const;
 export type Design = (typeof DESIGNS)[number];
 
@@ -26,6 +31,11 @@ export const DESIGN_LABELS: Record<Design, string> = {
   muhr: "Muhr",
   firuza: "Firuza",
   atlas: "Atlas",
+  gulbarg: "Gulbarg",
+  yulduz: "Yulduzli tun",
+  kapalak: "Kapalak",
+  oltin: "Oltin yog‘du",
+  yurak: "Yuraklar",
 };
 
 export const DESIGN_DESCRIPTIONS: Record<Design, string> = {
@@ -39,6 +49,11 @@ export const DESIGN_DESCRIPTIONS: Record<Design, string> = {
   muhr: "Yashil mum muhrni bosganda konvert ochiladi.",
   firuza: "Samarqand feruzasi: mehrob, sakkiz qirrali yulduz va darvoza.",
   atlas: "Milliy atlas naqshlari: qizil, sariq va ko‘k ranglar.",
+  gulbarg: "Pushti gulbarglar to‘kilib turadi, bo‘limlar to‘liq ekranda ochiladi.",
+  yulduz: "Qorong‘i osmonda miltillagan yulduzlar va uchib o‘tuvchi yulduz.",
+  kapalak: "Ekran bo‘ylab uchib yuruvchi kapalaklar, binafsha-pushti ranglar.",
+  oltin: "Qora fonda yuqoriga ko‘tariluvchi oltin zarralar.",
+  yurak: "Tepaga suzib chiqadigan yuraklar, oq qog‘ozda qizil chiziq gullar.",
 };
 
 export const MAX_PHOTO_BYTES = 8 * 1024 * 1024;

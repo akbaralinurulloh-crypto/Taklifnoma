@@ -4,6 +4,7 @@ import { useEffect, useState, type CSSProperties } from "react";
 import type { GateKind } from "./themes";
 import { Heart } from "./Ornaments";
 import { dict, type Lang } from "@/lib/i18n";
+import { useMusicStart } from "./MusicProvider";
 
 type Phase = "closed" | "opening" | "open";
 
@@ -27,6 +28,7 @@ const dl = (s: number) => ({ ["--d" as string]: `${s}s` }) as CSSProperties;
 /** Ochilish ekrani. Taklifnoma matni sahifada doim bor (qopqoq faqat ustidan yopadi); JS bo'lmasa qopqoq ko'rinmaydi. */
 export function Gate({ enabled, kind, groom, bride, dateText, bg, ink, color, color2, lang = "uz", children }: Props) {
   const g = dict(lang);
+  const startMusic = useMusicStart();
   const [phase, setPhase] = useState<Phase>("closed");
   const active = enabled && phase !== "open";
 
@@ -41,15 +43,16 @@ export function Gate({ enabled, kind, groom, bride, dateText, bg, ink, color, co
   function open() {
     if (phase !== "closed") return;
     setPhase("opening");
+    startMusic?.(); // bosish = brauzer ruxsati: tanlangan musiqa avtomatik boshlanadi
     window.scrollTo(0, 0);
     setTimeout(() => setPhase("open"), kind === "button" || kind === "swipe" ? 900 : 1500);
   }
 
   const opening = phase === "opening";
   const names = (
-    <h1 className="f-script iv-in break-words text-center text-[44px] leading-[1.05]" style={{ color: ink, ...dl(0.15) }}>
+    <h1 className="f-script iv-in break-words text-center text-[51px] leading-[1.05]" style={{ color: ink, ...dl(0.15) }}>
       {groom}
-      <span className="block text-[26px] opacity-80">&amp;</span>
+      <span className="block text-[30px] opacity-80">&amp;</span>
       {bride}
     </h1>
   );
@@ -60,9 +63,9 @@ export function Gate({ enabled, kind, groom, bride, dateText, bg, ink, color, co
   if (kind === "envelope") {
     body = (
       <>
-        <p className="iv-in text-[11px] uppercase tracking-[0.4em]" style={{ color: ink, opacity: 0.75 }}>{g.invitation}</p>
+        <p className="iv-in text-[13px] uppercase tracking-[0.4em]" style={{ color: ink, opacity: 0.75 }}>{g.invitation}</p>
         <div className="mt-4">{names}</div>
-        {dateText && <p className="f-display iv-in mt-3 text-sm tracking-[0.2em]" style={{ color: ink, ...dl(0.3) }}>{dateText}</p>}
+        {dateText && <p className="f-display iv-in mt-3 text-[16px] tracking-[0.2em]" style={{ color: ink, ...dl(0.3) }}>{dateText}</p>}
         <button
           type="button"
           onClick={open}
@@ -89,19 +92,19 @@ export function Gate({ enabled, kind, groom, bride, dateText, bg, ink, color, co
             }}
           />
           <span
-            className="absolute left-1/2 top-[66px] flex h-12 w-12 -translate-x-1/2 items-center justify-center rounded-full text-sm text-white shadow-md transition-opacity duration-300"
+            className="absolute left-1/2 top-[66px] flex h-12 w-12 -translate-x-1/2 items-center justify-center rounded-full text-[16px] text-white shadow-md transition-opacity duration-300"
             style={{ background: `radial-gradient(circle at 35% 30%,${color2},#00000033 130%)`, opacity: opening ? 0 : 1 }}
           >
             <Heart className="h-4 w-4" fill="#ffffffcc" />
           </span>
         </button>
-        <p className="iv-in mt-8 text-xs uppercase tracking-[0.3em]" style={{ color: ink, opacity: 0.8, ...dl(0.8) }}>{g.tapOpen}</p>
+        <p className="iv-in mt-8 text-[13.5px] uppercase tracking-[0.3em]" style={{ color: ink, opacity: 0.8, ...dl(0.8) }}>{g.tapOpen}</p>
       </>
     );
   } else if (kind === "seal") {
     body = (
       <>
-        <p className="iv-in text-[11px] uppercase tracking-[0.4em]" style={{ color: ink, opacity: 0.7 }}>{g.sentYou}</p>
+        <p className="iv-in text-[13px] uppercase tracking-[0.4em]" style={{ color: ink, opacity: 0.7 }}>{g.sentYou}</p>
         <button
           type="button"
           onClick={open}
@@ -114,21 +117,21 @@ export function Gate({ enabled, kind, groom, bride, dateText, bg, ink, color, co
             <circle cx="80" cy="80" r="46" fill="none" stroke="#ffffff" strokeOpacity=".35" strokeWidth="2" />
             <circle cx="80" cy="80" r="38" fill="none" stroke="#ffffff" strokeOpacity=".25" strokeWidth="1" />
           </svg>
-          <span className="f-script absolute inset-0 flex items-center justify-center text-[42px] text-white transition-opacity duration-500" style={{ opacity: opening ? 0 : 1 }}>
+          <span className="f-script absolute inset-0 flex items-center justify-center text-[48px] text-white transition-opacity duration-500" style={{ opacity: opening ? 0 : 1 }}>
             {mono(groom, bride)}
           </span>
         </button>
         <div className="mt-8">{names}</div>
-        <p className="iv-in mt-8 text-xs uppercase tracking-[0.3em]" style={{ color: ink, opacity: 0.8, ...dl(0.9) }}>{g.tapSeal}</p>
+        <p className="iv-in mt-8 text-[13.5px] uppercase tracking-[0.3em]" style={{ color: ink, opacity: 0.8, ...dl(0.9) }}>{g.tapSeal}</p>
       </>
     );
     wrapperClass = "gate-halves";
   } else if (kind === "heart") {
     body = (
       <>
-        <p className="iv-in text-[12px] uppercase tracking-[0.4em]" style={{ color: ink, opacity: 0.85 }}>{g.forYou}</p>
-        <h1 className="f-script iv-in mt-2 text-[56px] leading-none" style={{ color: ink, ...dl(0.15) }}>{g.invitation}</h1>
-        <p className="iv-in mt-1 text-[12px] uppercase tracking-[0.4em]" style={{ color: ink, opacity: 0.85, ...dl(0.25) }}>{g.arrived}</p>
+        <p className="iv-in text-[14px] uppercase tracking-[0.4em]" style={{ color: ink, opacity: 0.85 }}>{g.forYou}</p>
+        <h1 className="f-script iv-in mt-2 text-[64px] leading-none" style={{ color: ink, ...dl(0.15) }}>{g.invitation}</h1>
+        <p className="iv-in mt-1 text-[14px] uppercase tracking-[0.4em]" style={{ color: ink, opacity: 0.85, ...dl(0.25) }}>{g.arrived}</p>
         <button
           type="button"
           onClick={open}
@@ -147,7 +150,7 @@ export function Gate({ enabled, kind, groom, bride, dateText, bg, ink, color, co
             </span>
           </span>
         </button>
-        <p className="iv-in mt-10 text-xs uppercase tracking-[0.3em]" style={{ color: ink, ...dl(0.8) }}>{g.tapHeart}</p>
+        <p className="iv-in mt-10 text-[13.5px] uppercase tracking-[0.3em]" style={{ color: ink, ...dl(0.8) }}>{g.tapHeart}</p>
       </>
     );
   } else if (kind === "doors") {
@@ -157,12 +160,12 @@ export function Gate({ enabled, kind, groom, bride, dateText, bg, ink, color, co
           <polygon points="60,6 72,26 96,22 94,46 114,60 94,74 96,98 72,94 60,114 48,94 24,98 26,74 6,60 26,46 24,22 48,26" fill="none" stroke="currentColor" strokeWidth="2" />
           <circle cx="60" cy="60" r="14" fill="none" stroke="currentColor" strokeWidth="1.6" />
         </svg>
-        <p className="iv-in mt-4 text-[11px] uppercase tracking-[0.4em]" style={{ color: ink, opacity: 0.85, ...dl(0.1) }}>{g.nikohInvite}</p>
+        <p className="iv-in mt-4 text-[13px] uppercase tracking-[0.4em]" style={{ color: ink, opacity: 0.85, ...dl(0.1) }}>{g.nikohInvite}</p>
         <div className="mt-5">{names}</div>
         <button
           type="button"
           onClick={open}
-          className="iv-in mt-10 rounded-full border px-8 py-3 text-sm uppercase tracking-[0.25em] transition-colors hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+          className="iv-in mt-10 rounded-full border px-8 py-3 text-[16px] uppercase tracking-[0.25em] transition-colors hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
           style={{ color: ink, borderColor: color2, ...dl(0.5) }}
         >
           {g.openDoors}
@@ -173,13 +176,13 @@ export function Gate({ enabled, kind, groom, bride, dateText, bg, ink, color, co
   } else if (kind === "swipe") {
     body = (
       <>
-        <p className="iv-in text-[11px] uppercase tracking-[0.5em]" style={{ color: ink, opacity: 0.7 }}>{g.invitation}</p>
+        <p className="iv-in text-[13px] uppercase tracking-[0.5em]" style={{ color: ink, opacity: 0.7 }}>{g.invitation}</p>
         <div className="mt-6">{names}</div>
-        {dateText && <p className="f-display iv-in mt-4 text-sm tracking-[0.25em]" style={{ color: ink, ...dl(0.3) }}>{dateText}</p>}
+        {dateText && <p className="f-display iv-in mt-4 text-[16px] tracking-[0.25em]" style={{ color: ink, ...dl(0.3) }}>{dateText}</p>}
         <button
           type="button"
           onClick={open}
-          className="iv-in mt-14 flex flex-col items-center gap-2 text-xs uppercase tracking-[0.3em] focus-visible:outline-2 focus-visible:outline-offset-8 focus-visible:outline-white"
+          className="iv-in mt-14 flex flex-col items-center gap-2 text-[13.5px] uppercase tracking-[0.3em] focus-visible:outline-2 focus-visible:outline-offset-8 focus-visible:outline-white"
           style={{ color: ink, ...dl(0.5) }}
         >
           <svg viewBox="0 0 24 40" aria-hidden className="iv-pulse h-10 w-6" fill="none" stroke="currentColor" strokeWidth="1.6">
@@ -194,18 +197,18 @@ export function Gate({ enabled, kind, groom, bride, dateText, bg, ink, color, co
     body = (
       <>
         <div className="iv-in mx-auto w-[300px] rounded-md px-6 py-9 shadow-[0_18px_40px_-18px_rgba(0,0,0,.5)]" style={{ background: "var(--paper, #fff)", color: "#222" }}>
-          <p className="text-[11px] uppercase tracking-[0.4em]" style={{ color: color }}>{g.invitation}</p>
-          <h1 className="f-script mt-4 break-words text-[40px] leading-[1.05]" style={{ color }}>
+          <p className="text-[13px] uppercase tracking-[0.4em]" style={{ color: color }}>{g.invitation}</p>
+          <h1 className="f-script mt-4 break-words text-[46px] leading-[1.05]" style={{ color }}>
             {groom}
-            <span className="block text-[24px] opacity-80">&amp;</span>
+            <span className="block text-[28px] opacity-80">&amp;</span>
             {bride}
           </h1>
-          {dateText && <p className="f-display mt-4 text-sm tracking-[0.15em]" style={{ color }}>{dateText}</p>}
-          <p className="mt-4 text-sm">{g.inviteUs}</p>
+          {dateText && <p className="f-display mt-4 text-[16px] tracking-[0.15em]" style={{ color }}>{dateText}</p>}
+          <p className="mt-4 text-[16px]">{g.inviteUs}</p>
           <button
             type="button"
             onClick={open}
-              className="mt-6 rounded-full px-9 py-3 text-sm uppercase tracking-[0.2em] text-white transition-transform hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-4"
+              className="mt-6 rounded-full px-9 py-3 text-[16px] uppercase tracking-[0.2em] text-white transition-transform hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-4"
             style={{ background: color, outlineColor: color }}
           >
             {g.open}

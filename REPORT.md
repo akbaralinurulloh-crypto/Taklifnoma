@@ -125,3 +125,12 @@ Production deployment qadamlari: README 4-bo‘lim.
 - Musiqa: `public/music/*.mp3` (har biri 64 soniya, takrorlanadi). Hammasi `scripts/make_music.py` bilan **sintez qilingan original instrumental** (tashqi audio yo'q, litsenziya muammosi yo'q). Tirik ijro emas: sintezator ovozi. Tinglab ko'ring; yoqmasa /admin orqali o'z (litsenziyali) treklaringizni qo'shing.
 - Uch skelet: `cards` (kartalar: anor, osmon, atlas), `story` (uzluksiz hikoya: zaytun, shokolad, gulchizma, muhr), `slides` (to'liq ekranli bo'limlar: zarrin, oqqora, firuza). Galereya ham skeletga qarab farq qiladi (to'r, ustma-ust, surish).
 - Bezaklar: gradientli va soyali atirgul, tomirli barglar, SVG qog'oz to'qimasi. Bular vektor chizmalar, fotosurat emas.
+
+## Oltinchi yangilanish: animatsiyalar, 5 yangi dizayn, musiqa
+
+- Yozuvlar ~15% kattalashtirildi.
+- Konvert ochilganda tanlangan musiqa o'zi boshlanadi (bosish = brauzer ruxsati); pastda doimiy "Musiqani o'chirish/yoqish" tugmasi.
+- Animatsiyalar: har dizaynda o'z zarrachalari (gulbarg, barg, yulduz, oltin zarra, yurak, kapalak, konfetti), ekranga kirganda silliq paydo bo'lish, ism animatsiyasi, rasm suzishi/Ken Burns, kartalarda yaltirash, taqvimda yurak urishi. `prefers-reduced-motion` yoqilgan qurilmada o'chadi.
+- 5 yangi dizayn: Gulbarg, Yulduzli tun, Kapalak, Oltin yog'du, Yuraklar (jami 15).
+- **Migratsiya 0007**: yangi dizaynlar va 7 yangi musiqa (3 yor-yor uslubi + ballada, marsh, kelin kutib olish, raqs). Hammasi sintez qilingan original (`scripts/make_music.py`).
+- Mualliflik huquqidagi qo'shiqlar (Ed Sheeran, Bojalar, Sato va h.k.) loyihaga qo'shilmadi: litsenziyasiz tarqatish mumkin emas. O'z faylingiz bo'lsa /admin orqali (litsenziya tasdig'i bilan) yuklang.

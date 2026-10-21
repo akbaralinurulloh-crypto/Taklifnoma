@@ -37,7 +37,7 @@ export type Dict = {
   untilWedding: string; started: string; units: [string, string, string, string]; ariaTimer: string;
   program: string; address: string; map: string; dress: string; waitYou: string;
   gallery: string; wishesTitle: string;
-  music: { play: string; stop: string; volume: string; ariaVolume: string; failPlay: string; failLoad: string };
+  music: { off: string; on: string; play: string; stop: string; volume: string; ariaVolume: string; failPlay: string; failLoad: string };
   rsvp: {
     title: string; name: string; yes: string; no: string; guests: string; send: string; sending: string;
     need: string; thanksYes: string; thanksNo: string; fail: string;
@@ -66,7 +66,7 @@ const uz: Dict = {
   units: ["kun", "soat", "daqiqa", "soniya"], ariaTimer: "To‘ygacha qolgan vaqt",
   program: "To‘y dasturi", address: "Manzil", map: "Xaritada ko‘rish / yo‘nalish olish", dress: "Kiyim kodi",
   waitYou: "Sizni kutamiz!", gallery: "Lahzalarimiz", wishesTitle: "Tilaklar kitobi",
-  music: { play: "Musiqani yoqish", stop: "To‘xtatish", volume: "Ovoz", ariaVolume: "Ovoz balandligi", failPlay: "Audioni ijro etib bo‘lmadi. Qayta urinib ko‘ring.", failLoad: "Audio fayl yuklanmadi." },
+  music: { off: "Musiqani o‘chirish", on: "Musiqani yoqish", play: "Musiqani yoqish", stop: "To‘xtatish", volume: "Ovoz", ariaVolume: "Ovoz balandligi", failPlay: "Audioni ijro etib bo‘lmadi. Qayta urinib ko‘ring.", failLoad: "Audio fayl yuklanmadi." },
   rsvp: {
     title: "Kelishingizni tasdiqlang", name: "Ismingiz", yes: "Kelaman", no: "Kela olmayman", guests: "Nechta kishi (o‘zingiz bilan)",
     send: "Yuborish", sending: "Yuborilmoqda…", need: "Ismingizni kiriting va javobni tanlang.",
@@ -103,7 +103,7 @@ const ru: Dict = {
   units: ["дней", "часов", "минут", "секунд"], ariaTimer: "Время до свадьбы",
   program: "Программа", address: "Адрес", map: "Показать на карте / построить маршрут", dress: "Дресс-код",
   waitYou: "Ждём вас!", gallery: "Наши моменты", wishesTitle: "Книга пожеланий",
-  music: { play: "Включить музыку", stop: "Остановить", volume: "Громкость", ariaVolume: "Громкость звука", failPlay: "Не удалось воспроизвести аудио. Попробуйте ещё раз.", failLoad: "Аудиофайл не загрузился." },
+  music: { off: "Выключить музыку", on: "Включить музыку", play: "Включить музыку", stop: "Остановить", volume: "Громкость", ariaVolume: "Громкость звука", failPlay: "Не удалось воспроизвести аудио. Попробуйте ещё раз.", failLoad: "Аудиофайл не загрузился." },
   rsvp: {
     title: "Подтвердите своё присутствие", name: "Ваше имя", yes: "Приду", no: "Не смогу прийти", guests: "Сколько человек (с вами)",
     send: "Отправить", sending: "Отправка…", need: "Введите имя и выберите ответ.",
