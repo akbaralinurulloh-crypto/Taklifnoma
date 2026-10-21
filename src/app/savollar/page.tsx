@@ -20,7 +20,7 @@ export default function FaqPage() {
           </div>
         </section>
         <section className="mx-auto max-w-3xl px-4 pb-20 pt-4">
-          <div className="divide-y divide-[#f3d3dc] border-y border-[#f3d3dc]">
+          <div className="divide-y divide-[#e6dcc6] border-y border-[#e6dcc6]">
             {FAQ.map(([q, a]) => (
               <details key={q} className="group py-4">
                 <summary className="cursor-pointer list-none font-medium text-ink marker:content-none">
@@ -31,7 +31,7 @@ export default function FaqPage() {
             ))}
           </div>
           <div className="mt-10 text-center">
-            <Link href="/create" className="inline-block rounded-full bg-saffron px-9 py-3.5 font-medium text-white hover:bg-[#b81a58]">Taklifnoma yaratish</Link>
+            <Link href="/create" className="inline-block rounded-full bg-saffron px-9 py-3.5 font-medium text-white hover:bg-[#0f1a3a]">Taklifnoma yaratish</Link>
           </div>
         </section>
       </main>

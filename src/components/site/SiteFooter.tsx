@@ -6,7 +6,7 @@ export function SiteFooter() {
   const col = "mt-3 space-y-2";
   const a = "hover:text-gold-dark hover:underline underline-offset-4";
   return (
-    <footer className="border-t border-[#f3d3dc] bg-white">
+    <footer className="border-t border-[#e6dcc6] bg-white">
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-12 text-sm text-muted md:grid-cols-[1.4fr_1fr_1fr_1fr]">
         <div>
           <Logo />

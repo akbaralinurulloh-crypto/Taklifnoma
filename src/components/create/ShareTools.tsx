@@ -39,7 +39,7 @@ export function QrCard({ url: rawUrl }: { url: string }) {
       {png && (
         <div className="mt-3 flex items-center gap-4">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={png} alt="Taklifnoma havolasi QR-kodi" width={160} height={160} className="rounded-lg border border-[#f3d3dc]" />
+          <img src={png} alt="Taklifnoma havolasi QR-kodi" width={160} height={160} className="rounded-lg border border-[#e6dcc6]" />
           <a href={png} download="taklifnoma-qr.png" className="rounded-full border border-gold-dark px-4 py-1.5 text-sm text-gold-dark hover:bg-beige">
             PNG yuklab olish
           </a>
@@ -72,7 +72,7 @@ export function GuestLinks({ url: rawUrl, title }: { url: string; title: string 
         rows={4}
         placeholder={"Anvar aka\nGulnora xola"}
         aria-label="Mehmonlar ismlari"
-        className="mt-3 w-full rounded-lg border border-[#e8b7c5] px-3 py-2 text-sm"
+        className="mt-3 w-full rounded-lg border border-[#d3c3a0] px-3 py-2 text-sm"
       />
       <label className="mt-2 flex items-center gap-2 text-sm">
         <input type="checkbox" checked={ru} onChange={(e) => setRu(e.target.checked)} /> Havola rus tilida ochilsin
@@ -82,7 +82,7 @@ export function GuestLinks({ url: rawUrl, title }: { url: string; title: string 
           {names.map((n) => {
             const link = guestUrl(url, n, ru ? "ru" : undefined);
             return (
-              <li key={n} className="rounded-lg border border-[#f3d3dc] p-3">
+              <li key={n} className="rounded-lg border border-[#e6dcc6] p-3">
                 <CopyField label={n} value={link} />
                 <a
                   href={`https://wa.me/?text=${encodeURIComponent(`${title} ${link}`)}`}

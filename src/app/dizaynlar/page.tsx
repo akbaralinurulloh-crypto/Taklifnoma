@@ -29,7 +29,7 @@ export default function DesignsPage() {
               <h2 className="mt-4 font-serif text-2xl text-ink">{DESIGN_LABELS[d]}</h2>
               <p className="mt-1 max-w-[300px] text-sm leading-relaxed text-muted">{DESIGN_DESCRIPTIONS[d]}</p>
               <div className="mt-3 flex flex-wrap gap-2">
-                <Link href={`/namuna/${d}`} className="rounded-full border border-[#e8b7c5] px-4 py-2 text-sm text-ink hover:border-ink">Namunani ko‘rish</Link>
+                <Link href={`/namuna/${d}`} className="rounded-full border border-[#d3c3a0] px-4 py-2 text-sm text-ink hover:border-ink">Namunani ko‘rish</Link>
                 <Link href={`/create?dizayn=${d}`} className="rounded-full bg-gold-dark px-4 py-2 text-sm text-white hover:bg-ink">Shu dizaynda yaratish</Link>
               </div>
             </article>

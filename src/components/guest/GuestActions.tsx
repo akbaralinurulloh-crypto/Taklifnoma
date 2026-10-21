@@ -60,7 +60,7 @@ export function GuestActions({ title, weddingAt, location, url, lang = "uz" }: {
   }
 
   const btn =
-    "rounded-full border border-[#e8b7c5] bg-white px-5 py-2.5 text-sm text-ink transition-colors hover:border-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-dark";
+    "rounded-full border border-[#d3c3a0] bg-white px-5 py-2.5 text-sm text-ink transition-colors hover:border-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-dark";
   return (
     <div>
       <div className="flex flex-wrap gap-2">

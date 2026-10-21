@@ -37,7 +37,7 @@ export default async function EditPage({ params }: { params: Promise<{ token: st
 
   return (
     <main className="flex-1">
-      <header className="border-b border-[#f3d3dc] bg-white">
+      <header className="border-b border-[#e6dcc6] bg-white">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
           <Link href="/" className="font-serif text-xl text-ink">
             Taklifnoma

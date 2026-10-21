@@ -1,13 +1,13 @@
 @import "tailwindcss";
 
 :root {
-  --ivory: #fff7f9;
-  --beige: #fde4ea;
-  --gold: #e11d63;
-  --gold-dark: #a61e4d;
-  --ink: #2b1620;
-  --muted: #6b4a57;
-  --saffron: #e11d63;
+  --ivory: #faf6ee;
+  --beige: #f3ead6;
+  --gold: #c8963e;
+  --gold-dark: #8a5f12;
+  --ink: #0f1a3a;
+  --muted: #55607e;
+  --saffron: #1b2a5c;
   --background: var(--ivory);
   --foreground: var(--ink);
 }
@@ -171,6 +171,11 @@ body {
 @keyframes st-up { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: none; } }
 .st-up { animation: st-up .8s cubic-bezier(.2,.7,.2,1) both; animation-delay: var(--d, 0s); }
 .st-card { transition: transform .35s cubic-bezier(.2,.7,.2,1), box-shadow .35s; }
-.st-card:hover { transform: translateY(-5px); box-shadow: 0 22px 40px -22px rgb(166 30 77 / .45); }
-.st-hero-bg { background: radial-gradient(60% 50% at 85% 10%, rgb(225 29 99 / .14), transparent 70%), radial-gradient(50% 40% at 5% 90%, rgb(255 180 120 / .18), transparent 70%); }
+.st-card:hover { transform: translateY(-5px); box-shadow: 0 22px 40px -22px rgb(15 26 58 / .4); }
+.st-hero-bg { background: radial-gradient(60% 50% at 85% 10%, rgb(200 150 62 / .18), transparent 70%), radial-gradient(50% 40% at 5% 90%, rgb(27 42 92 / .08), transparent 70%); }
 @media (prefers-reduced-motion: reduce) { .st-up { animation: none; } .st-card { transition: none; } .st-card:hover { transform: none; } }
+
+.st-scroll { scrollbar-width: thin; scrollbar-color: #c8963e transparent; }
+@keyframes st-seal { 0%,100% { transform: scale(1); } 50% { transform: scale(1.12); } }
+.st-seal { animation: st-seal 3s ease-in-out infinite; transform-origin: center; }
+@media (prefers-reduced-motion: reduce) { .st-seal { animation: none; } }

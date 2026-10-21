@@ -47,7 +47,7 @@ export function RsvpList({ token }: { token: string }) {
       {rsvps && rsvps.length > 0 && (
         <>
           <p className="mt-2 text-sm text-muted">Kelaman: {yes} ta javob (jami {people} kishi) · Kela olmayman: {no}</p>
-          <ul className="mt-3 divide-y divide-[#f3d3dc] rounded-xl border border-[#f3d3dc] bg-white">
+          <ul className="mt-3 divide-y divide-[#e6dcc6] rounded-xl border border-[#e6dcc6] bg-white">
             {rsvps.map((r) => (
               <li key={r.guestName + r.createdAt} className="flex justify-between px-4 py-2 text-sm">
                 <span>{r.guestName}</span>
@@ -62,7 +62,7 @@ export function RsvpList({ token }: { token: string }) {
       <h2 className="mt-8 font-serif text-xl text-ink">Tilaklar kitobi</h2>
       {wishes && wishes.length === 0 && <p className="mt-2 text-sm text-muted">Hozircha tilaklar yo‘q.</p>}
       {wishes && wishes.length > 0 && (
-        <ul className="mt-3 divide-y divide-[#f3d3dc] rounded-xl border border-[#f3d3dc] bg-white">
+        <ul className="mt-3 divide-y divide-[#e6dcc6] rounded-xl border border-[#e6dcc6] bg-white">
           {wishes.map((w) => (
             <li key={w.guestName + w.createdAt + w.message} className="px-4 py-3 text-sm">
               <p className="font-medium">{w.guestName}</p>

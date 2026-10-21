@@ -143,6 +143,6 @@ Production deployment qadamlari: README 4-bo‘lim.
 - Animatsiyalar: aurora dog'lari, tepada o'qish chizig'i, bosganda zarrachalar, sarlavha chizig'i, ko'proq tushuvchi zarrachalar.
 
 ## Yangilanish 8 (sayt dizayni)
-- Sayt ranglari atirgul-pushti palitraga o'tkazildi (taklifnoma dizaynlariga tegilmadi).
+- Sayt ranglari to‘q ko‘k va oltin palitraga (konvert logo, yangi bosh sahifa tuzilmasi) o'tkazildi (taklifnoma dizaynlariga tegilmadi).
 - Yangi sahifalar: /imkoniyatlar, /savollar; matnlar src/lib/site-content.ts'da.
 - Bosh sahifa: gradient fon, ko'rsatkichlar qatori, 12 imkoniyat, 15 dizayn, savol-javob; 4 ustunli footer.

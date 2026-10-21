@@ -39,7 +39,7 @@ export function AdminLogin() {
       >
         <label className="block text-sm font-medium text-ink">
           Maxfiy kalit
-          <input type="password" value={secret} onChange={(e) => setSecret(e.target.value)} autoComplete="current-password" className="mt-1 w-full rounded-lg border border-[#e8b7c5] px-3 py-2" />
+          <input type="password" value={secret} onChange={(e) => setSecret(e.target.value)} autoComplete="current-password" className="mt-1 w-full rounded-lg border border-[#d3c3a0] px-3 py-2" />
         </label>
         {error && <p role="alert" className="mt-2 text-sm text-red-700">{error}</p>}
         <button type="submit" disabled={busy || !secret} className="mt-4 rounded-full bg-gold-dark px-6 py-2 text-sm text-white disabled:opacity-50">
@@ -88,7 +88,7 @@ export function MusicToggle({ id, active }: { id: string; active: boolean }) {
         type="button"
         disabled={busy}
         onClick={() => run(() => api(`/api/admin/music/${id}`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ active: !active }) }))}
-        className="rounded-full border border-[#e8b7c5] px-3 py-1 text-xs hover:bg-beige disabled:opacity-50"
+        className="rounded-full border border-[#d3c3a0] px-3 py-1 text-xs hover:bg-beige disabled:opacity-50"
       >
         {active ? "O‘chirib qo‘yish" : "Yoqish"}
       </button>
@@ -151,7 +151,7 @@ export function MusicUpload() {
 
   return (
     <form
-      className="mt-4 space-y-3 rounded-xl border border-[#f3d3dc] bg-white p-4"
+      className="mt-4 space-y-3 rounded-xl border border-[#e6dcc6] bg-white p-4"
       onSubmit={(e) => {
         e.preventDefault();
         run(async () => {
@@ -170,7 +170,7 @@ export function MusicUpload() {
       </label>
       <label className="block text-sm">
         Nomi
-        <input value={title} maxLength={120} onChange={(e) => setTitle(e.target.value)} className="mt-1 w-full rounded-lg border border-[#e8b7c5] px-3 py-2" />
+        <input value={title} maxLength={120} onChange={(e) => setTitle(e.target.value)} className="mt-1 w-full rounded-lg border border-[#d3c3a0] px-3 py-2" />
       </label>
       <label className="flex items-start gap-2 text-sm">
         <input type="checkbox" checked={license} onChange={(e) => setLicense(e.target.checked)} className="mt-1" />
