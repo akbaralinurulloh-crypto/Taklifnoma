@@ -3,7 +3,7 @@ import { hashToken, makeEditToken } from "@/lib/invitation";
 import { AppError } from "./errors";
 import { memoryRepo } from "./repo.memory";
 import {
-  adminUnpublish, createInvitation, deleteInvitation, getForEdit, getPublicBySlug, submitRsvp, updateInvitation,
+  adminUnpublish, createInvitation, deleteInvitation, getForEdit, getPublicBySlug, listPublicWishes, submitRsvp, submitWish, updateInvitation,
 } from "./service";
 
 const NOW = new Date("2027-01-01T00:00:00Z");
@@ -244,5 +244,66 @@ describe("ota-ona, kiyim kodi va dastur", () => {
     expect(row.parents).toBeNull();
     expect(row.dress_code).toBeNull();
     expect(row.program).toEqual([{ time: "18:00", title: "Ziyofat" }]);
+  });
+});
+
+describe("galereya, tilaklar va mehmonlar soni", () => {
+  const P = (n: number) => `photos/${String(n).padStart(8, "0")}-0000-0000-0000-000000000000.jpg`;
+
+  it("galereya saqlanadi, takrorlar olib tashlanadi, ommaviy ko'rinishda URL bo'ladi", async () => {
+    const { row } = await createInvitation(repo, { ...body, gallery: [P(1), P(2), P(1)] }, NOW);
+    expect(row.gallery).toEqual([P(1), P(2)]);
+    const pub = await getPublicBySlug(repo, row.slug, urls);
+    expect(pub?.gallery).toEqual([`https://cdn.test/photos/${P(1)}`, `https://cdn.test/photos/${P(2)}`]);
+  });
+
+  it("noto'g'ri manzil va 6 tadan ortiq rasmni rad etadi", async () => {
+    await expectAppError(createInvitation(repo, { ...body, gallery: ["../x.jpg"] }, NOW), 400);
+    await expectAppError(createInvitation(repo, { ...body, gallery: [1, 2, 3, 4, 5, 6, 7].map(P) }, NOW), 400);
+  });
+
+  it("tahrirlashda olib tashlangan galereya rasmlari tozalash uchun qaytariladi", async () => {
+    const { row } = await createInvitation(repo, { ...body, gallery: [P(1), P(2)] }, NOW);
+    const r = await updateInvitation(repo, token, { ...fields, gallery: [P(2), P(3)] }, NOW);
+    expect(r.row.gallery).toEqual([P(2), P(3)]);
+    expect(r.removedGallery).toEqual([P(1)]);
+    expect(row.gallery).toEqual([P(1), P(2)]);
+  });
+
+  it("galereya maydoni berilmasa mavjud galereya saqlanadi", async () => {
+    await createInvitation(repo, { ...body, gallery: [P(1)] }, NOW);
+    const r = await updateInvitation(repo, token, { ...fields }, NOW);
+    expect(r.row.gallery).toEqual([P(1)]);
+  });
+
+  it("RSVP mehmonlar sonini saqlaydi; 'kelmayman' bo'lsa 1; noto'g'ri sonni rad etadi", async () => {
+    const { row } = await createInvitation(repo, body, NOW);
+    await submitRsvp(repo, row.slug, { guestName: "Ali", response: "yes", guests: 4 });
+    await submitRsvp(repo, row.slug, { guestName: "Vali", response: "no", guests: 5 });
+    const list = await repo.listRsvps(row.id);
+    expect(list.find((r) => r.guest_name === "Ali")?.guests).toBe(4);
+    expect(list.find((r) => r.guest_name === "Vali")?.guests).toBe(1);
+    await expectAppError(submitRsvp(repo, row.slug, { guestName: "X", response: "yes", guests: 11 }), 400);
+    await expectAppError(submitRsvp(repo, row.slug, { guestName: "X", response: "yes", guests: 0 }), 400);
+  });
+
+  it("tilak qo'shiladi va ro'yxatda yangisi birinchi chiqadi; bo'sh/uzun matn va noma'lum slug rad etiladi", async () => {
+    const { row } = await createInvitation(repo, body, NOW);
+    await submitWish(repo, row.slug, { guestName: "Ali", message: "Baxtli bo‘linglar!" });
+    await submitWish(repo, row.slug, { guestName: "Vali", message: "<b>Tabriklaymiz</b>" });
+    const list = await listPublicWishes(repo, row.slug);
+    expect(list.map((w) => w.guestName)).toEqual(["Vali", "Ali"]);
+    expect(list[0].message).toBe("<b>Tabriklaymiz</b>"); // matn o'zgartirilmaydi, ko'rsatishda escape qilinadi
+    await expectAppError(submitWish(repo, row.slug, { guestName: "A", message: "  " }), 400);
+    await expectAppError(submitWish(repo, row.slug, { guestName: "A", message: "x".repeat(301) }), 400);
+    await expectAppError(submitWish(repo, "yoq-slug", { guestName: "A", message: "salom" }), 404);
+  });
+
+  it("nashrdan olingan taklifnomaning tilaklari ko'rinmaydi va yangisi yozilmaydi", async () => {
+    const { row } = await createInvitation(repo, body, NOW);
+    await submitWish(repo, row.slug, { guestName: "Ali", message: "salom" });
+    await adminUnpublish(repo, row.id);
+    expect(await listPublicWishes(repo, row.slug)).toEqual([]);
+    await expectAppError(submitWish(repo, row.slug, { guestName: "A", message: "salom" }), 404);
   });
 });

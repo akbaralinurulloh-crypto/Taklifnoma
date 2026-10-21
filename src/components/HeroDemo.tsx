@@ -43,6 +43,7 @@ export function HeroDemo({ children }: { children?: React.ReactNode }) {
     dressCode: null,
     program: [],
     photoUrl: null,
+    gallery: [],
     design,
     music: null,
   };

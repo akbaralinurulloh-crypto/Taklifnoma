@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { dict, type Lang } from "@/lib/i18n";
 
 function icsEscape(s: string) {
   return s.replace(/\\/g, "\\\\").replace(/;/g, "\\;").replace(/,/g, "\\,").replace(/\r?\n/g, "\\n");
@@ -14,7 +15,8 @@ function hash(s: string) {
 }
 
 /** Mehmon uchun: taqvimga qo'shish (.ics fayl) va havolani ulashish. */
-export function GuestActions({ title, weddingAt, location, url }: { title: string; weddingAt: string; location: string; url: string }) {
+export function GuestActions({ title, weddingAt, location, url, lang = "uz" }: { title: string; weddingAt: string; location: string; url: string; lang?: Lang }) {
+  const tx = dict(lang).actions;
   const [msg, setMsg] = useState<string | null>(null);
 
   function downloadIcs() {
@@ -41,7 +43,7 @@ export function GuestActions({ title, weddingAt, location, url }: { title: strin
     document.body.appendChild(a);
     a.click();
     a.remove();
-    setMsg("Taqvim fayli yuklandi. Uni ochsangiz, tadbir taqvimingizga qo‘shiladi.");
+    setMsg(tx.calDone);
   }
 
   async function share() {
@@ -51,9 +53,9 @@ export function GuestActions({ title, weddingAt, location, url }: { title: strin
         return;
       }
       await navigator.clipboard.writeText(url);
-      setMsg("Havola nusxalandi.");
+      setMsg(tx.copied);
     } catch {
-      setMsg("Ulashib bo‘lmadi. Havolani brauzer manzil satridan nusxalang.");
+      setMsg(tx.shareFail);
     }
   }
 
@@ -62,8 +64,8 @@ export function GuestActions({ title, weddingAt, location, url }: { title: strin
   return (
     <div>
       <div className="flex flex-wrap gap-2">
-        <button type="button" onClick={downloadIcs} className={btn}>Taqvimga qo‘shish</button>
-        <button type="button" onClick={share} className={btn}>Havolani ulashish</button>
+        <button type="button" onClick={downloadIcs} className={btn}>{tx.calendar}</button>
+        <button type="button" onClick={share} className={btn}>{tx.share}</button>
       </div>
       {msg && <p role="status" className="mt-2 text-xs text-muted">{msg}</p>}
     </div>

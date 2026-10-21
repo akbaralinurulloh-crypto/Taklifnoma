@@ -9,34 +9,71 @@ type P = { className?: string; style?: React.CSSProperties };
 
 const rad = (d: number) => (d * Math.PI) / 180;
 
-/** Atirgul: qatlam-qatlam gulbarglar. */
+/** Atirgul: gradientli, soyali, qatlam-qatlam gulbarglar va barglar (vektor, original chizma). */
 export function Rose({ className, style, c1 = "#8a1c2b", c2 = "#b3263a", c3 = "#d94a5e" }: P & { c1?: string; c2?: string; c3?: string }) {
+  const id = useId().replace(/:/g, "");
   const outer = [0, 72, 144, 216, 288];
   const mid = [36, 108, 180, 252, 324];
   return (
-    <svg viewBox="-60 -60 120 120" aria-hidden className={className} style={style}>
-      {outer.map((a) => (
-        <ellipse key={a} cx="0" cy="-30" rx="24" ry="30" fill={c1} transform={`rotate(${a})`} stroke={c3} strokeOpacity=".35" strokeWidth="1" />
+    <svg viewBox="-70 -70 140 140" aria-hidden className={className} style={style}>
+      <defs>
+        <radialGradient id={`${id}a`} cx="50%" cy="85%" r="95%">
+          <stop offset="0" stopColor={c1} />
+          <stop offset=".55" stopColor={c2} />
+          <stop offset="1" stopColor={c3} />
+        </radialGradient>
+        <radialGradient id={`${id}b`} cx="50%" cy="80%" r="90%">
+          <stop offset="0" stopColor={c1} stopOpacity=".95" />
+          <stop offset="1" stopColor={c3} />
+        </radialGradient>
+        <linearGradient id={`${id}l`} x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stopColor="#5f8a52" />
+          <stop offset="1" stopColor="#2c5535" />
+        </linearGradient>
+        <filter id={`${id}s`} x="-30%" y="-30%" width="160%" height="160%">
+          <feGaussianBlur in="SourceAlpha" stdDeviation="2.2" />
+          <feOffset dy="2.2" />
+          <feComponentTransfer><feFuncA type="linear" slope=".38" /></feComponentTransfer>
+          <feMerge><feMergeNode /><feMergeNode in="SourceGraphic" /></feMerge>
+        </filter>
+      </defs>
+      {[20, 92, 164, 236, 308].map((a) => (
+        <g key={a} transform={`rotate(${a})`}>
+          <path d="M0 -44 C 12 -52 30 -58 40 -48 C 30 -42 14 -38 0 -40 Z" fill={`url(#${id}l)`} />
+          <path d="M0 -42 L 34 -48" stroke="#ffffff" strokeOpacity=".25" strokeWidth=".8" />
+        </g>
       ))}
-      {mid.map((a) => (
-        <ellipse key={a} cx="0" cy="-20" rx="17" ry="21" fill={c2} transform={`rotate(${a})`} stroke={c3} strokeOpacity=".4" strokeWidth="1" />
-      ))}
-      {outer.map((a) => (
-        <ellipse key={a} cx="0" cy="-11" rx="10" ry="13" fill={c3} transform={`rotate(${a + 20})`} fillOpacity=".85" />
-      ))}
+      <g filter={`url(#${id}s)`}>
+        {outer.map((a) => (
+          <g key={a} transform={`rotate(${a})`}>
+            <ellipse cx="0" cy="-30" rx="24" ry="30" fill={`url(#${id}a)`} />
+            <path d="M-16 -46 C -6 -56 8 -56 16 -46" fill="none" stroke="#fff" strokeOpacity=".28" strokeWidth="1.6" strokeLinecap="round" />
+          </g>
+        ))}
+        {mid.map((a) => (
+          <g key={a} transform={`rotate(${a})`}>
+            <ellipse cx="0" cy="-20" rx="17" ry="21" fill={`url(#${id}b)`} stroke={c1} strokeOpacity=".25" />
+            <path d="M-10 -32 C -3 -38 5 -38 10 -32" fill="none" stroke="#fff" strokeOpacity=".3" strokeWidth="1.2" strokeLinecap="round" />
+          </g>
+        ))}
+        {outer.map((a) => (
+          <ellipse key={a} cx="0" cy="-11" rx="10" ry="13" fill={c3} fillOpacity=".8" stroke={c1} strokeOpacity=".3" transform={`rotate(${a + 20})`} />
+        ))}
+      </g>
       <path d="M0 0 m-5 0 a5 5 0 1 1 5 5 a8 8 0 1 1 -8 -8" fill="none" stroke={c1} strokeWidth="2.2" strokeLinecap="round" />
+      <circle cx="0" cy="0" r="3" fill={c1} fillOpacity=".7" />
     </svg>
   );
 }
 
-/** Barg. */
+/** Barg: o'rta tomir va yorug'lik bilan. */
 function Leaf({ x, y, r, s = 1, fill }: { x: number; y: number; r: number; s?: number; fill: string }) {
   return (
-    <path
-      d="M0 0 C 8 -8 20 -8 28 0 C 20 8 8 8 0 0 Z"
-      transform={`translate(${x} ${y}) rotate(${r}) scale(${s})`}
-      fill={fill}
-    />
+    <g transform={`translate(${x} ${y}) rotate(${r}) scale(${s})`}>
+      <path d="M0 0 C 8 -8 20 -8 28 0 C 20 8 8 8 0 0 Z" fill={fill} stroke="#000" strokeOpacity=".12" strokeWidth=".6" />
+      <path d="M1 0 L 26 0" stroke="#fff" strokeOpacity=".35" strokeWidth=".7" />
+      <path d="M0 0 C 8 -8 20 -8 28 0 C 20 -3 8 -3 0 0 Z" fill="#fff" fillOpacity=".14" />
+    </g>
   );
 }
 

@@ -1,12 +1,12 @@
 import { mapsUrl } from "@/lib/schema";
 
 /** Manzil bo'lmasa hech narsa ko'rsatilmaydi: ishlamaydigan tugma yo'q. */
-export function MapLink({ address, className = "" }: { address: string; className?: string }) {
+export function MapLink({ address, className = "", label = "Xaritada ko‘rish / yo‘nalish olish" }: { address: string; className?: string; label?: string }) {
   const href = mapsUrl(address);
   if (!href) return null;
   return (
     <a href={href} target="_blank" rel="noopener noreferrer" className={className}>
-      Xaritada ko‘rish / yo‘nalish olish
+      {label}
     </a>
   );
 }

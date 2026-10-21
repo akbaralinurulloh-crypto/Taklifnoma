@@ -18,6 +18,7 @@ export function sampleInvitation(design: Design, over: Partial<PublicInvitation>
       { time: "18:00", title: "Ziyofat va raqs" },
     ],
     photoUrl: null,
+    gallery: [],
     music: null,
     design,
     ...over,

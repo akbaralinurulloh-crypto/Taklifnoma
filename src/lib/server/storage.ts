@@ -14,7 +14,8 @@ export function publicAssetUrl(bucket: string, path: string): string {
 
 export const defaultUrls: AssetUrls = {
   photo: (p) => publicAssetUrl(BUCKET_PHOTOS, p),
-  music: (p) => publicAssetUrl(BUCKET_MUSIC, p),
+  // 'builtin/<nom>.mp3' — loyiha ichidagi tayyor treklar (public/music), qolganlari Supabase omboridan
+  music: (p) => (p.startsWith("builtin/") ? `/music/${p.slice(8)}` : publicAssetUrl(BUCKET_MUSIC, p)),
 };
 
 const PHOTO_EXT = { "image/jpeg": "jpg", "image/png": "png", "image/webp": "webp" } as const;

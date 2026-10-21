@@ -10,6 +10,7 @@ export function editableView(row: InvitationRow, urls: AssetUrls) {
     status: row.status,
     photoPath: row.photo_path,
     photoUrl: row.photo_path ? urls.photo(row.photo_path) : null,
+    gallery: (row.gallery ?? []).map((path) => ({ path, url: urls.photo(path) })),
     form: {
       groomName: row.groom_name,
       brideName: row.bride_name,

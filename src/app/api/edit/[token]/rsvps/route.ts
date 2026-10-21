@@ -11,7 +11,7 @@ export async function GET(req: Request, ctx: { params: Promise<{ token: string }
     const row = await getForEdit(repo, token);
     const rsvps = await repo.listRsvps(row.id);
     return Response.json({
-      rsvps: rsvps.map((r) => ({ guestName: r.guest_name, response: r.response, createdAt: r.created_at })),
+      rsvps: rsvps.map((r) => ({ guestName: r.guest_name, response: r.response, guests: r.guests ?? 1, createdAt: r.created_at })),
     });
   } catch (e) {
     return toErrorResponse(e);

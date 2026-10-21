@@ -12,6 +12,7 @@ const base: PublicInvitation = {
   venueAddress: "Namangan sh., Navoiy ko‘chasi 12",
   extraText: "Sizni kutamiz",
   photoUrl: "https://cdn.test/photo.jpg",
+  gallery: [],
   design: "osmon",
   parents: "Karim va Dilfuza oilalari nomidan",
   dressCode: "Klassik kostyum",
@@ -74,5 +75,36 @@ describe("o'nta dizayn haqiqatan turlicha", () => {
     const strip = (h: string) => h.replace(/class="[^"]*"/g, "").replace(/style="[^"]*"/g, "");
     const structures = DESIGNS.map((d) => strip(render({ design: d })));
     expect(new Set(structures).size).toBe(DESIGNS.length);
+  });
+});
+
+describe("rus tili, mehmon va galereya", () => {
+  it("rus tilida qat'iy matnlar va sana ruscha chiqadi, kiritilgan matn o'zgarmaydi", () => {
+    const html = renderToString(<InvitationView data={base} lang="ru" />);
+    for (const t of ["Ассаламу алейкум", "День свадьбы", "Программа", "Дресс-код", "Ждём вас!", "мая", "Azizbek", "Registon to‘yxonasi"]) {
+      expect(html).toContain(t);
+    }
+    expect(html).not.toContain("Assalomu alaykum");
+  });
+
+  it("shaxsiy havola: mehmon ismi bilan murojaat qilinadi va ism escape qilinadi", () => {
+    const html = renderToString(<InvitationView data={base} guest={'Anvar <script>x</script>'} slug="aziz-madina-1234" />);
+    expect(html).toContain("Hurmatli Anvar");
+    expect(html).not.toContain("<script>x");
+    expect(html).toContain("Tilaklar kitobi");
+    expect(html).toContain("Kelishingizni tasdiqlang");
+  });
+
+  it("slug bo'lmaganda (preview) RSVP va tilaklar kitobi ko'rsatilmaydi", () => {
+    const html = renderToString(<InvitationView data={base} />);
+    expect(html).not.toContain("Tilaklar kitobi");
+    expect(html).not.toContain("Kelishingizni tasdiqlang");
+  });
+
+  it("galereya rasmlari faqat berilganda chiqadi", () => {
+    const g = renderToString(<InvitationView data={{ ...base, gallery: ["https://cdn.test/g1.jpg", "https://cdn.test/g2.jpg"] }} />);
+    expect(g).toContain("https://cdn.test/g1.jpg");
+    expect(g).toContain("Lahzalarimiz");
+    expect(renderToString(<InvitationView data={base} />)).not.toContain("Lahzalarimiz");
   });
 });

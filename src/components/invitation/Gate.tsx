@@ -3,6 +3,7 @@
 import { useEffect, useState, type CSSProperties } from "react";
 import type { GateKind } from "./themes";
 import { Heart } from "./Ornaments";
+import { dict, type Lang } from "@/lib/i18n";
 
 type Phase = "closed" | "opening" | "open";
 
@@ -16,6 +17,7 @@ type Props = {
   ink: string;
   color: string;
   color2: string;
+  lang?: Lang;
   children: React.ReactNode;
 };
 
@@ -23,7 +25,8 @@ const mono = (a: string, b: string) => `${a.trim().charAt(0)}${b.trim().charAt(0
 const dl = (s: number) => ({ ["--d" as string]: `${s}s` }) as CSSProperties;
 
 /** Ochilish ekrani. Taklifnoma matni sahifada doim bor (qopqoq faqat ustidan yopadi); JS bo'lmasa qopqoq ko'rinmaydi. */
-export function Gate({ enabled, kind, groom, bride, dateText, bg, ink, color, color2, children }: Props) {
+export function Gate({ enabled, kind, groom, bride, dateText, bg, ink, color, color2, lang = "uz", children }: Props) {
+  const g = dict(lang);
   const [phase, setPhase] = useState<Phase>("closed");
   const active = enabled && phase !== "open";
 
@@ -57,13 +60,13 @@ export function Gate({ enabled, kind, groom, bride, dateText, bg, ink, color, co
   if (kind === "envelope") {
     body = (
       <>
-        <p className="iv-in text-[11px] uppercase tracking-[0.4em]" style={{ color: ink, opacity: 0.75 }}>Taklifnoma</p>
+        <p className="iv-in text-[11px] uppercase tracking-[0.4em]" style={{ color: ink, opacity: 0.75 }}>{g.invitation}</p>
         <div className="mt-4">{names}</div>
         {dateText && <p className="f-display iv-in mt-3 text-sm tracking-[0.2em]" style={{ color: ink, ...dl(0.3) }}>{dateText}</p>}
         <button
           type="button"
           onClick={open}
-          aria-label="Taklifnomani ochish"
+          aria-label={g.ariaOpen}
           className="iv-in relative mx-auto mt-10 block h-[150px] w-[230px] [perspective:800px] focus-visible:outline-2 focus-visible:outline-offset-8 focus-visible:outline-current"
           style={{ color: ink, ...dl(0.45) }}
         >
@@ -92,17 +95,17 @@ export function Gate({ enabled, kind, groom, bride, dateText, bg, ink, color, co
             <Heart className="h-4 w-4" fill="#ffffffcc" />
           </span>
         </button>
-        <p className="iv-in mt-8 text-xs uppercase tracking-[0.3em]" style={{ color: ink, opacity: 0.8, ...dl(0.8) }}>Ochish uchun bosing</p>
+        <p className="iv-in mt-8 text-xs uppercase tracking-[0.3em]" style={{ color: ink, opacity: 0.8, ...dl(0.8) }}>{g.tapOpen}</p>
       </>
     );
   } else if (kind === "seal") {
     body = (
       <>
-        <p className="iv-in text-[11px] uppercase tracking-[0.4em]" style={{ color: ink, opacity: 0.7 }}>Sizga taklifnoma keldi</p>
+        <p className="iv-in text-[11px] uppercase tracking-[0.4em]" style={{ color: ink, opacity: 0.7 }}>{g.sentYou}</p>
         <button
           type="button"
           onClick={open}
-          aria-label="Taklifnomani ochish"
+          aria-label={g.ariaOpen}
           className="iv-in group relative mx-auto mt-10 block h-40 w-40 focus-visible:outline-2 focus-visible:outline-offset-8 focus-visible:outline-current"
           style={{ color: ink, ...dl(0.3) }}
         >
@@ -116,20 +119,20 @@ export function Gate({ enabled, kind, groom, bride, dateText, bg, ink, color, co
           </span>
         </button>
         <div className="mt-8">{names}</div>
-        <p className="iv-in mt-8 text-xs uppercase tracking-[0.3em]" style={{ color: ink, opacity: 0.8, ...dl(0.9) }}>Muhrni bosing</p>
+        <p className="iv-in mt-8 text-xs uppercase tracking-[0.3em]" style={{ color: ink, opacity: 0.8, ...dl(0.9) }}>{g.tapSeal}</p>
       </>
     );
     wrapperClass = "gate-halves";
   } else if (kind === "heart") {
     body = (
       <>
-        <p className="iv-in text-[12px] uppercase tracking-[0.4em]" style={{ color: ink, opacity: 0.85 }}>Siz uchun</p>
-        <h1 className="f-script iv-in mt-2 text-[56px] leading-none" style={{ color: ink, ...dl(0.15) }}>Taklifnoma</h1>
-        <p className="iv-in mt-1 text-[12px] uppercase tracking-[0.4em]" style={{ color: ink, opacity: 0.85, ...dl(0.25) }}>keldi</p>
+        <p className="iv-in text-[12px] uppercase tracking-[0.4em]" style={{ color: ink, opacity: 0.85 }}>{g.forYou}</p>
+        <h1 className="f-script iv-in mt-2 text-[56px] leading-none" style={{ color: ink, ...dl(0.15) }}>{g.invitation}</h1>
+        <p className="iv-in mt-1 text-[12px] uppercase tracking-[0.4em]" style={{ color: ink, opacity: 0.85, ...dl(0.25) }}>{g.arrived}</p>
         <button
           type="button"
           onClick={open}
-          aria-label="Taklifnomani ochish"
+          aria-label={g.ariaOpen}
           className="iv-in mx-auto mt-12 block focus-visible:outline-2 focus-visible:outline-offset-8 focus-visible:outline-white"
           style={dl(0.4)}
         >
@@ -144,7 +147,7 @@ export function Gate({ enabled, kind, groom, bride, dateText, bg, ink, color, co
             </span>
           </span>
         </button>
-        <p className="iv-in mt-10 text-xs uppercase tracking-[0.3em]" style={{ color: ink, ...dl(0.8) }}>Yurakcha ustiga bosing</p>
+        <p className="iv-in mt-10 text-xs uppercase tracking-[0.3em]" style={{ color: ink, ...dl(0.8) }}>{g.tapHeart}</p>
       </>
     );
   } else if (kind === "doors") {
@@ -154,7 +157,7 @@ export function Gate({ enabled, kind, groom, bride, dateText, bg, ink, color, co
           <polygon points="60,6 72,26 96,22 94,46 114,60 94,74 96,98 72,94 60,114 48,94 24,98 26,74 6,60 26,46 24,22 48,26" fill="none" stroke="currentColor" strokeWidth="2" />
           <circle cx="60" cy="60" r="14" fill="none" stroke="currentColor" strokeWidth="1.6" />
         </svg>
-        <p className="iv-in mt-4 text-[11px] uppercase tracking-[0.4em]" style={{ color: ink, opacity: 0.85, ...dl(0.1) }}>Nikoh to‘yiga taklif</p>
+        <p className="iv-in mt-4 text-[11px] uppercase tracking-[0.4em]" style={{ color: ink, opacity: 0.85, ...dl(0.1) }}>{g.nikohInvite}</p>
         <div className="mt-5">{names}</div>
         <button
           type="button"
@@ -162,7 +165,7 @@ export function Gate({ enabled, kind, groom, bride, dateText, bg, ink, color, co
           className="iv-in mt-10 rounded-full border px-8 py-3 text-sm uppercase tracking-[0.25em] transition-colors hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
           style={{ color: ink, borderColor: color2, ...dl(0.5) }}
         >
-          Darvozani ochish
+          {g.openDoors}
         </button>
       </>
     );
@@ -170,7 +173,7 @@ export function Gate({ enabled, kind, groom, bride, dateText, bg, ink, color, co
   } else if (kind === "swipe") {
     body = (
       <>
-        <p className="iv-in text-[11px] uppercase tracking-[0.5em]" style={{ color: ink, opacity: 0.7 }}>Taklifnoma</p>
+        <p className="iv-in text-[11px] uppercase tracking-[0.5em]" style={{ color: ink, opacity: 0.7 }}>{g.invitation}</p>
         <div className="mt-6">{names}</div>
         {dateText && <p className="f-display iv-in mt-4 text-sm tracking-[0.25em]" style={{ color: ink, ...dl(0.3) }}>{dateText}</p>}
         <button
@@ -183,7 +186,7 @@ export function Gate({ enabled, kind, groom, bride, dateText, bg, ink, color, co
             <rect x="3" y="2" width="18" height="30" rx="9" />
             <circle cx="12" cy="11" r="2.6" fill="currentColor" />
           </svg>
-          Yuqoriga suring (yoki bosing)
+          {g.swipeUp}
         </button>
       </>
     );
@@ -191,21 +194,21 @@ export function Gate({ enabled, kind, groom, bride, dateText, bg, ink, color, co
     body = (
       <>
         <div className="iv-in mx-auto w-[300px] rounded-md px-6 py-9 shadow-[0_18px_40px_-18px_rgba(0,0,0,.5)]" style={{ background: "var(--paper, #fff)", color: "#222" }}>
-          <p className="text-[11px] uppercase tracking-[0.4em]" style={{ color: color }}>Taklifnoma</p>
+          <p className="text-[11px] uppercase tracking-[0.4em]" style={{ color: color }}>{g.invitation}</p>
           <h1 className="f-script mt-4 break-words text-[40px] leading-[1.05]" style={{ color }}>
             {groom}
             <span className="block text-[24px] opacity-80">&amp;</span>
             {bride}
           </h1>
           {dateText && <p className="f-display mt-4 text-sm tracking-[0.15em]" style={{ color }}>{dateText}</p>}
-          <p className="mt-4 text-sm">Sizni to‘yimizga taklif qilamiz</p>
+          <p className="mt-4 text-sm">{g.inviteUs}</p>
           <button
             type="button"
             onClick={open}
               className="mt-6 rounded-full px-9 py-3 text-sm uppercase tracking-[0.2em] text-white transition-transform hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-4"
             style={{ background: color, outlineColor: color }}
           >
-            Ochish
+            {g.open}
           </button>
         </div>
       </>
@@ -228,7 +231,7 @@ export function Gate({ enabled, kind, groom, bride, dateText, bg, ink, color, co
         <div
           role="dialog"
           aria-modal="true"
-          aria-label="Taklifnomani ochish"
+          aria-label={g.ariaOpen}
           className={`iv-gate fixed inset-0 z-[60] flex flex-col items-center justify-center overflow-hidden px-6 text-center ${wrapperClass}`}
           style={overlayStyle}
         >

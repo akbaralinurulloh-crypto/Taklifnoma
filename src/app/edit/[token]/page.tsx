@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CreateWizard } from "@/components/create/CreateWizard";
+import { GuestLinks, QrCard } from "@/components/create/ShareTools";
 import { RsvpList } from "@/components/RsvpList";
 import { Unconfigured } from "@/components/Unconfigured";
 import { getRepo } from "@/lib/server/deps";
@@ -32,6 +33,7 @@ export default async function EditPage({ params }: { params: Promise<{ token: st
   }
   const view = editableView(row, defaultUrls);
   const tracks = await loadTracks();
+  const publicUrl = `${(process.env.NEXT_PUBLIC_SITE_URL ?? "").replace(/\/$/, "")}/i/${row.slug}`;
 
   return (
     <main className="flex-1">
@@ -53,9 +55,13 @@ export default async function EditPage({ params }: { params: Promise<{ token: st
         tracks={tracks}
         backendConfigured={backendConfigured()}
         siteUrl={process.env.NEXT_PUBLIC_SITE_URL ?? ""}
-        initial={{ form: view.form, photoUrl: view.photoUrl, slug: view.slug }}
+        initial={{ form: view.form, photoUrl: view.photoUrl, slug: view.slug, gallery: view.gallery }}
         editToken={token}
       />
+      <section className="mx-auto mt-6 w-full max-w-6xl space-y-6 px-4" aria-label="Ulashish">
+        <QrCard url={publicUrl} />
+        <GuestLinks url={publicUrl} title={`${row.groom_name} va ${row.bride_name} to‘yiga taklifnoma`} />
+      </section>
       <RsvpList token={token} />
     </main>
   );

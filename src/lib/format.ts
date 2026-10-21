@@ -1,10 +1,7 @@
-const MONTHS = [
-  "yanvar", "fevral", "mart", "aprel", "may", "iyun",
-  "iyul", "avgust", "sentabr", "oktabr", "noyabr", "dekabr",
-];
-const WEEKDAYS = [
-  "yakshanba", "dushanba", "seshanba", "chorshanba", "payshanba", "juma", "shanba",
-];
+import { monthTitles, months, weekdayShort, weekdays, type Lang } from "./i18n";
+
+const MONTHS = months("uz");
+const WEEKDAYS = weekdays("uz");
 
 /** UTC ISO vaqtni Asia/Tashkent (UTC+5) bo'yicha o'zbekcha matnga aylantiradi. */
 export function whenText(iso: string | null): { weekday: string; date: string; time: string } | null {
@@ -22,28 +19,25 @@ export function whenText(iso: string | null): { weekday: string; date: string; t
 }
 
 /** Sana qismlari alohida (katta raqam, oy nomi, yil) ko'rsatiladigan dizaynlar uchun. */
-export function dateParts(iso: string | null): { day: string; month: string; year: string; weekday: string; time: string } | null {
+export function dateParts(iso: string | null, lang: Lang = "uz"): { day: string; month: string; monthNum: string; year: string; weekday: string; time: string } | null {
   if (!iso) return null;
   const t = new Date(iso).getTime();
   if (Number.isNaN(t)) return null;
   const d = new Date(t + 5 * 3600 * 1000);
   return {
     day: String(d.getUTCDate()).padStart(2, "0"),
-    month: MONTHS[d.getUTCMonth()],
+    month: months(lang)[d.getUTCMonth()],
+    monthNum: String(d.getUTCMonth() + 1).padStart(2, "0"),
     year: String(d.getUTCFullYear()),
-    weekday: WEEKDAYS[d.getUTCDay()],
+    weekday: weekdays(lang)[d.getUTCDay()],
     time: `${String(d.getUTCHours()).padStart(2, "0")}:${String(d.getUTCMinutes()).padStart(2, "0")}`,
   };
 }
 
-const MONTH_TITLES = [
-  "Yanvar", "Fevral", "Mart", "Aprel", "May", "Iyun",
-  "Iyul", "Avgust", "Sentabr", "Oktabr", "Noyabr", "Dekabr",
-];
-export const WEEKDAY_SHORT = ["Du", "Se", "Chor", "Pay", "Ju", "Sha", "Ya"];
+export const WEEKDAY_SHORT = weekdayShort("uz");
 
 /** Oylik taqvim (hafta Dushanbadan boshlanadi), to'y kuni belgilanadi. Toshkent vaqti bo'yicha. */
-export function monthGrid(iso: string | null): { title: string; year: number; day: number; cells: (number | null)[] } | null {
+export function monthGrid(iso: string | null, lang: Lang = "uz"): { title: string; year: number; day: number; cells: (number | null)[] } | null {
   if (!iso) return null;
   const t = new Date(iso).getTime();
   if (Number.isNaN(t)) return null;
@@ -56,5 +50,5 @@ export function monthGrid(iso: string | null): { title: string; year: number; da
   const cells: (number | null)[] = Array(offset).fill(null);
   for (let i = 1; i <= days; i++) cells.push(i);
   while (cells.length % 7) cells.push(null);
-  return { title: MONTH_TITLES[m], year: y, day: d.getUTCDate(), cells };
+  return { title: monthTitles(lang)[m], year: y, day: d.getUTCDate(), cells };
 }

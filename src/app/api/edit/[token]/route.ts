@@ -25,8 +25,9 @@ export async function PUT(req: Request, ctx: Ctx) {
     const body = await req.json().catch(() => {
       throw new AppError(400, "bad_request", "So‘rov formati noto‘g‘ri.");
     });
-    const { row, removedPhoto } = await updateInvitation(getRepo(), token, body);
+    const { row, removedPhoto, removedGallery } = await updateInvitation(getRepo(), token, body);
     await getStorage().removePhoto(removedPhoto); // almashtirilgan rasmning keraksiz fayli tozalanadi
+    for (const p of removedGallery) await getStorage().removePhoto(p);
     return Response.json(editableView(row, defaultUrls));
   } catch (e) {
     return toErrorResponse(e);
@@ -37,8 +38,9 @@ export async function DELETE(req: Request, ctx: Ctx) {
   try {
     rateLimit(req, "edit-token", 60, 10 * 60_000);
     const { token } = await ctx.params;
-    const { removedPhoto } = await deleteInvitation(getRepo(), token);
+    const { removedPhoto, removedGallery } = await deleteInvitation(getRepo(), token);
     await getStorage().removePhoto(removedPhoto);
+    for (const p of removedGallery) await getStorage().removePhoto(p);
     return Response.json({ ok: true });
   } catch (e) {
     return toErrorResponse(e);

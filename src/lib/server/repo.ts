@@ -15,6 +15,7 @@ export type InvitationRow = {
   dress_code: string | null;
   program: ProgramItem[];
   photo_path: string | null;
+  gallery: string[];
   design: Design;
   music_id: string | null;
   status: InvitationStatus;
@@ -30,7 +31,7 @@ export type InvitationPatch = Partial<
   Pick<
     InvitationRow,
     | "groom_name" | "bride_name" | "wedding_at" | "venue_name" | "venue_address"
-    | "extra_text" | "parents" | "dress_code" | "program" | "photo_path" | "design" | "music_id" | "status" | "published_at"
+    | "extra_text" | "parents" | "dress_code" | "program" | "photo_path" | "gallery" | "design" | "music_id" | "status" | "published_at"
   >
 >;
 
@@ -40,8 +41,10 @@ export type RsvpRow = {
   invitation_id: string;
   guest_name: string;
   response: "yes" | "no";
+  guests: number;
   created_at: string;
 };
+export type WishRow = { id: string; invitation_id: string; guest_name: string; message: string; created_at: string };
 
 export type InsertResult =
   | { ok: true; row: InvitationRow }
@@ -58,7 +61,9 @@ export interface Repo {
   listMusic(activeOnly: boolean): Promise<MusicRow[]>;
   insertMusic(title: string, storagePath: string): Promise<MusicRow>;
   setMusicActive(id: string, active: boolean): Promise<void>;
-  upsertRsvp(invitationId: string, guestName: string, response: "yes" | "no"): Promise<void>;
+  upsertRsvp(invitationId: string, guestName: string, response: "yes" | "no", guests: number): Promise<void>;
+  insertWish(invitationId: string, guestName: string, message: string): Promise<void>;
+  listWishes(invitationId: string, limit: number): Promise<WishRow[]>;
   listRsvps(invitationId: string): Promise<RsvpRow[]>;
   listInvitations(limit: number): Promise<InvitationRow[]>;
   countByStatus(): Promise<Record<InvitationStatus, number>>;

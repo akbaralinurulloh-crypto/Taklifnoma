@@ -6,7 +6,7 @@ import { defaultUrls } from "@/lib/server/storage";
 
 export async function POST(req: Request) {
   try {
-    rateLimit(req, "photos", 10, 10 * 60_000);
+    rateLimit(req, "photos", 40, 10 * 60_000);
     const len = Number(req.headers.get("content-length") ?? 0);
     if (len > MAX_PHOTO_BYTES + 100_000) throw new AppError(413, "too_large", "Rasm hajmi 8 MB dan oshmasligi kerak.");
     if (!(req.headers.get("content-type") ?? "").includes("multipart/form-data")) {

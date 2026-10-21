@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { GuestLinks, QrCard } from "./ShareTools";
 
 function isLocalHost(url: string): boolean {
   try {
@@ -94,6 +95,9 @@ export function PublishedPanel({ url, editUrl, title }: { url: string; editUrl: 
             </button>
           )}
         </div>
+
+        <QrCard url={url} />
+        <GuestLinks url={url} title={text} />
 
         <div className="rounded-xl border border-red-200 bg-red-50 p-4">
           <p className="text-sm font-medium text-red-900">Maxfiy tahrirlash havolasi: uni saqlab qo‘ying</p>

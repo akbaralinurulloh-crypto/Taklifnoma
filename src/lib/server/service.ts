@@ -2,7 +2,7 @@ import { hashToken, makeSlug } from "@/lib/invitation";
 import { invitationInputSchema, tashkentToIso, type Design } from "@/lib/schema";
 import type { PublicInvitation } from "@/lib/types";
 import { AppError, notFound } from "./errors";
-import type { InvitationRow, MusicRow, Repo } from "./repo";
+import type { InvitationRow, MusicRow, Repo, WishRow } from "./repo";
 
 export type AssetUrls = { photo: (path: string) => string; music: (path: string) => string };
 
@@ -74,6 +74,20 @@ function checkPhotoPath(p: unknown): string | null {
   return p;
 }
 
+export const MAX_GALLERY = 6;
+
+function checkGallery(g: unknown): string[] {
+  if (g === undefined || g === null) return [];
+  if (!Array.isArray(g)) throw validationError({ gallery: "Galereya formati noto‘g‘ri" });
+  if (g.length > MAX_GALLERY) throw validationError({ gallery: `Galereyada ${MAX_GALLERY} tadan ortiq rasm bo‘lmasin` });
+  const out: string[] = [];
+  for (const p of g) {
+    if (typeof p !== "string" || !PHOTO_RE.test(p)) throw validationError({ gallery: "Galereya rasmi manzili noto‘g‘ri" });
+    if (!out.includes(p)) out.push(p);
+  }
+  return out;
+}
+
 export async function createInvitation(repo: Repo, raw: unknown, now = new Date()) {
   const body = asBody(raw);
   const { data, iso } = parseFields(body);
@@ -96,6 +110,7 @@ export async function createInvitation(repo: Repo, raw: unknown, now = new Date(
   checkNotTooOld(iso, now);
   const musicId = await checkMusic(repo, data.musicId);
   const photoPath = checkPhotoPath(body.photoPath);
+  const gallery = checkGallery(body.gallery);
 
   for (let attempt = 0; attempt < 5; attempt++) {
     const res = await repo.insertInvitation({
@@ -110,6 +125,7 @@ export async function createInvitation(repo: Repo, raw: unknown, now = new Date(
       dress_code: data.dressCode,
       program: data.program,
       photo_path: photoPath,
+      gallery,
       design: data.design as Design,
       music_id: musicId,
       status: "published",
@@ -138,6 +154,7 @@ export function rowToPublic(row: InvitationRow, music: MusicRow | null, urls: As
     dressCode: row.dress_code,
     program: row.program ?? [],
     photoUrl: row.photo_path ? urls.photo(row.photo_path) : null,
+    gallery: (row.gallery ?? []).map((p) => urls.photo(p)),
     design: row.design,
     music: music && music.is_active ? { title: music.title, url: urls.music(music.storage_path) } : null,
   };
@@ -168,6 +185,8 @@ export async function updateInvitation(repo: Repo, token: string, raw: unknown, 
 
   let photoPath = row.photo_path;
   if ("photoPath" in body) photoPath = checkPhotoPath(body.photoPath);
+  let gallery = row.gallery ?? [];
+  if ("gallery" in body) gallery = checkGallery(body.gallery);
 
   const updated = await repo.updateInvitation(row.id, {
     groom_name: data.groomName,
@@ -182,15 +201,17 @@ export async function updateInvitation(repo: Repo, token: string, raw: unknown, 
     design: data.design as Design,
     music_id: musicId,
     photo_path: photoPath,
+    gallery,
   });
   const removedPhoto = row.photo_path && row.photo_path !== photoPath ? row.photo_path : null;
-  return { row: updated, removedPhoto };
+  const removedGallery = (row.gallery ?? []).filter((p) => !gallery.includes(p));
+  return { row: updated, removedPhoto, removedGallery };
 }
 
 export async function deleteInvitation(repo: Repo, token: string) {
   const row = await getForEdit(repo, token);
   await repo.updateInvitation(row.id, { status: "deleted" });
-  return { removedPhoto: row.photo_path };
+  return { removedPhoto: row.photo_path, removedGallery: row.gallery ?? [] };
 }
 
 export async function submitRsvp(repo: Repo, slug: string, raw: unknown) {
@@ -201,15 +222,46 @@ export async function submitRsvp(repo: Repo, slug: string, raw: unknown) {
   if (!name) fields.guestName = "Ismingizni kiriting";
   else if (name.length > 80) fields.guestName = "Ism 80 belgidan oshmasligi kerak";
   if (response !== "yes" && response !== "no") fields.response = "Javobni tanlang";
+  const guests = body.guests === undefined ? 1 : Number(body.guests);
+  if (!Number.isInteger(guests) || guests < 1 || guests > 10) fields.guests = "Mehmonlar soni 1 dan 10 gacha bo‘lsin";
   if (Object.keys(fields).length) throw validationError(fields);
 
   if (slug.length > 80 || !SLUG_RE.test(slug)) throw notFound();
   const row = await repo.findPublishedBySlug(slug);
   if (!row) throw notFound();
-  await repo.upsertRsvp(row.id, name, response as "yes" | "no");
+  await repo.upsertRsvp(row.id, name, response as "yes" | "no", response === "yes" ? guests : 1);
 }
 
 /** Admin: taklifnomani nashrdan olish (egasi buni qaytara olmaydi: tahrirlash 'status'ni o'zgartirmaydi). */
 export async function adminUnpublish(repo: Repo, id: string) {
   return repo.updateInvitation(id, { status: "draft" });
+}
+
+const WISH_LIMIT = 50;
+
+export type PublicWish = { guestName: string; message: string; createdAt: string };
+const toWish = (w: WishRow): PublicWish => ({ guestName: w.guest_name, message: w.message, createdAt: w.created_at });
+
+/** Tilaklar kitobiga yozuv qo'shadi. Matn matn sifatida saqlanadi va React tomonidan escape qilinadi. */
+export async function submitWish(repo: Repo, slug: string, raw: unknown) {
+  const body = asBody(raw);
+  const name = typeof body.guestName === "string" ? body.guestName.trim() : "";
+  const message = typeof body.message === "string" ? body.message.trim() : "";
+  const fields: Record<string, string> = {};
+  if (!name) fields.guestName = "Ismingizni kiriting";
+  else if (name.length > 80) fields.guestName = "Ism 80 belgidan oshmasligi kerak";
+  if (!message) fields.message = "Tilak matnini yozing";
+  else if (message.length > 300) fields.message = "Tilak 300 belgidan oshmasligi kerak";
+  if (Object.keys(fields).length) throw validationError(fields);
+  if (slug.length > 80 || !SLUG_RE.test(slug)) throw notFound();
+  const row = await repo.findPublishedBySlug(slug);
+  if (!row) throw notFound();
+  await repo.insertWish(row.id, name, message);
+}
+
+export async function listPublicWishes(repo: Repo, slug: string): Promise<PublicWish[]> {
+  if (slug.length > 80 || !SLUG_RE.test(slug)) return [];
+  const row = await repo.findPublishedBySlug(slug);
+  if (!row) return [];
+  return (await repo.listWishes(row.id, WISH_LIMIT)).map(toWish);
 }

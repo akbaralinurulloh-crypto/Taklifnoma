@@ -106,3 +106,22 @@ Production deployment qadamlari: README 4-bo‘lim.
 - **Migratsiya 0004** (`supabase/migrations/0004_new_invitation_fields.sql`) Supabase'da qo'lda ishga tushirilishi SHART: yangi ustunlar qo'shadi, eski dizayn nomli taklifnomalarni "osmon" ga o'tkazadi.
 - Tekshirildi: lint, tsc, 129 test, build; 390 px da 10 shablonning ochilish va asosiy qismi brauzerda ko'rildi, gorizontal siljish va konsol xatosi yo'q.
 - **Hali qilinmagan:** foto galereya (bir nechta rasm yuklash), mehmonlarga shaxsiy havola, tilaklar kitobi, rus tili, QR-kod, narx/to'lov. Juftlik surati yuklangan holat brauzerda hali ko‘rilmagan: faqat suratsiz holat ko‘rildi.
+
+## To'rtinchi yangilanish: galereya, tilaklar, QR, rus tili
+
+- **Migratsiya 0005 majburiy** (`supabase/migrations/0005_gallery_wishes.sql`): `invitations.gallery`, `rsvps.guests`, `wishes` jadvali.
+- Galereya: 6 tagacha rasm (yuklash, tartib, o'chirish); taklifnomada "Lahzalarimiz" bo'limi va to'liq ekran ko'rish.
+- Mehmon javobida kishilar soni (1-10); egasi umumiy sonni ko'radi.
+- Tilaklar kitobi: mehmon yozadi, hamma ko'radi; egasi tahrirlash sahifasida ko'radi.
+- Shaxsiy havola: `/i/<slug>?mehmon=Ism` ("Hurmatli Ism!" va forma ismi to'ldirilgan). Egasi ismlar ro'yxatidan havolalar yaratadi.
+- QR-kod: nashrdan keyin va tahrirlash sahifasida, PNG yuklab olinadi.
+- Rus tili: `?lang=ru` va taklifnomadagi til tugmasi. Qat'iy matnlar tarjima qilinadi, foydalanuvchi yozgan matn o'zgarmaydi.
+- Juftlik surati yuklangan holat 10 dizaynda brauzerda ko'rib tekshirildi.
+- Narx va to'lov: foydalanuvchi qaroriga ko'ra qilinmadi.
+
+## Beshinchi yangilanish: skeletlar, musiqa, bezaklar
+
+- **Migratsiya 0006** (`0006_builtin_music.sql`): 10 ta tayyor musiqa katalogga qo'shiladi.
+- Musiqa: `public/music/*.mp3` (har biri 64 soniya, takrorlanadi). Hammasi `scripts/make_music.py` bilan **sintez qilingan original instrumental** (tashqi audio yo'q, litsenziya muammosi yo'q). Tirik ijro emas: sintezator ovozi. Tinglab ko'ring; yoqmasa /admin orqali o'z (litsenziyali) treklaringizni qo'shing.
+- Uch skelet: `cards` (kartalar: anor, osmon, atlas), `story` (uzluksiz hikoya: zaytun, shokolad, gulchizma, muhr), `slides` (to'liq ekranli bo'limlar: zarrin, oqqora, firuza). Galereya ham skeletga qarab farq qiladi (to'r, ustma-ust, surish).
+- Bezaklar: gradientli va soyali atirgul, tomirli barglar, SVG qog'oz to'qimasi. Bular vektor chizmalar, fotosurat emas.

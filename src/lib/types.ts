@@ -12,6 +12,7 @@ export type PublicInvitation = {
   dressCode: string | null;
   program: ProgramItem[];
   photoUrl: string | null;
+  gallery: string[]; // galereya rasmlarining ommaviy manzillari
   design: Design;
   music: { title: string; url: string } | null;
 };

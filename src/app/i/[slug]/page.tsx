@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { cache } from "react";
 import { InvitationView } from "@/components/InvitationView";
-import { RsvpForm } from "@/components/RsvpForm";
 import { GuestActions } from "@/components/guest/GuestActions";
 import { Unconfigured } from "@/components/Unconfigured";
 import { getRepo } from "@/lib/server/deps";
@@ -10,10 +9,11 @@ import { AppError } from "@/lib/server/errors";
 import { getPublicBySlug } from "@/lib/server/service";
 import { defaultUrls } from "@/lib/server/storage";
 import { whenText } from "@/lib/format";
+import { dict, parseLang } from "@/lib/i18n";
 
 export const dynamic = "force-dynamic"; // har so'rovda bazadan o'qiladi: o'chirilgan/nashrdan olinganlar darhol yopiladi
 
-type Props = { params: Promise<{ slug: string }> };
+type Props = { params: Promise<{ slug: string }>; searchParams: Promise<Record<string, string | string[] | undefined>> };
 
 const load = cache(async (slug: string) => {
   try {
@@ -39,8 +39,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function PublicInvitationPage({ params }: Props) {
+export default async function PublicInvitationPage({ params, searchParams }: Props) {
   const { slug } = await params;
+  const sp = await searchParams;
+  const lang = parseLang(sp.lang);
+  const rawGuest = Array.isArray(sp.mehmon) ? sp.mehmon[0] : sp.mehmon;
+  const guest = rawGuest?.trim().slice(0, 80) || undefined; // faqat matn sifatida ko'rsatiladi (React escape qiladi)
+  const other = lang === "uz" ? "ru" : "uz";
+  const q = new URLSearchParams();
+  if (guest) q.set("mehmon", guest);
+  q.set("lang", other);
   const data = await load(slug);
   if (data === "not_configured") return <Unconfigured />;
   if (!data) notFound();
@@ -48,17 +56,17 @@ export default async function PublicInvitationPage({ params }: Props) {
   return (
     <main className="flex-1 bg-[#dfe8e1] py-0 sm:py-6">
       <>
-        <InvitationView data={data} gate />
+        <InvitationView data={data} gate lang={lang} slug={slug} guest={guest} langHref={`/i/${slug}?${q.toString()}`} />
         <div className="mx-auto mt-6 max-w-[420px] space-y-6 px-4 pb-10">
           {data.weddingAt && (
             <GuestActions
-              title={`${data.groomName} va ${data.brideName} to‘yi`}
+              title={dict(lang).actions.calTitle(data.groomName, data.brideName)}
+              lang={lang}
               weddingAt={data.weddingAt}
               location={`${data.venueName}, ${data.venueAddress}`}
               url={`${(process.env.NEXT_PUBLIC_SITE_URL ?? "").replace(/\/$/, "")}/i/${slug}`}
             />
           )}
-          <RsvpForm slug={slug} />
         </div>
       </>
     </main>

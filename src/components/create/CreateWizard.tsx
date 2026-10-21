@@ -40,7 +40,7 @@ export type WizardProps = {
   backendConfigured: boolean;
   siteUrl: string;
   mode?: "create" | "edit";
-  initial?: { form: Form; photoUrl: string | null; slug: string };
+  initial?: { form: Form; photoUrl: string | null; slug: string; gallery?: { path: string; url: string }[] };
   editToken?: string;
   /** /create?dizayn=... orqali kelgan dizayn: qoralamadagi dizaynni bosib o'tadi. */
   initialDesign?: Design;
@@ -69,6 +69,8 @@ const STEP1_FIELDS = ["groomName", "brideName", "date", "time", "venueName", "ve
 const cleanProgram = (rows: Form["program"]) => rows.filter((r) => r.time.trim() || r.title.trim()).map((r) => ({ time: r.time.trim(), title: r.title.trim() }));
 
 type Photo = { previewUrl: string; name: string; file?: File };
+type GalleryItem = { key: string; previewUrl: string; path?: string; file?: File };
+const MAX_GALLERY = 6;
 
 const inputCls =
   "mt-1 w-full rounded-lg border border-[#b7cdbf] bg-white px-3 py-2 text-base text-ink outline-none focus:border-gold focus:ring-2 focus:ring-gold/30";
@@ -96,6 +98,10 @@ export function CreateWizard({ tracks, backendConfigured, siteUrl, mode = "creat
   const [showErrors, setShowErrors] = useState(false);
   const [photo, setPhoto] = useState<Photo | null>(initial?.photoUrl ? { previewUrl: initial.photoUrl, name: "Joriy rasm" } : null);
   const [photoDirty, setPhotoDirty] = useState(false);
+  const [gallery, setGallery] = useState<GalleryItem[]>(() => (initial?.gallery ?? []).map((g) => ({ key: g.path, previewUrl: g.url, path: g.path })));
+  const [galleryDirty, setGalleryDirty] = useState(false);
+  const [galleryError, setGalleryError] = useState<string | null>(null);
+  const galleryUploads = useRef(new Map<File, string>());
   const [photoError, setPhotoError] = useState<string | null>(null);
   const [draftLoaded, setDraftLoaded] = useState(isEdit);
   const [saving, setSaving] = useState(false);
@@ -156,7 +162,7 @@ export function CreateWizard({ tracks, backendConfigured, siteUrl, mode = "creat
     }
   }, [form, draftLoaded, isEdit, result]);
 
-  const dirty = !result && !deleted && (JSON.stringify(form) !== JSON.stringify(baseline) || photoDirty);
+  const dirty = !result && !deleted && (JSON.stringify(form) !== JSON.stringify(baseline) || photoDirty || galleryDirty);
   useEffect(() => {
     if (!dirty) return;
     const handler = (e: BeforeUnloadEvent) => {
@@ -216,6 +222,57 @@ export function CreateWizard({ tracks, backendConfigured, siteUrl, mode = "creat
     setPhotoDirty(true);
   }
 
+  function addGallery(files: FileList | null) {
+    if (!files) return;
+    const next = [...gallery];
+    let err: string | null = null;
+    for (const file of Array.from(files)) {
+      if (next.length >= MAX_GALLERY) { err = `Galereyaga ${MAX_GALLERY} tagacha rasm qo‘shish mumkin.`; break; }
+      if (!(ALLOWED_PHOTO_TYPES as readonly string[]).includes(file.type)) { err = "Faqat JPG, PNG yoki WebP rasm yuklash mumkin."; continue; }
+      if (file.size > MAX_PHOTO_BYTES) { err = "Har bir rasm 8 MB dan oshmasligi kerak."; continue; }
+      next.push({ key: `${file.name}-${file.size}-${Math.random().toString(36).slice(2)}`, previewUrl: URL.createObjectURL(file), file });
+    }
+    setGalleryError(err);
+    setGallery(next);
+    setGalleryDirty(true);
+  }
+
+  function removeGallery(key: string) {
+    setGallery((g) => g.filter((x) => x.key !== key));
+    setGalleryDirty(true);
+    setGalleryError(null);
+  }
+
+  function moveGallery(key: string, d: -1 | 1) {
+    setGallery((g) => {
+      const i = g.findIndex((x) => x.key === key);
+      const j = i + d;
+      if (i < 0 || j < 0 || j >= g.length) return g;
+      const c = [...g];
+      [c[i], c[j]] = [c[j], c[i]];
+      return c;
+    });
+    setGalleryDirty(true);
+  }
+
+  /** Galereya fayllarini ketma-ket yuklaydi; yuklanganlari qayta urinishda qayta yuklanmaydi. */
+  async function uploadGallery(): Promise<string[]> {
+    const paths: string[] = [];
+    for (const g of gallery) {
+      if (g.path) { paths.push(g.path); continue; }
+      const file = g.file!;
+      let path = galleryUploads.current.get(file);
+      if (!path) {
+        const fd = new FormData();
+        fd.set("file", file);
+        path = (await api<{ path: string }>("/api/photos", { method: "POST", body: fd })).path;
+        galleryUploads.current.set(file, path);
+      }
+      paths.push(path);
+    }
+    return paths;
+  }
+
   function removePhoto() {
     if (objectUrlRef.current) URL.revokeObjectURL(objectUrlRef.current);
     objectUrlRef.current = null;
@@ -270,6 +327,7 @@ export function CreateWizard({ tracks, backendConfigured, siteUrl, mode = "creat
 
       if (!isEdit) {
         if (photo?.file) payload.photoPath = await uploadPhoto(photo.file);
+        payload.gallery = await uploadGallery();
         keysRef.current ??= { idempotencyKey: randomToken(24), editToken: randomToken(32) };
         const created = await api<{ slug: string }>("/api/invitations", {
           method: "POST",
@@ -290,6 +348,7 @@ export function CreateWizard({ tracks, backendConfigured, siteUrl, mode = "creat
         setResult({ url: `${origin}/i/${created.slug}`, editUrl: `${origin}/edit/${keysRef.current.editToken}` });
       } else {
         if (photoDirty) payload.photoPath = photo?.file ? await uploadPhoto(photo.file) : null;
+        if (galleryDirty) payload.gallery = await uploadGallery();
         const updated = await api<{ form: Form }>(`/api/edit/${editToken}`, {
           method: "PUT",
           headers: { "content-type": "application/json" },
@@ -300,6 +359,7 @@ export function CreateWizard({ tracks, backendConfigured, siteUrl, mode = "creat
         }
         setBaseline(form);
         setPhotoDirty(false);
+        setGalleryDirty(false);
         setSavedNote("O‘zgarishlar serverga saqlandi va ommaviy sahifada ko‘rinadi.");
       }
     } catch (e) {
@@ -347,6 +407,7 @@ export function CreateWizard({ tracks, backendConfigured, siteUrl, mode = "creat
     dressCode: form.dressCode.trim() || null,
     program: cleanProgram(form.program).filter((r) => /^([01]\d|2[0-3]):[0-5]\d$/.test(r.time) && r.title),
     photoUrl: photo?.previewUrl ?? null,
+    gallery: gallery.map((g) => g.previewUrl),
     design: form.design,
     music: track ? { title: track.title, url: track.url } : null,
   };
@@ -506,6 +567,39 @@ export function CreateWizard({ tracks, backendConfigured, siteUrl, mode = "creat
                   </div>
                 </div>
               )}
+              <div className="mt-8 border-t border-[#cfe0d5] pt-6">
+                <p className="text-sm font-medium text-ink">Galereya: bir nechta rasm (ixtiyoriy)</p>
+                <p className="mt-1 text-xs text-muted">{MAX_GALLERY} tagacha rasm. Tartibini ←/→ tugmalari bilan o‘zgartiring.</p>
+                <input
+                  type="file"
+                  multiple
+                  accept="image/jpeg,image/png,image/webp"
+                  className="mt-3 block w-full text-sm"
+                  aria-label="Galereya rasmlarini tanlash"
+                  onChange={(e) => {
+                    addGallery(e.target.files);
+                    e.target.value = "";
+                  }}
+                />
+                {(galleryError || serverFields.gallery) && (
+                  <p role="alert" className="mt-2 text-sm text-red-700">{galleryError ?? serverFields.gallery}</p>
+                )}
+                {gallery.length > 0 && (
+                  <ul className="mt-4 grid grid-cols-3 gap-3">
+                    {gallery.map((g, i) => (
+                      <li key={g.key} className="text-center">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={g.previewUrl} alt={`Galereya ${i + 1}`} className="h-24 w-full rounded-lg object-cover" />
+                        <div className="mt-1 flex items-center justify-center gap-2 text-sm">
+                          <button type="button" aria-label="Oldinga" disabled={i === 0} onClick={() => moveGallery(g.key, -1)} className="px-1 disabled:opacity-30">←</button>
+                          <button type="button" onClick={() => removeGallery(g.key)} className="text-red-700 underline">O‘chirish</button>
+                          <button type="button" aria-label="Orqaga" disabled={i === gallery.length - 1} onClick={() => moveGallery(g.key, 1)} className="px-1 disabled:opacity-30">→</button>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
               <p className="mt-4 text-xs text-muted">
                 Rasm “Saqlash” bosilganda serverga yuklanadi va faqat muvaffaqiyatli yuklangandan keyin taklifnomaga bog‘lanadi.
               </p>

@@ -2,13 +2,14 @@
 // bazasi testlari o'rnini bosmaydi (integratsiya testi alohida: supabase.integration.test.ts).
 import { randomUUID } from "node:crypto";
 import type {
-  InsertResult, InvitationPatch, InvitationRow, InvitationStatus, MusicRow, NewInvitation, Repo, RsvpRow,
+  InsertResult, InvitationPatch, InvitationRow, InvitationStatus, MusicRow, NewInvitation, Repo, RsvpRow, WishRow,
 } from "./repo";
 
 export function memoryRepo(): Repo & { _invitations: InvitationRow[]; _music: MusicRow[] } {
   const invitations: InvitationRow[] = [];
   const music: MusicRow[] = [];
   const rsvps: RsvpRow[] = [];
+  const wishes: WishRow[] = [];
   const now = () => new Date().toISOString();
 
   return {
@@ -54,14 +55,20 @@ export function memoryRepo(): Repo & { _invitations: InvitationRow[]; _music: Mu
       const m = music.find((x) => x.id === id);
       if (m) m.is_active = active;
     },
-    async upsertRsvp(invitationId, guestName, response) {
+    async upsertRsvp(invitationId, guestName, response, guests) {
       const key = guestName.trim().toLowerCase();
       const f = rsvps.find((r) => r.invitation_id === invitationId && r.guest_name.trim().toLowerCase() === key);
-      if (f) f.response = response;
-      else rsvps.push({ id: randomUUID(), invitation_id: invitationId, guest_name: guestName, response, created_at: now() });
+      if (f) { f.response = response; f.guests = guests; }
+      else rsvps.push({ id: randomUUID(), invitation_id: invitationId, guest_name: guestName, response, guests, created_at: now() });
     },
     async listRsvps(invitationId) {
       return rsvps.filter((r) => r.invitation_id === invitationId);
+    },
+    async insertWish(invitationId, guestName, message) {
+      wishes.push({ id: randomUUID(), invitation_id: invitationId, guest_name: guestName, message, created_at: now() });
+    },
+    async listWishes(invitationId, limit) {
+      return wishes.filter((w) => w.invitation_id === invitationId).reverse().slice(0, limit);
     },
     async listInvitations(limit) {
       return invitations.slice(0, limit).map((i) => ({ ...i }));

@@ -1,7 +1,7 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { AppError, notConfigured } from "./errors";
 import type {
-  InsertResult, InvitationPatch, InvitationRow, InvitationStatus, MusicRow, NewInvitation, Repo, RsvpRow,
+  InsertResult, InvitationPatch, InvitationRow, InvitationStatus, MusicRow, NewInvitation, Repo, RsvpRow, WishRow,
 } from "./repo";
 
 export function getSupabaseEnv() {
@@ -83,7 +83,7 @@ export function supabaseRepo(): Repo {
       const { error } = await db().from("music_tracks").update({ is_active: active }).eq("id", id);
       if (error) dbError(error);
     },
-    async upsertRsvp(invitationId, guestName, response) {
+    async upsertRsvp(invitationId, guestName, response, guests) {
       // Bir xil ism (katta-kichik harfga e'tiborsiz) uchun javob yangilanadi: yagona indeks 0002 migratsiyada.
       const { data: existing, error: e1 } = await db()
         .from("rsvps").select("id,guest_name").eq("invitation_id", invitationId);
@@ -91,11 +91,11 @@ export function supabaseRepo(): Repo {
       const key = guestName.trim().toLowerCase();
       const found = (existing ?? []).find((r: { id: string; guest_name: string }) => r.guest_name.trim().toLowerCase() === key);
       if (found) {
-        const { error } = await db().from("rsvps").update({ response }).eq("id", found.id);
+        const { error } = await db().from("rsvps").update({ response, guests }).eq("id", found.id);
         if (error) dbError(error);
         return;
       }
-      const { error } = await db().from("rsvps").insert({ invitation_id: invitationId, guest_name: guestName, response });
+      const { error } = await db().from("rsvps").insert({ invitation_id: invitationId, guest_name: guestName, response, guests });
       if (error && error.code !== "23505") dbError(error);
     },
     async listRsvps(invitationId) {
@@ -103,6 +103,16 @@ export function supabaseRepo(): Repo {
         .from("rsvps").select("*").eq("invitation_id", invitationId).order("created_at", { ascending: false });
       if (error) dbError(error);
       return (data as RsvpRow[]) ?? [];
+    },
+    async insertWish(invitationId, guestName, message) {
+      const { error } = await db().from("wishes").insert({ invitation_id: invitationId, guest_name: guestName, message });
+      if (error) dbError(error);
+    },
+    async listWishes(invitationId, limit) {
+      const { data, error } = await db()
+        .from("wishes").select("*").eq("invitation_id", invitationId).order("created_at", { ascending: false }).limit(limit);
+      if (error) dbError(error);
+      return (data as WishRow[]) ?? [];
     },
     async listInvitations(limit) {
       const { data, error } = await db().from("invitations").select("*").order("created_at", { ascending: false }).limit(limit);
