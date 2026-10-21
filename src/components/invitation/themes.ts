@@ -2,7 +2,7 @@ import type { Design } from "@/lib/schema";
 import type { FxKind } from "./Fx";
 
 export type GateKind = "button" | "envelope" | "seal" | "heart" | "doors" | "swipe";
-export type HeroKind = "full" | "arch" | "oval" | "polaroid" | "silk" | "plain" | "tile" | "atlas";
+export type HeroKind = "rose" | "full" | "arch" | "oval" | "polaroid" | "silk" | "plain" | "tile" | "atlas";
 /** Bo'limlar skeleti: cards = kartalar, story = uzluksiz hikoya, slides = to'liq ekranli bo'limlar. */
 export type LayoutKind = "cards" | "story" | "slides";
 export type CardShape = "arch" | "round" | "square";
@@ -22,6 +22,8 @@ export type Theme = {
   /** Hero foni (gradient) va yorug'lik rangi. */
   heroBg?: string;
   glow?: string;
+  /** Galereya va asosiy rasm uchun bezakli ramka. */
+  frame?: "rose";
   /** CSS o'zgaruvchilar: --bg sahifa foni, --paper karta foni, --ink matn, --muted ikkilamchi matn, --accent urg'u, --on rang ustidagi matn. */
   vars: Record<"--bg" | "--paper" | "--ink" | "--muted" | "--accent" | "--accent2" | "--on", string>;
   /** Ochilish ekrani foni va yozuv rangi. */
@@ -34,10 +36,11 @@ export type Theme = {
 
 export const THEMES: Record<Design, Theme> = {
   anor: {
+    frame: "rose",
     fx: "petals", fxColors: ["#b3263a","#d94a5e","#8a1c2b","#f0a0aa"],
-    gate: "button", hero: "full", layout: "cards", card: "round",
+    gate: "heart", hero: "rose", layout: "cards", card: "round",
     vars: { "--bg": "#fdf8f4", "--paper": "#ffffff", "--ink": "#4a0f1c", "--muted": "#7a4a54", "--accent": "#7d1228", "--accent2": "#c9a15a", "--on": "#fff4ec" },
-    gateBg: "radial-gradient(ellipse at top,#8c1a30,#4a0a17 75%)", gateInk: "#fff1e6", gateColor: "#7d1228", gateColor2: "#c9a15a",
+    gateBg: "radial-gradient(ellipse at top,#8c1a30,#4a0a17 75%)", gateInk: "#fff1e6", gateColor: "#e0314f", gateColor2: "#c9a15a",
   },
   osmon: {
     fx: "sparkles", fxColors: ["#c9a05a","#ffffff","#9fc2e3"],
@@ -95,11 +98,11 @@ export const THEMES: Record<Design, Theme> = {
     gateBg: "linear-gradient(160deg,#c8281e,#7a120c 70%)", gateInk: "#fff3d6", gateColor: "#f2b01e", gateColor2: "#1f4aa8",
   },
   gulbarg: {
-    gate: "envelope", hero: "oval", layout: "slides", card: "round",
+    gate: "heart", hero: "oval", layout: "slides", card: "round",
     fx: "petals", fxColors: ["#f4a6b8", "#e87a98", "#ffd0da", "#d46a85"],
     heroBg: "linear-gradient(180deg,#f9d3dc 0%,#fff0f3 65%,#fff7f1 100%)",
     vars: { "--bg": "#fff7f8", "--paper": "#ffffff", "--ink": "#6b2a3a", "--muted": "#9a6a76", "--accent": "#d46a85", "--accent2": "#e8b4a0", "--on": "#ffffff" },
-    gateBg: "linear-gradient(180deg,#fbd9e1,#fff3f5 60%,#fde8dc)", gateInk: "#6b2a3a", gateColor: "#fbe3e9", gateColor2: "#d46a85",
+    gateBg: "linear-gradient(180deg,#fbd9e1,#fff3f5 60%,#fde8dc)", gateInk: "#6b2a3a", gateColor: "#e87a98", gateColor2: "#d46a85",
   },
   yulduz: {
     gate: "swipe", hero: "full", layout: "story", card: "square", dark: true,
@@ -109,11 +112,11 @@ export const THEMES: Record<Design, Theme> = {
     gateBg: "radial-gradient(circle at 50% 30%,#1d2c70,#050b24 75%)", gateInk: "#eef1ff", gateColor: "#ffd978", gateColor2: "#bcd0ff",
   },
   kapalak: {
-    gate: "envelope", hero: "arch", layout: "cards", card: "arch",
+    gate: "heart", hero: "arch", layout: "cards", card: "arch",
     fx: "butterflies", fxColors: ["#c58be0", "#f08bb4", "#8fb2f0", "#f4b36a"],
     heroBg: "linear-gradient(170deg,#e4d3f5,#f9e6f0 70%)",
     vars: { "--bg": "#fbf5fb", "--paper": "#ffffff", "--ink": "#4b2f66", "--muted": "#82689c", "--accent": "#9a5cc4", "--accent2": "#e58ab4", "--on": "#ffffff" },
-    gateBg: "linear-gradient(180deg,#e6d6f7,#fbf1f8 60%,#f6e0ec)", gateInk: "#4b2f66", gateColor: "#efe3fa", gateColor2: "#9a5cc4",
+    gateBg: "linear-gradient(180deg,#e6d6f7,#fbf1f8 60%,#f6e0ec)", gateInk: "#4b2f66", gateColor: "#b57bdc", gateColor2: "#9a5cc4",
   },
   oltin: {
     gate: "doors", hero: "full", layout: "slides", card: "square", dark: true,

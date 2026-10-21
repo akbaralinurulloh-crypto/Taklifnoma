@@ -2,7 +2,8 @@
 
 import { useEffect, useState, type CSSProperties } from "react";
 import type { GateKind } from "./themes";
-import { Heart } from "./Ornaments";
+import { Fx } from "./Fx";
+import { Heart, Rose } from "./Ornaments";
 import { dict, type Lang } from "@/lib/i18n";
 import { useMusicStart } from "./MusicProvider";
 
@@ -19,6 +20,7 @@ type Props = {
   color: string;
   color2: string;
   lang?: Lang;
+  roses?: boolean;
   children: React.ReactNode;
 };
 
@@ -26,7 +28,7 @@ const mono = (a: string, b: string) => `${a.trim().charAt(0)}${b.trim().charAt(0
 const dl = (s: number) => ({ ["--d" as string]: `${s}s` }) as CSSProperties;
 
 /** Ochilish ekrani. Taklifnoma matni sahifada doim bor (qopqoq faqat ustidan yopadi); JS bo'lmasa qopqoq ko'rinmaydi. */
-export function Gate({ enabled, kind, groom, bride, dateText, bg, ink, color, color2, lang = "uz", children }: Props) {
+export function Gate({ enabled, kind, groom, bride, dateText, bg, ink, color, color2, lang = "uz", roses = false, children }: Props) {
   const g = dict(lang);
   const startMusic = useMusicStart();
   const [phase, setPhase] = useState<Phase>("closed");
@@ -129,6 +131,15 @@ export function Gate({ enabled, kind, groom, bride, dateText, bg, ink, color, co
   } else if (kind === "heart") {
     body = (
       <>
+        <Fx kind="hearts" colors={[color, color2, "#ffffff"]} />
+        {roses && (
+          <>
+            <Rose className="iv-drift pointer-events-none absolute -left-10 -top-8 h-44 w-44" />
+            <Rose className="pointer-events-none absolute -right-12 top-16 h-36 w-36" c1="#5d0f1d" c2="#8a1c2b" c3="#c4485b" />
+            <Rose className="iv-drift pointer-events-none absolute -bottom-10 -left-6 h-40 w-40" c1="#5d0f1d" c2="#8a1c2b" c3="#c4485b" />
+            <Rose className="pointer-events-none absolute -bottom-8 -right-8 h-44 w-44" />
+          </>
+        )}
         <p className="iv-in text-[14px] uppercase tracking-[0.4em]" style={{ color: ink, opacity: 0.85 }}>{g.forYou}</p>
         <h1 className="f-script iv-in mt-2 text-[64px] leading-none" style={{ color: ink, ...dl(0.15) }}>{g.invitation}</h1>
         <p className="iv-in mt-1 text-[14px] uppercase tracking-[0.4em]" style={{ color: ink, opacity: 0.85, ...dl(0.25) }}>{g.arrived}</p>

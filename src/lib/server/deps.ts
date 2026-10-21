@@ -6,6 +6,9 @@ export type StorageOps = {
   uploadPhoto: (buf: Uint8Array, type: "image/jpeg" | "image/png" | "image/webp") => Promise<string>;
   removePhoto: (path: string | null | undefined) => Promise<void>;
   uploadMusicFile: (buf: Uint8Array, contentType: string, ext: string) => Promise<string>;
+  createMusicUpload: (ext: string) => Promise<{ path: string; uploadUrl: string }>;
+  readMusicFile: (path: string) => Promise<Uint8Array | null>;
+  removeMusicFile: (path: string) => Promise<void>;
 };
 
 let repoOverride: Repo | null = null;

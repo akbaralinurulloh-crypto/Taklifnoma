@@ -13,6 +13,7 @@ import {
   type Design,
 } from "@/lib/schema";
 import type { PublicInvitation } from "@/lib/types";
+import { defaultTrack } from "@/lib/builtin-music";
 import { ApiError, api, randomToken } from "@/lib/client-api";
 import { InvitationView } from "@/components/InvitationView";
 import { PhonePreview } from "@/components/site/PhonePreview";
@@ -409,7 +410,7 @@ export function CreateWizard({ tracks, backendConfigured, siteUrl, mode = "creat
     photoUrl: photo?.previewUrl ?? null,
     gallery: gallery.map((g) => g.previewUrl),
     design: form.design,
-    music: track ? { title: track.title, url: track.url } : null,
+    music: track ? { title: track.title, url: track.url } : defaultTrack(form.design),
   };
 
   const err = (k: string) => serverFields[k] ?? (showErrors ? errors[k] : undefined);
@@ -630,15 +631,15 @@ export function CreateWizard({ tracks, backendConfigured, siteUrl, mode = "creat
               <p className="text-sm font-medium text-ink">Musiqa</p>
               {tracks.length === 0 ? (
                 <p className="mt-3 rounded-lg bg-amber-50 p-3 text-sm text-amber-900">
-                  Musiqa katalogi hozircha bo‘sh: litsenziyasi tasdiqlangan audio fayllar hali qo‘shilmagan. Fayllar
-                  qo‘shilgach bu yerda tanlash va tinglash imkoni paydo bo‘ladi. Taklifnomani musiqasiz ham yaratish mumkin.
+                  Tanlash uchun katalog hozircha bo‘sh. Taklifnomangizga tanlangan dizaynga mos tayyor musiqa avtomatik
+                  qo‘yiladi va konvert ochilganda o‘zi boshlanadi.
                 </p>
               ) : (
                 <ul className="mt-3 space-y-3">
                   <li>
                     <label className="flex items-center gap-2 text-sm">
                       <input type="radio" name="music" checked={form.musicId === null} onChange={() => set("musicId", null)} />
-                      Musiqasiz
+                      Dizaynga mos musiqa (avtomatik)
                     </label>
                   </li>
                   {tracks.map((t) => (

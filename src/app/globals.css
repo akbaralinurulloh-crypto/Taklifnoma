@@ -147,3 +147,22 @@ body {
   .iv-rv { opacity: 1; transform: none; transition: none; }
   .iv-ken, .iv-float, .iv-names, .iv-beat, .iv-gleam::after, .iv-ring, .iv-eq { animation: none; }
 }
+
+/* Atirgul ramkasining o'ralgan poyasi (lentaga o'xshash) */
+.iv-vine {
+  background: repeating-linear-gradient(48deg, #2d5a38 0 7px, #4a8552 7px 14px, #3a6e45 14px 18px);
+  box-shadow: inset 0 0 0 2px rgb(15 45 25 / .55), inset 0 3px 6px rgb(255 255 255 / .25), 0 10px 22px -10px rgb(0 0 0 / .6);
+}
+
+/* Orqa fon "aurora" dog'lari */
+.iv-aurora i { position: absolute; width: 300px; height: 300px; border-radius: 50%; opacity: .16; filter: blur(60px); animation: iv-aur 14s ease-in-out infinite alternate; }
+@keyframes iv-aur { from { transform: translate3d(0,0,0) scale(1); } to { transform: translate3d(70px,50px,0) scale(1.3); } }
+.iv-aurora ~ * { position: relative; }
+
+/* Sarlavha tagidagi chiziq ekranga kirganda cho'ziladi */
+.iv-ttl { display: inline-block; position: relative; padding-bottom: 14px; }
+.iv-ttl::after { content: ""; position: absolute; left: 50%; bottom: 0; height: 2px; width: 90px; transform: translateX(-50%); background: linear-gradient(90deg, transparent, var(--accent), transparent); transition: width 1.3s cubic-bezier(.2,.7,.2,1) .35s; }
+.iv-rv:not(.iv-rv-in) .iv-ttl::after { width: 0; }
+[data-rv="left"] .iv-ttl::after { left: 0; transform: none; background: linear-gradient(90deg, var(--accent), transparent); }
+
+@media (prefers-reduced-motion: reduce) { .iv-aurora i { animation: none; } .iv-ttl::after { transition: none; } }

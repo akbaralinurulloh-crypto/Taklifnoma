@@ -46,7 +46,7 @@ const MODE: Record<Exclude<FxKind, "none">, "fall" | "rise" | "twinkle" | "fly">
 export function Fx({ kind, colors }: { kind: FxKind; colors: string[] }) {
   if (kind === "none") return null;
   const mode = MODE[kind];
-  const n = mode === "fly" ? 5 : mode === "twinkle" ? 26 : 16;
+  const n = mode === "fly" ? 7 : mode === "twinkle" ? 34 : 24;
   const items = Array.from({ length: n }, (_, i) => {
     const size = mode === "fly" ? 30 + r(i, 1) * 26 : mode === "twinkle" ? 5 + r(i, 1) * 11 : kind === "gold" ? 6 + r(i, 1) * 12 : 12 + r(i, 1) * 16;
     const style = {
@@ -58,6 +58,7 @@ export function Fx({ kind, colors }: { kind: FxKind; colors: string[] }) {
       ["--x" as string]: `${Math.round((r(i, 6) - 0.5) * 140)}px`,
       ["--r" as string]: `${Math.round(r(i, 7) * 360)}deg`,
       opacity: kind === "gold" ? 0.9 : 0.85,
+      filter: i % 4 === 0 ? "blur(1.2px)" : undefined,
     } as CSSProperties;
     return (
       <span key={i} className={`iv-fx iv-fx-${mode}`} style={style}>

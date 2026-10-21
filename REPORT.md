@@ -134,3 +134,10 @@ Production deployment qadamlari: README 4-bo‘lim.
 - 5 yangi dizayn: Gulbarg, Yulduzli tun, Kapalak, Oltin yog'du, Yuraklar (jami 15).
 - **Migratsiya 0007**: yangi dizaynlar va 7 yangi musiqa (3 yor-yor uslubi + ballada, marsh, kelin kutib olish, raqs). Hammasi sintez qilingan original (`scripts/make_music.py`).
 - Mualliflik huquqidagi qo'shiqlar (Ed Sheeran, Bojalar, Sato va h.k.) loyihaga qo'shilmadi: litsenziyasiz tarqatish mumkin emas. O'z faylingiz bo'lsa /admin orqali (litsenziya tasdig'i bilan) yuklang.
+
+## Yangilanish 7
+- Admin musiqa yuklash: fayl brauzerdan to'g'ridan-to'g'ri Supabase'ga imzolangan havola orqali yuklanadi (Vercel 4.5 MB chegarasi aylanib o'tildi), keyin server tekshiradi (≤15 MB, haqiqiy audio). Admin ro'yxatida eshitib ko'rish tugmasi bor.
+- Musiqa: tanlanmagan bo'lsa dizaynga mos tayyor musiqa avtomatik; konvert ochilganda boshlanadi; pastda "Musiqani o'chirish/yoqish" tugmasi.
+- Yurakli ochilish: anor (atirgulli), gulbarg, kapalak dizaynlariga qo'shildi.
+- Atirgul ramkasi: asosiy rasm va galereya atrofida poya-lenta va atirgullar; bosh sahifadagi burchak atirgullari rasm bilan yo'qolmaydi.
+- Animatsiyalar: aurora dog'lari, tepada o'qish chizig'i, bosganda zarrachalar, sarlavha chizig'i, ko'proq tushuvchi zarrachalar.

@@ -5,6 +5,7 @@ import { AdminLogin, LogoutButton, MusicToggle, MusicUpload, UnpublishButton } f
 import { ADMIN_COOKIE, adminConfigured, isValidAdminSession } from "@/lib/server/admin";
 import { getRepo } from "@/lib/server/deps";
 import { getSupabaseEnv } from "@/lib/server/repo.supabase";
+import { defaultUrls } from "@/lib/server/storage";
 import { DESIGNS, DESIGN_LABELS } from "@/lib/schema";
 import { whenText } from "@/lib/format";
 
@@ -95,8 +96,9 @@ export default async function AdminPage() {
         <ul className="mt-3 divide-y divide-[#cfe0d5] rounded-xl border border-[#cfe0d5] bg-white">
           {music.length === 0 && <li className="px-4 py-3 text-sm text-muted">Katalog bo‘sh.</li>}
           {music.map((m) => (
-            <li key={m.id} className="flex items-center justify-between px-4 py-2 text-sm">
+            <li key={m.id} className="flex flex-wrap items-center justify-between gap-2 px-4 py-2 text-sm">
               <span>{m.title} <span className="text-xs text-muted">({m.is_active ? "faol" : "o‘chirilgan"})</span></span>
+              <audio controls preload="none" src={defaultUrls.music(m.storage_path)} className="h-8 max-w-[220px]" />
               <MusicToggle id={m.id} active={m.is_active} />
             </li>
           ))}

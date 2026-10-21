@@ -97,42 +97,87 @@ export function MusicToggle({ id, active }: { id: string; active: boolean }) {
   );
 }
 
+const AUDIO_EXT: Record<string, string> = { mp3: "mp3", ogg: "ogg", wav: "wav", m4a: "m4a", mp4: "m4a", aac: "m4a" };
+const MAX_AUDIO = 15 * 1024 * 1024;
+
 export function MusicUpload() {
   const [title, setTitle] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [license, setLicense] = useState(false);
+  const [stage, setStage] = useState<string | null>(null);
+  const [done, setDone] = useState<string | null>(null);
   const { busy, error, run } = useAction();
+
+  function pick(f: File | null) {
+    setDone(null);
+    setFile(f);
+    if (f && !title.trim()) setTitle(f.name.replace(/\.[^.]+$/, "").replace(/[_-]+/g, " ").slice(0, 120));
+  }
+
+  async function upload() {
+    if (!file) return;
+    const ext = AUDIO_EXT[(file.name.split(".").pop() ?? "").toLowerCase()];
+    if (!ext) throw new ApiError("Faqat MP3, OGG, WAV yoki M4A fayl qabul qilinadi.");
+    if (file.size > MAX_AUDIO) throw new ApiError(`Fayl hajmi ${(file.size / 1048576).toFixed(1)} MB: 15 MB dan oshmasligi kerak.`);
+    setDone(null);
+    setStage("1/3: yuklash manzili olinmoqda…");
+    const { path, uploadUrl } = await api<{ path: string; uploadUrl: string }>("/api/admin/music/sign", {
+      method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ ext }),
+    });
+    setStage(`2/3: fayl yuklanmoqda (${(file.size / 1048576).toFixed(1)} MB)…`);
+    const fd = new FormData();
+    fd.append("cacheControl", "3600");
+    fd.append("", file);
+    let res: Response;
+    try {
+      res = await fetch(uploadUrl, { method: "PUT", body: fd, headers: { "x-upsert": "false" } });
+    } catch {
+      throw new ApiError("Faylni omborga yuklab bo‘lmadi: internet aloqasi uzildi. Qayta urinib ko‘ring.");
+    }
+    if (!res.ok) {
+      const t = await res.text().catch(() => "");
+      throw new ApiError(`Faylni omborga yuklab bo‘lmadi (xato ${res.status}). ${t.slice(0, 160)}`);
+    }
+    setStage("3/3: fayl tekshirilmoqda…");
+    await api("/api/admin/music/finish", {
+      method: "POST", headers: { "content-type": "application/json" },
+      body: JSON.stringify({ title, path, licenseConfirmed: license }),
+    });
+    setDone(`“${title.trim()}” katalogga qo‘shildi va hozir foydalanishga tayyor.`);
+    setTitle("");
+    setFile(null);
+    setLicense(false);
+  }
+
   return (
     <form
       className="mt-4 space-y-3 rounded-xl border border-[#cfe0d5] bg-white p-4"
       onSubmit={(e) => {
         e.preventDefault();
-        if (!file) return;
-        const fd = new FormData();
-        fd.set("title", title);
-        fd.set("file", file);
-        fd.set("licenseConfirmed", license ? "true" : "false");
         run(async () => {
-          await api("/api/admin/music", { method: "POST", body: fd });
-          setTitle("");
-          setFile(null);
-          setLicense(false);
+          try {
+            await upload();
+          } finally {
+            setStage(null);
+          }
         });
       }}
     >
       <h3 className="text-sm font-medium text-ink">Yangi audio qo‘shish</h3>
       <label className="block text-sm">
-        Nomi
-        <input value={title} maxLength={120} onChange={(e) => setTitle(e.target.value)} className="mt-1 w-full rounded-lg border border-[#b7cdbf] px-3 py-2" />
+        Fayl (MP3, OGG, WAV, M4A; 15 MB gacha)
+        <input type="file" accept="audio/*,.mp3,.ogg,.wav,.m4a" onChange={(e) => pick(e.target.files?.[0] ?? null)} className="mt-1 block w-full text-sm" />
       </label>
       <label className="block text-sm">
-        Fayl (MP3, OGG, WAV, M4A; 15 MB gacha)
-        <input type="file" accept="audio/*" onChange={(e) => setFile(e.target.files?.[0] ?? null)} className="mt-1 block w-full text-sm" />
+        Nomi
+        <input value={title} maxLength={120} onChange={(e) => setTitle(e.target.value)} className="mt-1 w-full rounded-lg border border-[#b7cdbf] px-3 py-2" />
       </label>
       <label className="flex items-start gap-2 text-sm">
         <input type="checkbox" checked={license} onChange={(e) => setLicense(e.target.checked)} className="mt-1" />
         <span>Bu audio fayldan foydalanish uchun litsenziya/ruxsatim borligini tasdiqlayman.</span>
       </label>
+      {stage && <p role="status" className="text-sm text-muted">{stage}</p>}
+      {done && <p role="status" className="text-sm text-green-800">{done}</p>}
       {error && <p role="alert" className="text-sm text-red-700">{error}</p>}
       <button type="submit" disabled={busy || !title.trim() || !file || !license} className="rounded-full bg-gold-dark px-5 py-2 text-sm text-white disabled:opacity-50">
         {busy ? "Yuklanmoqda…" : "Qo‘shish"}

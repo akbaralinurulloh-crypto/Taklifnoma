@@ -1,9 +1,10 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { RoseFrame } from "./RoseFrame";
 
 /** Galereya: birinchi rasm katta, qolganlari to'r ko'rinishida. Bosilganda to'liq ekranda ochiladi (←/→/Esc bilan boshqariladi). */
-export function Gallery({ urls, alt, variant = "grid" }: { urls: string[]; alt: string; variant?: "grid" | "stack" | "scroller" }) {
+export function Gallery({ urls, alt, variant = "grid", frame }: { urls: string[]; alt: string; variant?: "grid" | "stack" | "scroller"; frame?: "rose" }) {
   const [open, setOpen] = useState<number | null>(null);
   const close = useCallback(() => setOpen(null), []);
   const step = useCallback((d: number) => setOpen((i) => (i === null ? i : (i + d + urls.length) % urls.length)), [urls.length]);
@@ -29,19 +30,22 @@ export function Gallery({ urls, alt, variant = "grid" }: { urls: string[]; alt: 
     <>
       <div
         className={
-          variant === "stack" ? "mt-6 space-y-3"
+          variant === "stack" ? (frame ? "mt-8 space-y-8" : "mt-6 space-y-3")
           : variant === "scroller" ? "-mx-8 mt-6 flex snap-x snap-mandatory gap-3 overflow-x-auto px-8 pb-2"
           : "mt-6 grid grid-cols-2 gap-2"
         }
       >
         {urls.map((u, i) => {
           const wide = variant === "grid" && i === 0 && urls.length % 2 === 1;
-          const cls = variant === "stack" ? "block w-full overflow-hidden rounded-sm" : variant === "scroller" ? "w-[78%] shrink-0 snap-center overflow-hidden rounded-2xl" : `overflow-hidden rounded-lg ${wide ? "col-span-2" : ""}`;
+          const cls = variant === "stack" ? `block w-full ${frame ? "" : "overflow-hidden rounded-sm"}` : variant === "scroller" ? "w-[78%] shrink-0 snap-center overflow-hidden rounded-2xl" : `overflow-hidden rounded-lg ${wide ? "col-span-2" : ""}`;
           const img = variant === "stack" ? "h-72" : variant === "scroller" ? "h-80" : wide ? "h-64" : "h-44";
+          const pic = (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={u} alt={`${alt} ${i + 1}`} loading="lazy" className={`w-full object-cover ${frame ? "h-64" : img}`} />
+          );
           return (
             <button key={u} type="button" onClick={() => setOpen(i)} className={cls} aria-label={`${alt} ${i + 1}/${urls.length}`}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={u} alt={`${alt} ${i + 1}`} loading="lazy" className={`w-full object-cover ${img}`} />
+              {frame === "rose" ? <RoseFrame size="sm">{pic}</RoseFrame> : pic}
             </button>
           );
         })}

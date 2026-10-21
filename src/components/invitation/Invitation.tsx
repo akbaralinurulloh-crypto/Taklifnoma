@@ -6,16 +6,23 @@ import type { PublicInvitation } from "@/lib/types";
 import { Countdown } from "../templates/Countdown";
 import { MusicControl } from "../templates/MusicControl";
 import { MapLink, Photo, delay, initials } from "../templates/parts";
+import { ScrollBar, TapBurst } from "./Extras";
 import { Fx } from "./Fx";
 import { Gallery } from "./Gallery";
 import { Gate } from "./Gate";
 import { MusicProvider } from "./MusicProvider";
 import { Reveal } from "./Reveal";
+import { RoseFrame } from "./RoseFrame";
 import { RsvpBox, WishesBox } from "./GuestSections";
 import {
   AtlasBand, Bow, Branch, Clouds, Dove, Heart, LineFlora, OGIVE_PATH, Rose, Silk, Sparkle, Star8, TileBand, TornEdge,
 } from "./Ornaments";
 import { THEMES, type Theme } from "./themes";
+
+const BURST: Record<string, string[]> = {
+  hearts: ["♥", "♡"], petals: ["❀", "✿"], leaves: ["❦", "✦"], stars: ["✦", "★"], sparkles: ["✦", "✧"],
+  gold: ["✦", "•"], butterflies: ["✿", "✦"], confetti: ["■", "●", "▲"], none: ["✦"],
+};
 
 type Parts = NonNullable<ReturnType<typeof dateParts>>;
 
@@ -54,6 +61,27 @@ function Hero({ data, t, p, lang }: { data: PublicInvitation; t: Theme; p: Parts
   const alt = `${a} va ${b}`;
 
   switch (t.hero) {
+    case "rose":
+      return (
+        <header className="relative overflow-hidden px-6 pb-16 pt-14 text-center" style={{ background: t.heroBg ?? "linear-gradient(160deg,#7d1228,#3d0711)" }}>
+          <Rose className="iv-drift absolute -left-12 -top-10 h-52 w-52" />
+          <Rose className="absolute -right-14 top-28 h-44 w-44" c1="#5d0f1d" c2="#8a1c2b" c3="#c4485b" />
+          <Rose className="iv-drift absolute -bottom-12 -left-8 h-48 w-48" c1="#5d0f1d" c2="#8a1c2b" c3="#c4485b" />
+          <Rose className="absolute -bottom-10 -right-10 h-52 w-52" />
+          <Dove className="absolute left-8 top-24 h-8 w-12 opacity-80" />
+          <Dove className="absolute right-16 top-14 h-6 w-9 opacity-60" />
+          <p className="iv-in relative text-[14px] uppercase tracking-[0.5em] text-white">{d.nikohDay}</p>
+          <RoseFrame className="iv-float relative mx-auto mt-8 w-[300px]">
+            {photoUrl ? (
+              <Photo url={photoUrl} alt={alt} className="iv-ken h-[360px] w-full" />
+            ) : (
+              <Monogram a={a} b={b} className="h-[300px] w-full rounded-none border-0 bg-[#fdf8f4] text-[#7d1228]" />
+            )}
+          </RoseFrame>
+          <Names a={a} b={b} className="relative mt-10 text-white" />
+          <DateLine lang={lang} p={p} className="relative mt-5 text-white" />
+        </header>
+      );
     case "full": {
       const dark = !!t.dark;
       return (
@@ -220,6 +248,8 @@ function Hero({ data, t, p, lang }: { data: PublicInvitation; t: Theme; p: Parts
 
 function Divider({ t }: { t: Theme }) {
   switch (t.hero) {
+    case "rose":
+      return <TornEdge className="-mb-px block h-8 w-full" fill={t.vars["--bg"]} flip />;
     case "full":
       return t.dark ? (
         <div aria-hidden className="mx-auto my-2 flex items-center justify-center gap-3 py-4"><span className="h-px w-16 bg-white/40" /><Sparkle className="h-4 w-4" fill="#fff" /><span className="h-px w-16 bg-white/40" /></div>
@@ -248,7 +278,7 @@ function Card({ t, children, className = "" }: { t: Theme; children: ReactNode; 
 }
 
 function Title({ children }: { children: ReactNode }) {
-  return <h2 className="f-script iv-accent text-[44px] leading-none">{children}</h2>;
+  return <h2 className="f-script iv-ttl iv-accent text-[44px] leading-none">{children}</h2>;
 }
 
 function Calendar({ iso, lang, selected }: { iso: string | null; lang: Lang; selected: "heart" | "dot" }) {
@@ -272,12 +302,22 @@ function Calendar({ iso, lang, selected }: { iso: string | null; lang: Lang; sel
   );
 }
 
+function Aurora() {
+  return (
+    <div aria-hidden className="iv-aurora pointer-events-none absolute inset-0 overflow-hidden">
+      {[8, 32, 58, 84].map((top, i) => (
+        <i key={i} style={{ top: `${top}%`, [i % 2 ? "right" : "left"]: "-90px", animationDelay: `${-i * 4}s`, background: i % 2 ? "var(--accent2)" : "var(--accent)" }} />
+      ))}
+    </div>
+  );
+}
+
 type Section = { key: string; title: string; pre?: ReactNode; node: ReactNode };
 
 function buildSections(data: PublicInvitation, t: Theme, p: Parts | null, lang: Lang, slug?: string, guest?: string, inlineMusic = true): Section[] {
   const d: Dict = dict(lang);
   const heartThemes = t.hero === "full" || t.hero === "silk" || t.hero === "oval";
-  const gv = t.layout === "story" ? "stack" : t.layout === "slides" ? "scroller" : "grid";
+  const gv = t.layout === "story" || t.frame ? "stack" : t.layout === "slides" ? "scroller" : "grid";
   const out: Section[] = [];
 
   out.push({
@@ -299,7 +339,7 @@ function buildSections(data: PublicInvitation, t: Theme, p: Parts | null, lang: 
   });
 
   if (data.gallery.length > 0) {
-    out.push({ key: "gallery", title: d.gallery, node: <Gallery urls={data.gallery} alt={`${data.groomName} & ${data.brideName}`} variant={gv} /> });
+    out.push({ key: "gallery", title: d.gallery, node: <Gallery urls={data.gallery} alt={`${data.groomName} & ${data.brideName}`} variant={gv} frame={t.frame} /> });
   }
   if (p) {
     out.push({
@@ -384,12 +424,13 @@ function Body({ data, t, p, lang, slug, guest, inlineMusic, motion }: { data: Pu
 
   if (t.layout === "story") {
     return (
-      <div className="pb-12 pt-2">
+      <div className="relative pb-12 pt-2">
+        <Aurora />
         {sections.map((s, i) => (
           <Reveal as="section" kind="left" enabled={motion} key={s.key} className="border-t px-8 py-12 text-left iv-line first:border-t-0">
             <p className="f-display text-[13px] uppercase tracking-[0.4em] iv-muted">{String(i + 1).padStart(2, "0")}</p>
             {s.pre && <div className="mt-3">{s.pre}</div>}
-            <h2 className="f-script iv-accent mt-1 text-[53px] leading-none">{s.title}</h2>
+            <h2 className="f-script iv-ttl iv-accent mt-1 text-[53px] leading-none">{s.title}</h2>
             {s.node}
           </Reveal>
         ))}
@@ -400,13 +441,14 @@ function Body({ data, t, p, lang, slug, guest, inlineMusic, motion }: { data: Pu
 
   if (t.layout === "slides") {
     return (
-      <div>
+      <div className="relative">
+        <Aurora />
         {sections.map((s, i) => (
           <Reveal as="section" kind="zoom" enabled={motion} key={s.key} className={`flex min-h-[86svh] flex-col items-center justify-center px-8 py-16 text-center ${i % 2 ? "iv-paper" : ""}`}>
             <span className="f-display mb-8 text-[13px] tracking-[0.5em] iv-muted">{i + 1} / {sections.length}</span>
             <div className="w-full max-w-[340px]">
               {s.pre}
-              <h2 className="f-script iv-accent text-[51px] leading-none">{s.title}</h2>
+              <h2 className="f-script iv-ttl iv-accent text-[51px] leading-none">{s.title}</h2>
               {s.node}
             </div>
           </Reveal>
@@ -417,7 +459,8 @@ function Body({ data, t, p, lang, slug, guest, inlineMusic, motion }: { data: Pu
   }
 
   return (
-    <div className="space-y-6 pb-10 pt-8">
+    <div className="relative space-y-6 pb-10 pt-8">
+      <Aurora />
       {sections.map((s) => (
         <Reveal key={s.key} kind="up" enabled={motion}>
           <Card t={t}>
@@ -451,9 +494,12 @@ export function Invitation({ data, gate = false, lang = "uz", slug, guest, langH
       color={t.gateColor}
       color2={t.gateColor2}
       lang={lang}
+      roses={t.frame === "rose"}
     >
       <article className="iv relative mx-auto w-full max-w-[420px] overflow-hidden" style={t.vars as unknown as CSSProperties} lang={lang} data-dark={!!t.dark}>
         {motion && <Fx kind={t.fx} colors={t.fxColors} />}
+        {motion && gate && <ScrollBar />}
+        {motion && gate && <TapBurst symbols={BURST[t.fx]} colors={t.fxColors} />}
         {langHref && (
           <Link href={langHref} prefetch={false} className="absolute right-3 top-3 z-20 rounded-full bg-black/45 px-3 py-1 text-[13.5px] text-white backdrop-blur" hrefLang={lang === "uz" ? "ru" : "uz"}>
             {dict(lang).switchTo}

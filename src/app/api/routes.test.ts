@@ -12,6 +12,8 @@ import { POST as photosPOST } from "./photos/route";
 import { POST as loginPOST } from "./admin/login/route";
 import { POST as unpublishPOST } from "./admin/invitations/[id]/unpublish/route";
 import { POST as musicPOST } from "./admin/music/route";
+import { POST as musicSignPOST } from "./admin/music/sign/route";
+import { POST as musicFinishPOST } from "./admin/music/finish/route";
 import { GET as healthGET } from "./health/route";
 
 const removed: string[] = [];
@@ -19,7 +21,11 @@ const storage: StorageOps = {
   uploadPhoto: async (_b, type) => `photos/123e4567-e89b-12d3-a456-426614174000.${type === "image/png" ? "png" : "jpg"}`,
   removePhoto: async (p) => { if (p) removed.push(p); },
   uploadMusicFile: async (_b, _t, ext) => `tracks/test.${ext}`,
+  createMusicUpload: async (ext) => ({ path: `tracks/123e4567-e89b-12d3-a456-426614174111.${ext}`, uploadUrl: "https://x/upload" }),
+  readMusicFile: async (p) => files.get(p) ?? null,
+  removeMusicFile: async (p) => { files.delete(p); removed.push(p); },
 };
+const files = new Map<string, Uint8Array>();
 
 const json = (url: string, method: string, body?: unknown, headers: Record<string, string> = {}) =>
   new Request(`http://localhost${url}`, {
@@ -240,6 +246,33 @@ describe("admin", () => {
     expect((await mk(true, new TextEncoder().encode("matn"))).status).toBe(415);
     expect((await mk(true, new Uint8Array([0x49, 0x44, 0x33, 4, 0, 0]))).status).toBe(201);
     expect(repo._music).toHaveLength(1);
+  });
+
+  it("katta audio: imzolangan yuklash, serverda tekshirish va katalogga qo'shish", async () => {
+    process.env.ADMIN_SECRET = SECRET;
+    const cookie = cookieFrom(await loginPOST(json("/x", "POST", { secret: SECRET })));
+    const H = { cookie };
+    expect((await musicSignPOST(json("/x", "POST", { ext: "mp3" }))).status).toBe(401); // kirmagan
+    expect((await musicSignPOST(json("/x", "POST", { ext: "exe" }, H))).status).toBe(415);
+    const sign = await musicSignPOST(json("/x", "POST", { ext: "mp3" }, H));
+    expect(sign.status).toBe(200);
+    const { path } = await sign.json();
+    const fin = (over: object) => musicFinishPOST(json("/x", "POST", { title: "Sato", path, licenseConfirmed: true, ...over }, H));
+
+    expect((await fin({ path: "../etc/passwd" })).status).toBe(400);
+    files.set(path, new TextEncoder().encode("bu audio emas"));
+    expect((await fin({})).status).toBe(415); // haqiqiy audio emas: fayl ombordan o'chiriladi
+    expect(files.has(path)).toBe(false);
+    files.set(path, new Uint8Array([0x49, 0x44, 0x33, 4, 0, 0]));
+    expect((await fin({ licenseConfirmed: false })).status).toBe(400);
+    expect(files.has(path)).toBe(false); // litsenziyasiz fayl ham tozalanadi
+    expect((await fin({})).status).toBe(404); // fayl yo'q
+    files.set(path, new Uint8Array([0x49, 0x44, 0x33, 4, 0, 0]));
+    const ok = await fin({});
+    expect(ok.status).toBe(201);
+    expect(repo._music.at(-1)?.storage_path).toBe(path);
+    files.set(path, new Uint8Array(16 * 1024 * 1024).fill(0x49)); // 15 MB dan katta
+    expect((await fin({ title: "Katta" })).status).toBe(413);
   });
 });
 

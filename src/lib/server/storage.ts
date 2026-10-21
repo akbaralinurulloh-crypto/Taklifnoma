@@ -50,3 +50,36 @@ export async function uploadMusicFile(buf: Uint8Array, contentType: string, ext:
   }
   return path;
 }
+
+const MUSIC_EXT = new Set(["mp3", "ogg", "wav", "m4a"]);
+export const MUSIC_PATH_RE = /^tracks\/[a-f0-9-]{36}\.(mp3|ogg|wav|m4a)$/;
+
+/**
+ * Katta audio fayllar Vercel so'rov hajmi cheklovidan (~4.5 MB) o'tmasligi uchun brauzer faylni to'g'ridan-to'g'ri
+ * Supabase omboriga yuklaydi. Server faqat bir martalik imzolangan manzil beradi.
+ */
+export async function createMusicUpload(ext: string): Promise<{ path: string; uploadUrl: string }> {
+  if (!MUSIC_EXT.has(ext)) throw new AppError(415, "bad_type", "Faqat MP3, OGG, WAV yoki M4A audio qabul qilinadi.");
+  const path = `tracks/${randomUUID()}.${ext}`;
+  const { data, error } = await adminClient().storage.from(BUCKET_MUSIC).createSignedUploadUrl(path);
+  if (error || !data) {
+    console.error("[storage] yuklash manzili yaratilmadi:", error?.message);
+    throw new AppError(502, "upload_failed", "Yuklash manzilini yaratib bo‘lmadi. Supabase sozlamalarini tekshiring.");
+  }
+  return { path, uploadUrl: data.signedUrl };
+}
+
+/** Yuklangan faylni serverda o'qib tekshirish uchun (tur baytlardan aniqlanadi, hajm o'lchanadi). */
+export async function readMusicFile(path: string): Promise<Uint8Array | null> {
+  const { data, error } = await adminClient().storage.from(BUCKET_MUSIC).download(path);
+  if (error || !data) return null;
+  return new Uint8Array(await data.arrayBuffer());
+}
+
+export async function removeMusicFile(path: string): Promise<void> {
+  try {
+    await adminClient().storage.from(BUCKET_MUSIC).remove([path]);
+  } catch (e) {
+    console.error("[storage] audio o‘chirilmadi:", e instanceof Error ? e.message : e);
+  }
+}

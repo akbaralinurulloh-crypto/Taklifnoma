@@ -9,6 +9,7 @@ import { AppError } from "@/lib/server/errors";
 import { getPublicBySlug } from "@/lib/server/service";
 import { defaultUrls } from "@/lib/server/storage";
 import { whenText } from "@/lib/format";
+import { defaultTrack } from "@/lib/builtin-music";
 import { dict, parseLang } from "@/lib/i18n";
 
 export const dynamic = "force-dynamic"; // har so'rovda bazadan o'qiladi: o'chirilgan/nashrdan olinganlar darhol yopiladi
@@ -56,7 +57,7 @@ export default async function PublicInvitationPage({ params, searchParams }: Pro
   return (
     <main className="flex-1 bg-[#dfe8e1] py-0 sm:py-6">
       <>
-        <InvitationView data={data} gate lang={lang} slug={slug} guest={guest} langHref={`/i/${slug}?${q.toString()}`} />
+        <InvitationView data={{ ...data, music: data.music ?? defaultTrack(data.design) }} gate lang={lang} slug={slug} guest={guest} langHref={`/i/${slug}?${q.toString()}`} />
         <div className="mx-auto mt-6 max-w-[420px] space-y-6 px-4 pb-10">
           {data.weddingAt && (
             <GuestActions
