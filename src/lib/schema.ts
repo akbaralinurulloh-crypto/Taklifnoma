@@ -1,60 +1,34 @@
 // Brauzer va serverda ishlatiladigan sof mantiq. node:crypto bu yerda ISHLATILMAYDI.
 import { z } from "zod";
 
-export const DESIGNS = [
-  "anor",
-  "osmon",
-  "zarrin",
-  "oqqora",
-  "zaytun",
-  "shokolad",
-  "gulchizma",
-  "muhr",
-  "firuza",
-  "atlas",
-  "gulbarg",
-  "yulduz",
-  "kapalak",
-  "oltin",
-  "yurak",
-] as const;
+export const DESIGNS = ["zarrin", "oqqora", "osmon", "zaytun", "shokolad"] as const;
 export type Design = (typeof DESIGNS)[number];
 
 export const DESIGN_LABELS: Record<Design, string> = {
-  anor: "Anor",
-  osmon: "Osmon",
-  zarrin: "Zarrin",
-  oqqora: "Oq va qora",
+  zarrin: "Oltin klassika",
+  oqqora: "Qora va oltin",
+  osmon: "Kechki ko‘k",
   zaytun: "Zaytun",
-  shokolad: "Shokolad",
-  gulchizma: "Gul chizma",
-  muhr: "Muhr",
-  firuza: "Firuza",
-  atlas: "Atlas",
-  gulbarg: "Gulbarg",
-  yulduz: "Yulduzli tun",
-  kapalak: "Kapalak",
-  oltin: "Oltin yog‘du",
-  yurak: "Yuraklar",
+  shokolad: "Shampan",
 };
 
 export const DESIGN_DESCRIPTIONS: Record<Design, string> = {
-  anor: "To‘q qizil rang, atirgullar va rasm ustidagi ismlar.",
-  osmon: "Havorang osmon, oltin muhrli konvert va yengil bulutlar.",
-  zarrin: "Oltin ipak mato va yurakka bosib ochiladigan taklifnoma.",
-  oqqora: "Oq-qora kino uslubi, qora parda surilib ochiladi.",
-  zaytun: "Zaytun yashil ipak, lentali konvert va oval kartalar.",
-  shokolad: "Shokolad va krem ranglari, lentali konvert.",
-  gulchizma: "Oq qog‘ozda qalam bilan chizilgan gullar.",
-  muhr: "Yashil mum muhrni bosganda konvert ochiladi.",
-  firuza: "Samarqand feruzasi: mehrob, sakkiz qirrali yulduz va darvoza.",
-  atlas: "Milliy atlas naqshlari: qizil, sariq va ko‘k ranglar.",
-  gulbarg: "Pushti gulbarglar to‘kilib turadi, bo‘limlar to‘liq ekranda ochiladi.",
-  yulduz: "Qorong‘i osmonda miltillagan yulduzlar va uchib o‘tuvchi yulduz.",
-  kapalak: "Ekran bo‘ylab uchib yuruvchi kapalaklar, binafsha-pushti ranglar.",
-  oltin: "Qora fonda yuqoriga ko‘tariluvchi oltin zarralar.",
-  yurak: "Tepaga suzib chiqadigan yuraklar, oq qog‘ozda qizil chiziq gullar.",
+  zarrin: "Krem qog‘oz, oltin chiziqlar va konvert ochilishi. Sokin, klassik hashamat.",
+  oqqora: "Qora fon, oltin yozuv va ikki darvoza. Qat’iy, zamonaviy hashamat.",
+  osmon: "To‘q ko‘k tun, oq-krem yozuv va oltin muhrli konvert.",
+  zaytun: "Zaytun yashil va krem, mum muhr va chap tekislangan hikoya.",
+  shokolad: "Shampan va jigarrang, toza ramka va yengil karta ochilishi.",
 };
+
+/** Eski (o‘chirilgan) dizaynlar bazada qolgan bo‘lsa, ularga yangi dizayn beriladi. */
+const LEGACY_DESIGN: Record<string, Design> = {
+  anor: "zarrin", gulbarg: "shokolad", yurak: "shokolad", kapalak: "shokolad", gulchizma: "shokolad", muhr: "zaytun",
+  yulduz: "osmon", firuza: "osmon", atlas: "zarrin", oltin: "oqqora",
+};
+export function normalizeDesign(v: string): Design {
+  if ((DESIGNS as readonly string[]).includes(v)) return v as Design;
+  return LEGACY_DESIGN[v] ?? "zarrin";
+}
 
 export const MAX_PHOTO_BYTES = 8 * 1024 * 1024;
 export const ALLOWED_PHOTO_TYPES = ["image/jpeg", "image/png", "image/webp"] as const;

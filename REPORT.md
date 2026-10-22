@@ -151,3 +151,9 @@ Production deployment qadamlari: README 4-bo‘lim.
 - Shrift: qo'lyozma o'rniga o'qiladigan Cormorant (ism va matn), sarlavhalar katta harfda, diamantli nafis chiziq.
 - Kartalarda ikki qatlamli oltin ramka; matn kattaroq va to'qroq.
 - Animatsiya sokinlashtirildi: Anor zarrachalari kam (0.35), suzuvchi rasm/gul harakatlari, aurora va bosish zarrachalari olib tashlandi.
+
+## Yangilanish 11 (taklifnomalar noldan)
+- Eski 15 dizayn o'chirildi, o'rniga 5 ta sokin luxury dizayn: zarrin (Oltin klassika), oqqora (Qora va oltin), osmon (Kechki ko'k), zaytun (Zaytun), shokolad (Shampan).
+- Har biri turli bosh ekran (arka, to'liq ekran, oval, doira, ofset ramka), turli ochilish (konvert, darvoza, mum muhr, karta) va turli skelet (chiziqli, panelli, yo'l).
+- Eski taklifnomalar bazada qolsa, kodda yangi dizaynga o'giriladi; supabase/migrations/0008_five_luxury_designs.sql bazani ham yangilaydi.
+- Qo'lda o'chirish ixtiyoriy: src/components/invitation/RoseFrame.tsx (ishlatilmaydi).

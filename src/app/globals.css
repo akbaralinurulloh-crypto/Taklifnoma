@@ -193,17 +193,9 @@ body {
 .iv-rv[data-rv="zoom"] { transform: scale(.94); }
 @media (prefers-reduced-motion: reduce) { .iv-ttl::before { transition: none; } }
 
-/* Sarlavhada oltin yaltirash, chiziqlar chizilishi */
-@keyframes iv-shine { from { background-position: 220% 0; } to { background-position: -120% 0; } }
-@supports (-webkit-background-clip: text) or (background-clip: text) {
-  .iv-ttl { color: transparent !important; background-image: linear-gradient(100deg, var(--accent) 38%, var(--accent2, #fff) 50%, var(--accent) 62%); background-size: 240% 100%; -webkit-background-clip: text; background-clip: text; animation: iv-shine 6s ease-in-out infinite; }
-}
-@keyframes iv-draw-x { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 .iv-line { transform-origin: center; }
 .iv-rv-in .iv-line { animation: iv-draw-x 1.4s cubic-bezier(.2,.7,.2,1) both .3s; }
 @keyframes iv-sway { 0%, 100% { transform: rotate(-1.2deg); } 50% { transform: rotate(1.2deg); } }
-.iv-sway { animation: iv-sway 8s ease-in-out infinite; transform-origin: 50% 0; }
-@media (prefers-reduced-motion: reduce) { .iv-ttl { animation: none; } .iv-sway, .iv-rv-in .iv-line { animation: none; } }
 
 /* ---- Luxury: ikki qatlamli oltin ramka, nafis sarlavhalar ---- */
 .iv-frame { box-shadow: 0 24px 44px -30px rgb(0 0 0 / .4), inset 0 0 0 7px var(--paper), inset 0 0 0 8px color-mix(in srgb, var(--accent2, var(--accent)) 60%, transparent); }
@@ -217,3 +209,8 @@ body {
 .iv-rv[data-rv="up"] { transform: translateY(30px); }
 .iv-rv[data-rv="zoom"] { transform: scale(.96); }
 @media (prefers-reduced-motion: reduce) { .iv-ttl::before { transition: none; } }
+
+/* ---- Yangi luxury taklifnomalar ---- */
+.iv-hair { border-color: color-mix(in srgb, var(--accent2) 70%, transparent); }
+.iv-rule span { background: color-mix(in srgb, var(--accent2) 70%, transparent); }
+.iv-rule i { background: var(--accent2); }

@@ -1,3 +1,4 @@
+import { normalizeDesign } from "@/lib/schema";
 import { whenParts } from "./when";
 import type { InvitationRow } from "./repo";
 import type { AssetUrls } from "./service";
@@ -22,7 +23,7 @@ export function editableView(row: InvitationRow, urls: AssetUrls) {
       parents: row.parents ?? "",
       dressCode: row.dress_code ?? "",
       program: row.program ?? [],
-      design: row.design,
+      design: normalizeDesign(row.design),
       musicId: row.music_id,
     },
   };

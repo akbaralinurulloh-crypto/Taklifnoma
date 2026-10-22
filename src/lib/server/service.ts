@@ -1,5 +1,5 @@
 import { hashToken, makeSlug } from "@/lib/invitation";
-import { invitationInputSchema, tashkentToIso, type Design } from "@/lib/schema";
+import { invitationInputSchema, normalizeDesign, tashkentToIso, type Design } from "@/lib/schema";
 import type { PublicInvitation } from "@/lib/types";
 import { AppError, notFound } from "./errors";
 import type { InvitationRow, MusicRow, Repo, WishRow } from "./repo";
@@ -155,7 +155,7 @@ export function rowToPublic(row: InvitationRow, music: MusicRow | null, urls: As
     program: row.program ?? [],
     photoUrl: row.photo_path ? urls.photo(row.photo_path) : null,
     gallery: (row.gallery ?? []).map((p) => urls.photo(p)),
-    design: row.design,
+    design: normalizeDesign(row.design),
     music: music && music.is_active ? { title: music.title, url: urls.music(music.storage_path) } : null,
   };
 }
