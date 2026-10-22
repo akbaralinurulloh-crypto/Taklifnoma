@@ -15,7 +15,7 @@ export const FEATURES = [
 ] as const;
 
 export const STEPS = [
-  ["Shablonni tanlang", "O‘n beshta nafis dizayndan o‘zingizga yoqqanini tanlang: konvert, mum muhr, darvoza yoki karta ochilishi."],
+  ["Shablonni tanlang", "Yigirma beshta nafis dizayndan o‘zingizga yoqqanini tanlang: konvert, mum muhr, darvoza yoki karta ochilishi."],
   ["Ma’lumotlarni kiriting", "Ismlar, sana, dastur, manzil va juftlik rasmi. O‘ng tomonda taklifnoma o‘sha zahoti o‘zgaradi."],
   ["Havolani yuboring", "Saqlang va tayyor havolani WhatsApp yoki Telegram orqali mehmonlarga jo‘nating."],
 ] as const;

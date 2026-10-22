@@ -8,7 +8,7 @@ import { sampleInvitation } from "@/lib/sample";
 
 export const metadata: Metadata = {
   title: "Taklifnoma dizaynlari",
-  description: "O‘n beshta nafis to‘y taklifnomasi shabloni: art-deko, evkalipt, boho, jurnal, ipak va boshqalar.",
+  description: "Yigirma beshta nafis to‘y taklifnomasi shabloni: kumush ipak, safir, zumrad, gul chizma, art-deko va boshqalar.",
 };
 
 export default function DesignsPage() {
@@ -17,7 +17,7 @@ export default function DesignsPage() {
       <SiteHeader />
       <main className="flex-1">
         <section className="mx-auto max-w-6xl px-4 pb-6 pt-12">
-          <h1 className="font-serif text-4xl leading-tight text-ink sm:text-5xl">O‘n beshta dizayn</h1>
+          <h1 className="font-serif text-4xl leading-tight text-ink sm:text-5xl">Yigirma besh dizayn</h1>
           <p className="mt-3 max-w-xl text-muted">
             Har birining o‘z tuzilmasi, ranglari va animatsiyasi bor. Namunani to‘liq ochib ko‘ring yoki darhol shu dizaynda yarating.
           </p>

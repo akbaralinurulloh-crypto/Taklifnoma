@@ -1,10 +1,20 @@
 // Brauzer va serverda ishlatiladigan sof mantiq. node:crypto bu yerda ISHLATILMAYDI.
 import { z } from "zod";
 
-export const DESIGNS = ["deko", "evkalipt", "boho", "jurnal", "yoqut", "tong", "ipak", "bant", "krem", "marmar", "zarrin", "oqqora", "osmon", "zaytun", "shokolad"] as const;
+export const DESIGNS = ["kumush", "marvarid", "safir", "zumrad", "lino", "chizma", "gulpush", "lavanda", "shox", "kokgul", "deko", "evkalipt", "boho", "jurnal", "yoqut", "tong", "ipak", "bant", "krem", "marmar", "zarrin", "oqqora", "osmon", "zaytun", "shokolad"] as const;
 export type Design = (typeof DESIGNS)[number];
 
 export const DESIGN_LABELS: Record<Design, string> = {
+  kumush: "Kumush ipak",
+  marvarid: "Marvarid",
+  safir: "Safir",
+  zumrad: "Zumrad",
+  lino: "Lino",
+  chizma: "Gul chizma",
+  gulpush: "Pushti gul",
+  lavanda: "Lavanda",
+  shox: "Zaytun shox",
+  kokgul: "Ko‘k gul",
   deko: "Art-deko",
   evkalipt: "Evkalipt",
   boho: "Boho",
@@ -23,6 +33,16 @@ export const DESIGN_LABELS: Record<Design, string> = {
 };
 
 export const DESIGN_DESCRIPTIONS: Record<Design, string> = {
+  kumush: "Kumush ipak to‘lqinlari, oq yozuv va surib ochiladigan sahifa.",
+  marvarid: "Marvarid va shampan ranglari, nafis arka va mum muhrli konvert.",
+  safir: "Chuqur ko‘k safir rangi, oltin chiziqlar va ikki darvoza.",
+  zumrad: "To‘q zumrad yashil, oltin yozuv va chap tekislangan hikoya.",
+  lino: "Zig‘ir mato rangi, qora yozuv, ofset ramkali rasm. Sodda va toza.",
+  chizma: "Oq qog‘ozda qalam bilan chizilgan gullar, qo‘lyozma ismlar.",
+  gulpush: "Pushti-qizil chizma gullar, yumshoq panellar va yurakli ochilish.",
+  lavanda: "Binafsha chizma gullar, chap tekislangan yo‘l ko‘rinishi.",
+  shox: "Yashil zaytun shoxlari chizmasi va mum muhrli konvert.",
+  kokgul: "Havorang chizma gullar, konvert va ramkali panellar.",
   deko: "Qora fon, oltin yelpig‘ich naqsh va qat’iy ramka. Klassik hashamat.",
   evkalipt: "Yumshoq yashil evkalipt shoxlari va krem qog‘oz. Tabiiy, sokin uslub.",
   boho: "Terrakota va qum ranglaridagi ichma-ich yoylar. Iliq, zamonaviy.",

@@ -14,7 +14,7 @@ import { MusicProvider } from "./MusicProvider";
 import { Reveal } from "./Reveal";
 import { RsvpBox, WishesBox } from "./GuestSections";
 import { BohoArches, DecoFan, Eucalyptus } from "./Decor";
-import { Bow, Branch, Clouds, Heart } from "./Ornaments";
+import { Bow, Branch, Clouds, Heart, LineFlora } from "./Ornaments";
 import { THEMES, type Theme } from "./themes";
 
 type Parts = NonNullable<ReturnType<typeof dateParts>>;
@@ -30,9 +30,9 @@ function Rule({ className = "" }: { className?: string }) {
   );
 }
 
-function Names({ a, b, size = "text-[54px]" }: { a: string; b: string; size?: string }) {
+function Names({ a, b, size = "text-[54px]", hand = false }: { a: string; b: string; size?: string; hand?: boolean }) {
   return (
-    <h1 className={`f-script iv-names break-words text-center leading-[1.05] ${size}`} style={delay(0.1)}>
+    <h1 className={`${hand ? "f-hand" : "f-script"} iv-names break-words text-center leading-[1.05] ${size}`} style={delay(0.1)}>
       {a}
       <span className="my-1 block text-[0.42em] font-medium not-italic opacity-80">&amp;</span>
       {b}
@@ -228,6 +228,32 @@ function Hero({ data, t, p, lang }: { data: PublicInvitation; t: Theme; p: Parts
           <div className="mt-6 border-t border-black pt-3"><p className="f-display text-[15px] uppercase tracking-[0.18em]">{p ? `${p.weekday}, ${p.day}${lang === "uz" ? "-" : " "}${p.month} ${p.year} · ${p.time}` : ""}</p></div>
         </header>
       );
+    case "line": {
+      const ink = t.vars["--accent"];
+      const flora = t.orn !== "branch";
+      const o = (cls: string, flip = false) =>
+        flora
+          ? <LineFlora className={`iv-sway pointer-events-none absolute ${cls}`} color={ink} flip={flip} />
+          : <Branch className={`iv-sway pointer-events-none absolute ${cls}`} leaf={t.vars["--accent2"]} stem={ink} flip={flip} />;
+      return (
+        <header className="relative min-h-[560px] overflow-hidden px-6 pb-14 pt-16 text-center" style={style}>
+          {o("-right-6 -top-3 h-28 w-44 rotate-[8deg]")}
+          {o("-bottom-2 -left-8 h-28 w-44 -rotate-[18deg]", true)}
+          {o("bottom-3 left-1/2 h-16 w-24 -translate-x-1/2 opacity-70")}
+          {p && (
+            <div aria-hidden className="iv-hair absolute left-4 top-24 border-l pl-2 text-left text-[13px] uppercase leading-5 tracking-[0.12em]">
+              <span className="block">{p.day}</span>
+              <span className="block">{p.month.slice(0, 3)}</span>
+              <span className="block">{String(p.year).slice(-2)}</span>
+            </div>
+          )}
+          <p className="iv-in mx-auto max-w-[200px] text-[14px] uppercase leading-6 tracking-[0.28em] opacity-85">{d.weddingInvite}</p>
+          {photoUrl && <Photo url={photoUrl} alt={alt} className="mx-auto mt-6 h-[190px] w-[150px] rounded-t-[75px]" />}
+          <div className="mt-8"><Names a={a} b={b} size="text-[60px]" hand /></div>
+          <div className="mt-5"><DateLine p={p} lang={lang} /></div>
+        </header>
+      );
+    }
     case "arch":
     default:
       return (
@@ -370,7 +396,7 @@ function Body({ data, t, p, lang, slug, guest, inlineMusic, motion }: { data: Pu
   const sections = buildSections(data, t, p, lang, slug, guest, inlineMusic);
   const closing = (
     <div className="px-6 pt-6 text-center">
-      <p className="f-script text-[38px] iv-accent">{d.waitYou}</p>
+      <p className={`${t.hand ? "f-hand" : "f-script"} text-[38px] iv-accent`}>{d.waitYou}</p>
       <p className="f-display mt-1 break-words text-[15px] uppercase tracking-[0.2em] iv-muted">{data.groomName} &amp; {data.brideName}</p>
     </div>
   );

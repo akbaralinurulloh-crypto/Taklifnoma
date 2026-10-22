@@ -3,7 +3,7 @@ import type { FxKind } from "./Fx";
 
 export type GateKind = "button" | "envelope" | "seal" | "heart" | "doors" | "swipe";
 /** Bosh ekran: arch = arkali rasm, full = to'liq ekran rasm, oval = tuxumsimon, round = doira, frame = ofsetli ramka. */
-export type HeroKind = "arch" | "full" | "oval" | "round" | "frame" | "sky" | "silk" | "card" | "deco" | "botanic" | "boho" | "editorial";
+export type HeroKind = "arch" | "full" | "oval" | "round" | "frame" | "sky" | "silk" | "card" | "deco" | "botanic" | "boho" | "editorial" | "line";
 /** Bo'limlar skeleti: rule = chiziq bilan ajratilgan, panels = ramkali panellar, journey = chap tekislangan yo'l. */
 export type LayoutKind = "rule" | "panels" | "journey";
 
@@ -17,13 +17,17 @@ export type Theme = {
   fxDensity?: number;
   dark?: boolean;
   /** Ipak mato foni (hero va sahifa foni). */
-  silk?: "gold" | "olive" | "cream" | "wine";
+  silk?: "gold" | "olive" | "cream" | "wine" | "silver";
   /** Yumaloq kartalar (ipak dizaynlar uchun). */
   round?: boolean;
   /** Taqvimda yurak. */
   heart?: boolean;
   /** Zaytun shoxi bezagi. */
   branch?: boolean;
+  /** Qo'lyozma (Great Vibes) ismlar. */
+  hand?: boolean;
+  /** "line" bosh ekrandagi bezak turi. */
+  orn?: "flora" | "branch";
   /** Hero foni va yozuv rangi. */
   heroBg: string;
   heroInk: string;
@@ -36,6 +40,85 @@ export type Theme = {
 };
 
 export const THEMES: Record<Design, Theme> = {
+  kumush: {
+    silk: "silver", dark: true,
+    gate: "swipe", hero: "silk", layout: "journey",
+    fx: "sparkles", fxColors: ["#ffffff", "#dfe4ea"], fxDensity: 0.35,
+    heroBg: "#8d96a3", heroInk: "#ffffff",
+    vars: { "--bg": "#2b3038", "--paper": "#363c46", "--ink": "#f4f6f8", "--muted": "#c3cad3", "--accent": "#e6ebf1", "--accent2": "#aab4c0", "--on": "#2b3038" },
+    gateBg: "linear-gradient(115deg,#59616d 0%,#cfd5dc 30%,#7d8693 52%,#e8ecf0 74%,#59616d 100%)", gateInk: "#ffffff", gateColor: "#ffffff", gateColor2: "#aab4c0",
+  },
+  marvarid: {
+    round: true,
+    gate: "seal", hero: "arch", layout: "panels",
+    fx: "sparkles", fxColors: ["#d9c8b4", "#ffffff"], fxDensity: 0.3,
+    heroBg: "linear-gradient(180deg,#efe6e2 0%,#faf6f3 75%)", heroInk: "#4a3d42",
+    vars: { "--bg": "#faf6f3", "--paper": "#ffffff", "--ink": "#4a3d42", "--muted": "#7a6b70", "--accent": "#7a6068", "--accent2": "#c9b29a", "--on": "#ffffff" },
+    gateBg: "linear-gradient(120deg,#efe6e2,#fcf9f7 45%,#e6d9d2)", gateInk: "#4a3d42", gateColor: "#7a6068", gateColor2: "#c9b29a",
+  },
+  safir: {
+    dark: true,
+    gate: "doors", hero: "oval", layout: "panels",
+    fx: "sparkles", fxColors: ["#e6c97a", "#ffffff"], fxDensity: 0.35,
+    heroBg: "linear-gradient(180deg,#0a1f4d 0%,#12306e 100%)", heroInk: "#f6efdc",
+    vars: { "--bg": "#0a1a40", "--paper": "#10265c", "--ink": "#f6efdc", "--muted": "#c3c9de", "--accent": "#e6c97a", "--accent2": "#b89a55", "--on": "#0a1a40" },
+    gateBg: "radial-gradient(circle at 50% 35%,#1b3a80,#061233 75%)", gateInk: "#f6efdc", gateColor: "#e6c97a", gateColor2: "#b89a55",
+  },
+  zumrad: {
+    dark: true,
+    gate: "envelope", hero: "full", layout: "journey",
+    fx: "leaves", fxColors: ["#6fa98a", "#e6c97a"], fxDensity: 0.25,
+    heroBg: "radial-gradient(ellipse at 50% 20%,#17483a,#06201a 75%)", heroInk: "#f4ebd2",
+    vars: { "--bg": "#06201a", "--paper": "#0d2f26", "--ink": "#f4ebd2", "--muted": "#bdc9b8", "--accent": "#e0c477", "--accent2": "#a9925a", "--on": "#06201a" },
+    gateBg: "linear-gradient(160deg,#17483a,#06201a 70%)", gateInk: "#f4ebd2", gateColor: "#2f6b57", gateColor2: "#e0c477",
+  },
+  lino: {
+    gate: "button", hero: "frame", layout: "rule",
+    fx: "none", fxColors: [],
+    heroBg: "linear-gradient(180deg,#ece5d8 0%,#f6f2ea 75%)", heroInk: "#262626",
+    vars: { "--bg": "#f6f2ea", "--paper": "#fbf9f4", "--ink": "#262626", "--muted": "#605b52", "--accent": "#262626", "--accent2": "#a8987a", "--on": "#fbf9f4" },
+    gateBg: "#f6f2ea", gateInk: "#262626", gateColor: "#262626", gateColor2: "#a8987a",
+  },
+  chizma: {
+    hand: true, orn: "flora",
+    gate: "button", hero: "line", layout: "rule",
+    fx: "petals", fxColors: ["#d8d8d8", "#bdbdbd"], fxDensity: 0.3,
+    heroBg: "#f7f6f2", heroInk: "#232323",
+    vars: { "--bg": "#f7f6f2", "--paper": "#ffffff", "--ink": "#232323", "--muted": "#5e5e5e", "--accent": "#232323", "--accent2": "#8a8a8a", "--on": "#ffffff" },
+    gateBg: "#f7f6f2", gateInk: "#232323", gateColor: "#232323", gateColor2: "#8a8a8a",
+  },
+  gulpush: {
+    hand: true, orn: "flora", round: true,
+    gate: "heart", hero: "line", layout: "panels",
+    fx: "petals", fxColors: ["#e9b9c4", "#d98a9c"], fxDensity: 0.3,
+    heroBg: "#fbf6f6", heroInk: "#6b1d33",
+    vars: { "--bg": "#fbf6f6", "--paper": "#ffffff", "--ink": "#5a1a2c", "--muted": "#855566", "--accent": "#8a2b45", "--accent2": "#d98a9c", "--on": "#ffffff" },
+    gateBg: "linear-gradient(160deg,#fbe3e8,#fff8f8 55%,#f6d3dc)", gateInk: "#5a1a2c", gateColor: "#ffffff", gateColor2: "#8a2b45",
+  },
+  lavanda: {
+    hand: true, orn: "flora",
+    gate: "envelope", hero: "line", layout: "journey",
+    fx: "petals", fxColors: ["#cdb9e6", "#b79ad8"], fxDensity: 0.3,
+    heroBg: "#f8f5fc", heroInk: "#47325f",
+    vars: { "--bg": "#f8f5fc", "--paper": "#ffffff", "--ink": "#47325f", "--muted": "#76638f", "--accent": "#7a54a8", "--accent2": "#b79ad8", "--on": "#ffffff" },
+    gateBg: "linear-gradient(180deg,#e9def7,#f8f5fc 60%,#efe5f8)", gateInk: "#47325f", gateColor: "#cdb9e6", gateColor2: "#7a54a8",
+  },
+  shox: {
+    hand: true, orn: "branch",
+    gate: "seal", hero: "line", layout: "rule",
+    fx: "leaves", fxColors: ["#9db39a", "#c2d1bf"], fxDensity: 0.3,
+    heroBg: "#f6f7f1", heroInk: "#2f3d2a",
+    vars: { "--bg": "#f6f7f1", "--paper": "#ffffff", "--ink": "#2f3d2a", "--muted": "#5f6e58", "--accent": "#4a6340", "--accent2": "#a8b585", "--on": "#ffffff" },
+    gateBg: "#f6f7f1", gateInk: "#2f3d2a", gateColor: "#4a6340", gateColor2: "#a8b585",
+  },
+  kokgul: {
+    hand: true, orn: "branch", round: true,
+    gate: "envelope", hero: "line", layout: "panels",
+    fx: "petals", fxColors: ["#bcd3ea", "#9bbddc"], fxDensity: 0.3,
+    heroBg: "#f4f8fc", heroInk: "#2c4a6e",
+    vars: { "--bg": "#f4f8fc", "--paper": "#ffffff", "--ink": "#2c4a6e", "--muted": "#5b7390", "--accent": "#4f7cab", "--accent2": "#9bbddc", "--on": "#ffffff" },
+    gateBg: "linear-gradient(180deg,#d9e7f5,#f4f8fc 60%,#e6eff9)", gateInk: "#2c4a6e", gateColor: "#e6eff9", gateColor2: "#4f7cab",
+  },
   deko: {
     dark: true,
     gate: "doors", hero: "deco", layout: "rule",

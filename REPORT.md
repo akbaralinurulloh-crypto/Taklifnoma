@@ -166,3 +166,11 @@ Production deployment qadamlari: README 4-bo‘lim.
 - Yangi 5 ta: deko (Art-deko), evkalipt (Evkalipt), boho (Boho), jurnal (Jurnal), yoqut (Yoqut ipak).
 - Yumshoq animatsiyalar: shoxlar tebranishi, yoylar nafasi, art-deko yelpig'ich paydo bo'lishi, sarlavha bir marta yaltirashi.
 - 0010_fifteen_designs.sql ni ishga tushiring (0008, 0009 dan keyin).
+
+## Yangilanish 14 (20 ta dizayn)
+- Chizma gullar oilasi: chizma (qora-oq), gulpush (pushti), lavanda, shox (zaytun shoxi), kokgul (havorang). Great Vibes qo'lyozma ismlar, chap tomonda sana ustuni.
+- 0011_twenty_designs.sql ni ishga tushiring (0008 dan keyin; 0009/0010 ni o'tkazib yuborsa bo'ladi).
+
+## Yangilanish 15 (25 ta dizayn)
+- Yangi 5 ta original: kumush (Kumush ipak), marvarid, safir, zumrad, lino.
+- 0012_twentyfive_designs.sql ni ishga tushiring (0008 dan keyin; 0009-0011 ni o'tkazib yuborsa bo'ladi).

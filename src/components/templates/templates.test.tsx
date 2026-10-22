@@ -70,7 +70,7 @@ describe.each(DESIGNS)("template: %s", (design) => {
   });
 });
 
-describe("o'n beshta dizayn haqiqatan turlicha", () => {
+describe("yigirma besh dizayn haqiqatan turlicha", () => {
   it("har bir dizaynning HTML tuzilmasi boshqalaridan farq qiladi (faqat rang emas)", () => {
     const strip = (h: string) => h.replace(/class="[^"]*"/g, "").replace(/style="[^"]*"/g, "");
     const structures = DESIGNS.map((d) => strip(render({ design: d })));

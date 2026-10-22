@@ -262,3 +262,12 @@ body {
   .iv-rv-in .iv-ttl { color: transparent !important; background-image: linear-gradient(100deg, var(--accent) 40%, var(--accent2, #fff) 50%, var(--accent) 60%); background-size: 240% 100%; -webkit-background-clip: text; background-clip: text; animation: iv-shine-once 2.6s ease-out .4s 1 both; }
 }
 @media (prefers-reduced-motion: reduce) { .iv-silk-wine, .iv-sway, .iv-breath, .iv-fan, .iv-rv-in .iv-ttl { animation: none; } }
+
+.f-hand { font-family: "Great Vibes", "Snell Roundhand", cursive; font-style: normal; font-weight: 400; letter-spacing: 0; }
+
+.iv-silk-silver { background-size: 220% 100%, 220% 100%, 100% 100%; animation: iv-flow 26s ease-in-out infinite alternate;
+  background-image:
+    linear-gradient(112deg, transparent 22%, rgb(255 255 255 / .6) 34%, transparent 46%, rgb(40 48 60 / .4) 58%, transparent 70%),
+    linear-gradient(248deg, transparent 30%, rgb(255 255 255 / .45) 44%, transparent 58%, rgb(40 48 60 / .35) 74%, transparent 90%),
+    linear-gradient(160deg, #59616d, #cfd5dc 38%, #7d8693 62%, #e8ecf0); }
+@media (prefers-reduced-motion: reduce) { .iv-silk-silver { animation: none; } }
