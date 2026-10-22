@@ -13,6 +13,7 @@ import { Gate } from "./Gate";
 import { MusicProvider } from "./MusicProvider";
 import { Reveal } from "./Reveal";
 import { RsvpBox, WishesBox } from "./GuestSections";
+import { BohoArches, DecoFan, Eucalyptus } from "./Decor";
 import { Bow, Branch, Clouds, Heart } from "./Ornaments";
 import { THEMES, type Theme } from "./themes";
 
@@ -145,7 +146,7 @@ function Hero({ data, t, p, lang }: { data: PublicInvitation; t: Theme; p: Parts
       );
     case "silk":
       return (
-        <header className="iv-silk-gold relative flex min-h-[620px] flex-col items-center justify-center overflow-hidden px-6 py-16 text-center" style={style}>
+        <header className={`iv-silk-${t.silk ?? "gold"} relative flex min-h-[620px] flex-col items-center justify-center overflow-hidden px-6 py-16 text-center`} style={style}>
           {label(d.forYou)}
           <h2 className="f-script iv-in mt-2 text-[40px] font-medium" style={delay(0.15)}>{d.invitation}</h2>
           <div className="relative mx-auto mt-6 h-[210px] w-[210px]">
@@ -168,6 +169,63 @@ function Hero({ data, t, p, lang }: { data: PublicInvitation; t: Theme; p: Parts
             <Rule className="my-5" />
             <div className="iv-accent"><DateLine p={p} lang={lang} /></div>
           </div>
+        </header>
+      );
+    case "deco":
+      return (
+        <header className="relative overflow-hidden px-6 pb-14 pt-10 text-center" style={style}>
+          <span aria-hidden className="iv-hair pointer-events-none absolute inset-3 border" />
+          <span aria-hidden className="iv-hair pointer-events-none absolute inset-[18px] border opacity-60" />
+          <DecoFan className="iv-fan relative mx-auto mt-4 h-24 w-48" color={t.vars["--accent"]} />
+          <div className="mt-6">{label(d.ourWedding)}</div>
+          {photoUrl && <div className="iv-hair relative mx-auto mt-6 w-[200px] border p-1.5"><Photo url={photoUrl} alt={alt} className="h-[250px] w-full" /></div>}
+          <div className="mt-7 iv-accent"><Names a={a} b={b} size="text-[54px]" /></div>
+          <Rule className="my-5" />
+          <DateLine p={p} lang={lang} />
+        </header>
+      );
+    case "botanic":
+      return (
+        <header className="relative overflow-hidden px-6 pb-14 pt-14 text-center" style={style}>
+          <Eucalyptus className="iv-sway pointer-events-none absolute -left-3 top-0 h-[300px] w-[84px]" />
+          <Eucalyptus flip className="iv-sway pointer-events-none absolute -right-3 top-0 h-[300px] w-[84px]" leaf="#a2b59d" />
+          <div className="relative">{label(d.invitation)}</div>
+          <div className="relative mx-auto mt-6 h-[200px] w-[200px]">
+            <span aria-hidden className="iv-hair absolute -inset-2.5 rounded-full border" />
+            {photoUrl ? <Photo url={photoUrl} alt={alt} className="h-full w-full rounded-full" /> : <Monogram a={a} b={b} />}
+          </div>
+          <div className="relative mt-8"><Names a={a} b={b} /></div>
+          <Rule className="relative my-5" />
+          <DateLine p={p} lang={lang} />
+        </header>
+      );
+    case "boho":
+      return (
+        <header className="relative overflow-hidden px-6 pb-14 pt-12 text-center" style={style}>
+          <div className="relative mx-auto w-[260px]">
+            <BohoArches className="iv-breath h-auto w-full" colors={["#d3a06a", "#e3b98a", "#efd3b0", "#f6e6d0"]} />
+            {photoUrl && <Photo url={photoUrl} alt={alt} className="absolute inset-x-[22%] bottom-0 h-[62%] w-[56%] rounded-t-[100px]" />}
+          </div>
+          <div className="mt-6">{label(d.nikohInvite)}</div>
+          <div className="mt-5"><Names a={a} b={b} /></div>
+          <Rule className="my-5" />
+          <DateLine p={p} lang={lang} />
+        </header>
+      );
+    case "editorial":
+      return (
+        <header className="relative overflow-hidden px-8 pb-12 pt-10 text-left" style={style}>
+          <div className="flex items-center justify-between border-b border-black pb-3 text-[13px] uppercase tracking-[0.3em]">
+            <span>{d.invitation}</span>
+            <span>{p ? `${p.day}.${p.monthNum}.${p.year}` : ""}</span>
+          </div>
+          <h1 className="f-script iv-names mt-10 break-words text-[68px] leading-[0.95]" style={delay(0.1)}>
+            {a}
+            <span className="my-2 block text-[0.4em] font-medium not-italic" style={{ color: "var(--accent2)" }}>&amp;</span>
+            {b}
+          </h1>
+          {photoUrl && <Photo url={photoUrl} alt={alt} className="mt-8 h-[300px] w-full" />}
+          <div className="mt-6 border-t border-black pt-3"><p className="f-display text-[15px] uppercase tracking-[0.18em]">{p ? `${p.weekday}, ${p.day}${lang === "uz" ? "-" : " "}${p.month} ${p.year} · ${p.time}` : ""}</p></div>
         </header>
       );
     case "arch":

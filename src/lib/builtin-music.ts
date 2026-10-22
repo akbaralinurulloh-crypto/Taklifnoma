@@ -2,6 +2,11 @@ import type { Design } from "./schema";
 
 /** Loyiha ichidagi tayyor treklar (public/music). Baza sozlanmagan yoki musiqa tanlanmagan bo'lsa ham ishlaydi. */
 export const DESIGN_DEFAULT_TRACK: Record<Design, { file: string; title: string }> = {
+  deko: { file: "oqqora", title: "Oq va qora — tungi romans" },
+  evkalipt: { file: "zaytun", title: "Zaytun bog‘i — gitara" },
+  boho: { file: "atlas", title: "Atlas — bayramona doira" },
+  jurnal: { file: "osmon", title: "Osmon — yengil qo‘ng‘iroqchalar" },
+  yoqut: { file: "yoryor2", title: "Yor-yor 2 — sekin" },
   tong: { file: "ballada", title: "Romantik ballada" },
   ipak: { file: "kelin", title: "Kelin kutib olish" },
   bant: { file: "muhr", title: "Muhr — arfa" },

@@ -3,7 +3,7 @@ import type { FxKind } from "./Fx";
 
 export type GateKind = "button" | "envelope" | "seal" | "heart" | "doors" | "swipe";
 /** Bosh ekran: arch = arkali rasm, full = to'liq ekran rasm, oval = tuxumsimon, round = doira, frame = ofsetli ramka. */
-export type HeroKind = "arch" | "full" | "oval" | "round" | "frame" | "sky" | "silk" | "card";
+export type HeroKind = "arch" | "full" | "oval" | "round" | "frame" | "sky" | "silk" | "card" | "deco" | "botanic" | "boho" | "editorial";
 /** Bo'limlar skeleti: rule = chiziq bilan ajratilgan, panels = ramkali panellar, journey = chap tekislangan yo'l. */
 export type LayoutKind = "rule" | "panels" | "journey";
 
@@ -17,7 +17,7 @@ export type Theme = {
   fxDensity?: number;
   dark?: boolean;
   /** Ipak mato foni (hero va sahifa foni). */
-  silk?: "gold" | "olive" | "cream";
+  silk?: "gold" | "olive" | "cream" | "wine";
   /** Yumaloq kartalar (ipak dizaynlar uchun). */
   round?: boolean;
   /** Taqvimda yurak. */
@@ -36,6 +36,43 @@ export type Theme = {
 };
 
 export const THEMES: Record<Design, Theme> = {
+  deko: {
+    dark: true,
+    gate: "doors", hero: "deco", layout: "rule",
+    fx: "sparkles", fxColors: ["#e8c76a", "#ffffff"], fxDensity: 0.35,
+    heroBg: "radial-gradient(ellipse at 50% 0%,#1d2a45,#0a0f1c 75%)", heroInk: "#f3e9cf",
+    vars: { "--bg": "#0a0f1c", "--paper": "#121a2d", "--ink": "#f3e9cf", "--muted": "#c9bd9a", "--accent": "#e0be6a", "--accent2": "#b8975a", "--on": "#0a0f1c" },
+    gateBg: "radial-gradient(circle at 50% 35%,#1d2a45,#070a14 75%)", gateInk: "#f3e9cf", gateColor: "#e0be6a", gateColor2: "#b8975a",
+  },
+  evkalipt: {
+    gate: "envelope", hero: "botanic", layout: "panels", round: true,
+    fx: "leaves", fxColors: ["#9db39a", "#c2d1bf"], fxDensity: 0.3,
+    heroBg: "linear-gradient(180deg,#e8eee4 0%,#f8f6ef 75%)", heroInk: "#34452f",
+    vars: { "--bg": "#f8f6ef", "--paper": "#ffffff", "--ink": "#34452f", "--muted": "#5f7058", "--accent": "#4f6b4a", "--accent2": "#b49a5a", "--on": "#ffffff" },
+    gateBg: "linear-gradient(180deg,#dfe8da,#f8f6ef 60%,#e9e4d2)", gateInk: "#34452f", gateColor: "#7f967a", gateColor2: "#b49a5a",
+  },
+  boho: {
+    gate: "button", hero: "boho", layout: "journey", round: true,
+    fx: "none", fxColors: [],
+    heroBg: "linear-gradient(180deg,#f3e3cf 0%,#faf3e8 80%)", heroInk: "#5a3322",
+    vars: { "--bg": "#faf3e8", "--paper": "#fffaf3", "--ink": "#5a3322", "--muted": "#85624e", "--accent": "#b4573a", "--accent2": "#d3a06a", "--on": "#fffaf3" },
+    gateBg: "linear-gradient(180deg,#f3e3cf,#faf3e8)", gateInk: "#5a3322", gateColor: "#b4573a", gateColor2: "#d3a06a",
+  },
+  jurnal: {
+    gate: "swipe", hero: "editorial", layout: "journey",
+    fx: "none", fxColors: [],
+    heroBg: "#ffffff", heroInk: "#141414",
+    vars: { "--bg": "#ffffff", "--paper": "#fafafa", "--ink": "#141414", "--muted": "#5c5c5c", "--accent": "#141414", "--accent2": "#a8874a", "--on": "#ffffff" },
+    gateBg: "#ffffff", gateInk: "#141414", gateColor: "#141414", gateColor2: "#a8874a",
+  },
+  yoqut: {
+    silk: "wine", dark: true,
+    gate: "heart", hero: "silk", layout: "panels",
+    fx: "hearts", fxColors: ["#e8c76a", "#f2d9a0"], fxDensity: 0.25,
+    heroBg: "#5a1426", heroInk: "#fbeedd",
+    vars: { "--bg": "#2a0a14", "--paper": "#3a1220", "--ink": "#fbeedd", "--muted": "#d9bfa8", "--accent": "#e8c76a", "--accent2": "#c9a557", "--on": "#2a0a14" },
+    gateBg: "linear-gradient(115deg,#3a0c18 0%,#8a2540 30%,#4a1022 52%,#a8344f 74%,#3a0c18 100%)", gateInk: "#fbeedd", gateColor: "#fbeedd", gateColor2: "#e8c76a",
+  },
   tong: {
     heart: true, round: true,
     gate: "envelope", hero: "sky", layout: "panels",

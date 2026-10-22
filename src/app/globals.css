@@ -243,3 +243,22 @@ body {
 .iv-sky-glow { background: radial-gradient(60% 55% at 50% 40%, rgb(255 236 190 / .85), rgb(255 255 255 / .0) 72%); animation: iv-glow 9s ease-in-out infinite alternate; }
 @keyframes iv-glow { from { opacity: .65; transform: scale(.97); } to { opacity: 1; transform: scale(1.03); } }
 @media (prefers-reduced-motion: reduce) { .iv-silk-gold, .iv-silk-olive, .iv-silk-cream, .iv-sky-glow { animation: none; } }
+
+.iv-silk-wine { background-size: 220% 100%, 220% 100%, 100% 100%; animation: iv-flow 26s ease-in-out infinite alternate;
+  background-image:
+    linear-gradient(112deg, transparent 22%, rgb(255 190 200 / .28) 34%, transparent 46%, rgb(10 0 4 / .45) 58%, transparent 70%),
+    linear-gradient(248deg, transparent 30%, rgb(255 170 185 / .22) 44%, transparent 58%, rgb(10 0 4 / .4) 74%, transparent 90%),
+    linear-gradient(160deg, #3a0c18, #8a2540 38%, #4a1022 62%, #a8344f); }
+
+/* Yumshoq jonlanish: shoxlar tebranadi, yoylar nafas oladi, sarlavha bir marta yaltiraydi */
+@keyframes iv-sway2 { 0%, 100% { transform: rotate(-1.6deg); } 50% { transform: rotate(1.6deg); } }
+.iv-sway { transform-origin: 50% 0; animation: iv-sway2 9s ease-in-out infinite; }
+@keyframes iv-breath { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.025); } }
+.iv-breath { animation: iv-breath 10s ease-in-out infinite; }
+@keyframes iv-fan { from { opacity: 0; transform: scale(.9); } to { opacity: 1; transform: none; } }
+.iv-fan { animation: iv-fan 1.6s cubic-bezier(.2,.7,.2,1) both; }
+@keyframes iv-shine-once { from { background-position: 220% 0; } to { background-position: -40% 0; } }
+@supports (background-clip: text) or (-webkit-background-clip: text) {
+  .iv-rv-in .iv-ttl { color: transparent !important; background-image: linear-gradient(100deg, var(--accent) 40%, var(--accent2, #fff) 50%, var(--accent) 60%); background-size: 240% 100%; -webkit-background-clip: text; background-clip: text; animation: iv-shine-once 2.6s ease-out .4s 1 both; }
+}
+@media (prefers-reduced-motion: reduce) { .iv-silk-wine, .iv-sway, .iv-breath, .iv-fan, .iv-rv-in .iv-ttl { animation: none; } }

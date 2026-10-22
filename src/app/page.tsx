@@ -53,7 +53,7 @@ export default function Home() {
         {/* 2. Qora-ko'k lenta: ko'rsatkichlar */}
         <section aria-label="Qisqacha" className="bg-ink text-white">
           <ul className="mx-auto grid max-w-6xl grid-cols-2 divide-x divide-white/15 px-4 py-6 text-center sm:grid-cols-4">
-            {[["10", "nafis dizayn"], ["2", "til: o‘zbek, rus"], ["♫", "dizaynga mos musiqa"], ["0 so‘m", "yaratish bepul"]].map(([n, l]) => (
+            {[["15", "nafis dizayn"], ["2", "til: o‘zbek, rus"], ["♫", "dizaynga mos musiqa"], ["0 so‘m", "yaratish bepul"]].map(([n, l]) => (
               <li key={l} className="px-2"><p className="font-serif text-3xl text-gold">{n}</p><p className="text-xs text-white/70">{l}</p></li>
             ))}
           </ul>

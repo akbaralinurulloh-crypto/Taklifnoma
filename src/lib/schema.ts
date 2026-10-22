@@ -1,10 +1,15 @@
 // Brauzer va serverda ishlatiladigan sof mantiq. node:crypto bu yerda ISHLATILMAYDI.
 import { z } from "zod";
 
-export const DESIGNS = ["tong", "ipak", "bant", "krem", "marmar", "zarrin", "oqqora", "osmon", "zaytun", "shokolad"] as const;
+export const DESIGNS = ["deko", "evkalipt", "boho", "jurnal", "yoqut", "tong", "ipak", "bant", "krem", "marmar", "zarrin", "oqqora", "osmon", "zaytun", "shokolad"] as const;
 export type Design = (typeof DESIGNS)[number];
 
 export const DESIGN_LABELS: Record<Design, string> = {
+  deko: "Art-deko",
+  evkalipt: "Evkalipt",
+  boho: "Boho",
+  jurnal: "Jurnal",
+  yoqut: "Yoqut ipak",
   tong: "Moviy tong",
   ipak: "Oltin ipak",
   bant: "Yashil bant",
@@ -18,6 +23,11 @@ export const DESIGN_LABELS: Record<Design, string> = {
 };
 
 export const DESIGN_DESCRIPTIONS: Record<Design, string> = {
+  deko: "Qora fon, oltin yelpig‘ich naqsh va qat’iy ramka. Klassik hashamat.",
+  evkalipt: "Yumshoq yashil evkalipt shoxlari va krem qog‘oz. Tabiiy, sokin uslub.",
+  boho: "Terrakota va qum ranglaridagi ichma-ich yoylar. Iliq, zamonaviy.",
+  jurnal: "Jurnal sahifasidek: katta serif yozuv, nozik chiziqlar, oq qog‘oz.",
+  yoqut: "To‘q yoqut rangli ipak va oltin chiziqlar, yurakka bosib ochiladi.",
   tong: "Yumshoq osmon ranglari, nur taralgan arka va konvert ochilishi.",
   ipak: "Oltin ipak mato to‘lqinlari va yurakka bosib ochiladigan taklifnoma.",
   bant: "Zaytun ipak, oq oval karta, bant va mum muhrli konvert.",

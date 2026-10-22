@@ -161,3 +161,8 @@ Production deployment qadamlari: README 4-bo‘lim.
 ## Yangilanish 12 (10 ta dizayn)
 - Yangi 5 ta: tong (Moviy tong), ipak (Oltin ipak, yurakli ochilish), bant (Yashil bant, mum muhr), krem (Krem bant, yurakli taqvim), marmar (Marmar, surib ochish). Ipak matolar CSS bilan chizilgan, sekin oqadi.
 - Hammasi: 10 dizayn. supabase/migrations/0009_ten_designs.sql ni ishga tushiring (0008 dan keyin).
+
+## Yangilanish 13 (15 ta dizayn, yumshoq animatsiya)
+- Yangi 5 ta: deko (Art-deko), evkalipt (Evkalipt), boho (Boho), jurnal (Jurnal), yoqut (Yoqut ipak).
+- Yumshoq animatsiyalar: shoxlar tebranishi, yoylar nafasi, art-deko yelpig'ich paydo bo'lishi, sarlavha bir marta yaltirashi.
+- 0010_fifteen_designs.sql ni ishga tushiring (0008, 0009 dan keyin).
