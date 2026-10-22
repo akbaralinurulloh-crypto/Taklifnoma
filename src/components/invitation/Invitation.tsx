@@ -13,7 +13,7 @@ import { Gate } from "./Gate";
 import { MusicProvider } from "./MusicProvider";
 import { Reveal } from "./Reveal";
 import { RsvpBox, WishesBox } from "./GuestSections";
-import { Branch } from "./Ornaments";
+import { Bow, Branch, Clouds, Heart } from "./Ornaments";
 import { THEMES, type Theme } from "./themes";
 
 type Parts = NonNullable<ReturnType<typeof dateParts>>;
@@ -62,7 +62,7 @@ function Hero({ data, t, p, lang }: { data: PublicInvitation; t: Theme; p: Parts
   const d = dict(lang);
   const { groomName: a, brideName: b, photoUrl } = data;
   const alt = `${a} va ${b}`;
-  const style = { background: t.heroBg, color: t.heroInk } as CSSProperties;
+  const style = (t.hero === "silk" || t.hero === "card" ? { color: t.heroInk } : { background: t.heroBg, color: t.heroInk }) as CSSProperties;
   const label = (text: string) => <p className="iv-in text-[14px] uppercase tracking-[0.32em] opacity-85">{text}</p>;
 
   switch (t.hero) {
@@ -102,7 +102,7 @@ function Hero({ data, t, p, lang }: { data: PublicInvitation; t: Theme; p: Parts
     case "round":
       return (
         <header className="relative overflow-hidden px-6 pb-14 pt-12 text-center" style={style}>
-          <Branch className="mx-auto block h-12 w-36" leaf="#8ea16b" stem="#4a5c30" />
+          {t.branch && <Branch className="mx-auto block h-12 w-36" leaf="#8ea16b" stem="#4a5c30" />}
           <div className="mt-2">{label(d.invitation)}</div>
           <div className="relative mx-auto mt-6 h-[240px] w-[240px]">
             <span aria-hidden className="iv-hair absolute -inset-2.5 rounded-full border" />
@@ -126,6 +126,50 @@ function Hero({ data, t, p, lang }: { data: PublicInvitation; t: Theme; p: Parts
           <DateLine p={p} lang={lang} />
         </header>
       );
+    case "sky":
+      return (
+        <header className="relative overflow-hidden px-6 pb-14 pt-12 text-center" style={style}>
+          <Clouds className="pointer-events-none absolute inset-x-0 top-0 h-20 w-full opacity-70" fill="#ffffff" />
+          <p className="iv-in relative text-[15px] tracking-[0.12em] opacity-90">{d.nikohDay}</p>
+          <p className="iv-in relative mt-1 text-[14px] uppercase tracking-[0.3em] opacity-80" style={delay(0.15)}>{p ? `${p.day}.${p.monthNum}.${p.year}` : ""}</p>
+          <div className="relative mx-auto mt-7 w-[250px]">
+            <div aria-hidden className="iv-sky-glow absolute -inset-6" />
+            <div className="iv-hair relative rounded-t-[125px] border p-1.5">
+              {photoUrl ? <Photo url={photoUrl} alt={alt} className="h-[320px] w-full rounded-t-[119px]" /> : <div className="flex h-[260px] items-center justify-center rounded-t-[119px] bg-white/60"><Monogram a={a} b={b} /></div>}
+            </div>
+          </div>
+          <div className="relative mt-8"><Names a={a} b={b} /></div>
+          <Rule className="relative my-5" />
+          <DateLine p={p} lang={lang} />
+        </header>
+      );
+    case "silk":
+      return (
+        <header className="iv-silk-gold relative flex min-h-[620px] flex-col items-center justify-center overflow-hidden px-6 py-16 text-center" style={style}>
+          {label(d.forYou)}
+          <h2 className="f-script iv-in mt-2 text-[40px] font-medium" style={delay(0.15)}>{d.invitation}</h2>
+          <div className="relative mx-auto mt-6 h-[210px] w-[210px]">
+            <span aria-hidden className="absolute -inset-2.5 rounded-full border border-white/55" />
+            {photoUrl ? <Photo url={photoUrl} alt={alt} className="h-full w-full rounded-full" /> : <Monogram a={a} b={b} />}
+          </div>
+          <div className="mt-8" style={{ textShadow: "0 2px 18px rgb(60 35 5 / .45)" }}><Names a={a} b={b} size="text-[52px]" /></div>
+          <Rule className="my-5" />
+          <DateLine p={p} lang={lang} />
+        </header>
+      );
+    case "card":
+      return (
+        <header className={`iv-silk-${t.silk ?? "olive"} relative overflow-hidden px-5 py-12`} style={{ color: t.heroInk }}>
+          <div className="iv-oval relative mx-auto w-full max-w-[330px] bg-[var(--paper)] px-8 pb-16 pt-16 text-center shadow-[0_30px_60px_-28px_rgb(0_0_0/.55)]">
+            <Bow className="mx-auto h-14 w-20" color={t.vars["--accent2"]} dark={t.vars["--accent"]} />
+            <p className="iv-in mt-5 text-[14px] uppercase tracking-[0.2em] iv-muted">{d.invitedYou}</p>
+            {photoUrl && <Photo url={photoUrl} alt={alt} className="mx-auto mt-5 h-[150px] w-[120px] rounded-t-[60px]" />}
+            <div className="mt-6 iv-accent"><Names a={a} b={b} size="text-[46px]" /></div>
+            <Rule className="my-5" />
+            <div className="iv-accent"><DateLine p={p} lang={lang} /></div>
+          </div>
+        </header>
+      );
     case "arch":
     default:
       return (
@@ -143,7 +187,7 @@ function Hero({ data, t, p, lang }: { data: PublicInvitation; t: Theme; p: Parts
   }
 }
 
-function Calendar({ iso, lang }: { iso: string | null; lang: Lang }) {
+function Calendar({ iso, lang, heart = false }: { iso: string | null; lang: Lang; heart?: boolean }) {
   const g = monthGrid(iso, lang);
   if (!g) return null;
   return (
@@ -155,7 +199,7 @@ function Calendar({ iso, lang }: { iso: string | null; lang: Lang }) {
         ))}
         {g.cells.map((c, i) => (
           <span key={i} className="relative flex h-9 items-center justify-center">
-            {c === g.day && <span className="iv-accent-bg absolute h-8 w-8 rounded-full" />}
+            {c === g.day && (heart ? <Heart className="absolute h-9 w-9 iv-accent" /> : <span className="iv-accent-bg absolute h-8 w-8 rounded-full" />)}
             <span className={`f-body relative ${c === g.day ? "font-bold" : ""}`} style={c === g.day ? { color: "var(--on)" } : undefined}>{c ?? ""}</span>
           </span>
         ))}
@@ -199,7 +243,7 @@ function buildSections(data: PublicInvitation, t: Theme, p: Parts | null, lang: 
       node: (
         <>
           <p className="f-display mt-3 text-[18px] iv-muted">{d.fullDate(p.weekday, p.day, p.month, p.year, p.time)}</p>
-          <Calendar iso={data.weddingAt} lang={lang} />
+          <Calendar iso={data.weddingAt} lang={lang} heart={t.heart} />
         </>
       ),
     });
@@ -292,12 +336,15 @@ function Body({ data, t, p, lang, slug, guest, inlineMusic, motion }: { data: Pu
     );
   }
 
+  const silkBg = t.silk ? `iv-silk-${t.silk}` : "";
+  const cardShape = t.round ? "rounded-[44px]" : "iv-hair border";
+
   if (t.layout === "panels") {
     return (
-      <div className="relative space-y-6 pb-12 pt-8">
+      <div className={`relative space-y-6 pb-12 pt-8 ${silkBg}`}>
         {sections.map((s) => (
           <Reveal key={s.key} kind="up" enabled={motion}>
-            <section className="iv-paper iv-frame iv-hair mx-5 border px-6 py-10 text-center">
+            <section className={`iv-paper iv-frame mx-5 px-6 py-10 text-center ${cardShape}`}>
               {s.pre}
               <h2 className="iv-ttl iv-accent">{s.title}</h2>
               {s.node}
@@ -310,7 +357,7 @@ function Body({ data, t, p, lang, slug, guest, inlineMusic, motion }: { data: Pu
   }
 
   return (
-    <div className="relative pb-12 pt-6">
+    <div className={`relative pb-12 pt-6`}>
       {sections.map((s, i) => (
         <Reveal as="section" key={s.key} kind="up" enabled={motion} className="px-7 py-8 text-center">
           {i > 0 && <Rule className="mb-9" />}

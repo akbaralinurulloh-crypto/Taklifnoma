@@ -3,7 +3,7 @@ import type { FxKind } from "./Fx";
 
 export type GateKind = "button" | "envelope" | "seal" | "heart" | "doors" | "swipe";
 /** Bosh ekran: arch = arkali rasm, full = to'liq ekran rasm, oval = tuxumsimon, round = doira, frame = ofsetli ramka. */
-export type HeroKind = "arch" | "full" | "oval" | "round" | "frame";
+export type HeroKind = "arch" | "full" | "oval" | "round" | "frame" | "sky" | "silk" | "card";
 /** Bo'limlar skeleti: rule = chiziq bilan ajratilgan, panels = ramkali panellar, journey = chap tekislangan yo'l. */
 export type LayoutKind = "rule" | "panels" | "journey";
 
@@ -16,6 +16,14 @@ export type Theme = {
   /** Zarrachalar zichligi (1 = oddiy). */
   fxDensity?: number;
   dark?: boolean;
+  /** Ipak mato foni (hero va sahifa foni). */
+  silk?: "gold" | "olive" | "cream";
+  /** Yumaloq kartalar (ipak dizaynlar uchun). */
+  round?: boolean;
+  /** Taqvimda yurak. */
+  heart?: boolean;
+  /** Zaytun shoxi bezagi. */
+  branch?: boolean;
   /** Hero foni va yozuv rangi. */
   heroBg: string;
   heroInk: string;
@@ -28,6 +36,45 @@ export type Theme = {
 };
 
 export const THEMES: Record<Design, Theme> = {
+  tong: {
+    heart: true, round: true,
+    gate: "envelope", hero: "sky", layout: "panels",
+    fx: "sparkles", fxColors: ["#c9a05a", "#ffffff"], fxDensity: 0.3,
+    heroBg: "linear-gradient(180deg,#dbe8f6 0%,#f4f8fc 70%,#fbf4e6 100%)", heroInk: "#2c4a6e",
+    vars: { "--bg": "#f4f8fc", "--paper": "#ffffff", "--ink": "#2c4a6e", "--muted": "#5b7390", "--accent": "#4f7cab", "--accent2": "#c9a05a", "--on": "#ffffff" },
+    gateBg: "linear-gradient(180deg,#d4e4f4 0%,#f4f8fc 60%,#fbf1de 100%)", gateInk: "#2c4a6e", gateColor: "#e6eff9", gateColor2: "#c9a05a",
+  },
+  ipak: {
+    silk: "gold",
+    gate: "heart", hero: "silk", layout: "rule",
+    fx: "gold", fxColors: ["#e8c76a", "#fff1b8"], fxDensity: 0.35,
+    heroBg: "#b98d4a", heroInk: "#fffaf0",
+    vars: { "--bg": "#efe5d3", "--paper": "#f8f1e3", "--ink": "#4a3516", "--muted": "#76603a", "--accent": "#8f6a22", "--accent2": "#c9a557", "--on": "#fffaf0" },
+    gateBg: "linear-gradient(115deg,#6d5222 0%,#c9a557 30%,#8a6a2a 52%,#e6cf94 74%,#7b5f20 100%)", gateInk: "#fffaf0", gateColor: "#fffaf0", gateColor2: "#c9a557",
+  },
+  bant: {
+    silk: "olive", round: true,
+    gate: "seal", hero: "card", layout: "panels",
+    fx: "none", fxColors: [],
+    heroBg: "#6f7650", heroInk: "#2f3520",
+    vars: { "--bg": "#7b8259", "--paper": "#f7f5ec", "--ink": "#2f3520", "--muted": "#59603f", "--accent": "#4f5a30", "--accent2": "#a58d4e", "--on": "#f7f5ec" },
+    gateBg: "linear-gradient(120deg,#555d36,#8a916a 45%,#4e552f 75%,#7b8259)", gateInk: "#f7f5ec", gateColor: "#6a7344", gateColor2: "#a58d4e",
+  },
+  krem: {
+    silk: "cream", round: true, heart: true,
+    gate: "seal", hero: "card", layout: "rule",
+    fx: "none", fxColors: [],
+    heroBg: "#e2d3bf", heroInk: "#4a2f22",
+    vars: { "--bg": "#efe4d3", "--paper": "#fbf8f2", "--ink": "#4a2f22", "--muted": "#7d6554", "--accent": "#6b4331", "--accent2": "#b89a6b", "--on": "#fbf8f2" },
+    gateBg: "linear-gradient(120deg,#e6d8c4,#faf4ea 45%,#d9c7ad 75%,#efe4d3)", gateInk: "#4a2f22", gateColor: "#5a3a2a", gateColor2: "#b89a6b",
+  },
+  marmar: {
+    gate: "swipe", hero: "round", layout: "panels",
+    fx: "none", fxColors: [],
+    heroBg: "linear-gradient(135deg,#f4f4f2 0%,#e6e6e3 40%,#f8f8f6 70%,#dedddb 100%)", heroInk: "#1c1c1c",
+    vars: { "--bg": "#f6f6f4", "--paper": "#ffffff", "--ink": "#1c1c1c", "--muted": "#555555", "--accent": "#1c1c1c", "--accent2": "#b8975a", "--on": "#ffffff" },
+    gateBg: "linear-gradient(135deg,#f6f6f4,#e4e4e1 50%,#f8f8f6)", gateInk: "#1c1c1c", gateColor: "#1c1c1c", gateColor2: "#b8975a",
+  },
   zarrin: {
     gate: "envelope", hero: "arch", layout: "rule",
     fx: "gold", fxColors: ["#e8c76a", "#c9a557", "#fff1b8"], fxDensity: 0.45,
@@ -50,6 +97,7 @@ export const THEMES: Record<Design, Theme> = {
     gateBg: "linear-gradient(180deg,#0f1c40,#1b2f66)", gateInk: "#f7f2e4", gateColor: "#e9eefb", gateColor2: "#b79a5b",
   },
   zaytun: {
+    branch: true,
     gate: "seal", hero: "round", layout: "journey",
     fx: "leaves", fxColors: ["#8ea16b", "#b5c28f"], fxDensity: 0.3,
     heroBg: "linear-gradient(180deg,#e7ead8 0%,#f6f4ec 75%)", heroInk: "#2a3320",

@@ -214,3 +214,32 @@ body {
 .iv-hair { border-color: color-mix(in srgb, var(--accent2) 70%, transparent); }
 .iv-rule span { background: color-mix(in srgb, var(--accent2) 70%, transparent); }
 .iv-rule i { background: var(--accent2); }
+
+/* ---- Ipak mato: qatlamli gradientlar va sekin oqim ---- */
+@keyframes iv-flow { from { background-position: 0% 0, 100% 0, 0 0; } to { background-position: 100% 0, 0% 0, 0 0; } }
+.iv-silk-gold, .iv-silk-olive, .iv-silk-cream {
+  background-size: 220% 100%, 220% 100%, 100% 100%;
+  animation: iv-flow 26s ease-in-out infinite alternate;
+}
+.iv-silk-gold {
+  background-image:
+    linear-gradient(112deg, transparent 22%, rgb(255 248 220 / .55) 34%, transparent 46%, rgb(80 50 10 / .35) 58%, transparent 70%),
+    linear-gradient(248deg, transparent 30%, rgb(255 240 190 / .35) 44%, transparent 58%, rgb(70 45 8 / .3) 74%, transparent 90%),
+    linear-gradient(160deg, #6d5222, #c9a557 38%, #8a6a2a 62%, #e6cf94);
+}
+.iv-silk-olive {
+  background-image:
+    linear-gradient(112deg, transparent 22%, rgb(235 240 210 / .35) 34%, transparent 46%, rgb(20 28 8 / .35) 58%, transparent 70%),
+    linear-gradient(248deg, transparent 30%, rgb(225 232 195 / .25) 44%, transparent 58%, rgb(20 28 8 / .3) 74%, transparent 90%),
+    linear-gradient(160deg, #4e552f, #8a916a 40%, #5a6238 66%, #7b8259);
+}
+.iv-silk-cream {
+  background-image:
+    linear-gradient(112deg, transparent 22%, rgb(255 255 255 / .75) 34%, transparent 46%, rgb(120 90 60 / .22) 58%, transparent 70%),
+    linear-gradient(248deg, transparent 30%, rgb(255 255 255 / .55) 44%, transparent 58%, rgb(120 90 60 / .2) 74%, transparent 90%),
+    linear-gradient(160deg, #d9c7ad, #f6ede0 40%, #e0d0b8 66%, #efe4d3);
+}
+.iv-oval { border-radius: 50% / 22%; }
+.iv-sky-glow { background: radial-gradient(60% 55% at 50% 40%, rgb(255 236 190 / .85), rgb(255 255 255 / .0) 72%); animation: iv-glow 9s ease-in-out infinite alternate; }
+@keyframes iv-glow { from { opacity: .65; transform: scale(.97); } to { opacity: 1; transform: scale(1.03); } }
+@media (prefers-reduced-motion: reduce) { .iv-silk-gold, .iv-silk-olive, .iv-silk-cream, .iv-sky-glow { animation: none; } }

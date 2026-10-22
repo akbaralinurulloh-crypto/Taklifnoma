@@ -157,3 +157,7 @@ Production deployment qadamlari: README 4-bo‘lim.
 - Har biri turli bosh ekran (arka, to'liq ekran, oval, doira, ofset ramka), turli ochilish (konvert, darvoza, mum muhr, karta) va turli skelet (chiziqli, panelli, yo'l).
 - Eski taklifnomalar bazada qolsa, kodda yangi dizaynga o'giriladi; supabase/migrations/0008_five_luxury_designs.sql bazani ham yangilaydi.
 - Qo'lda o'chirish ixtiyoriy: src/components/invitation/RoseFrame.tsx (ishlatilmaydi).
+
+## Yangilanish 12 (10 ta dizayn)
+- Yangi 5 ta: tong (Moviy tong), ipak (Oltin ipak, yurakli ochilish), bant (Yashil bant, mum muhr), krem (Krem bant, yurakli taqvim), marmar (Marmar, surib ochish). Ipak matolar CSS bilan chizilgan, sekin oqadi.
+- Hammasi: 10 dizayn. supabase/migrations/0009_ten_designs.sql ni ishga tushiring (0008 dan keyin).

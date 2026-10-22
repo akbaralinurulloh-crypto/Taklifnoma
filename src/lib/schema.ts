@@ -1,10 +1,15 @@
 // Brauzer va serverda ishlatiladigan sof mantiq. node:crypto bu yerda ISHLATILMAYDI.
 import { z } from "zod";
 
-export const DESIGNS = ["zarrin", "oqqora", "osmon", "zaytun", "shokolad"] as const;
+export const DESIGNS = ["tong", "ipak", "bant", "krem", "marmar", "zarrin", "oqqora", "osmon", "zaytun", "shokolad"] as const;
 export type Design = (typeof DESIGNS)[number];
 
 export const DESIGN_LABELS: Record<Design, string> = {
+  tong: "Moviy tong",
+  ipak: "Oltin ipak",
+  bant: "Yashil bant",
+  krem: "Krem bant",
+  marmar: "Marmar",
   zarrin: "Oltin klassika",
   oqqora: "Qora va oltin",
   osmon: "Kechki ko‘k",
@@ -13,6 +18,11 @@ export const DESIGN_LABELS: Record<Design, string> = {
 };
 
 export const DESIGN_DESCRIPTIONS: Record<Design, string> = {
+  tong: "Yumshoq osmon ranglari, nur taralgan arka va konvert ochilishi.",
+  ipak: "Oltin ipak mato to‘lqinlari va yurakka bosib ochiladigan taklifnoma.",
+  bant: "Zaytun ipak, oq oval karta, bant va mum muhrli konvert.",
+  krem: "Shampan ipak, jigarrang muhrli konvert, yurakli taqvim.",
+  marmar: "Oq marmar, qora va oltin chiziqlar, surib ochiladigan sahifa.",
   zarrin: "Krem qog‘oz, oltin chiziqlar va konvert ochilishi. Sokin, klassik hashamat.",
   oqqora: "Qora fon, oltin yozuv va ikki darvoza. Qat’iy, zamonaviy hashamat.",
   osmon: "To‘q ko‘k tun, oq-krem yozuv va oltin muhrli konvert.",
