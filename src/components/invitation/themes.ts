@@ -15,6 +15,8 @@ export type Theme = {
   /** Fonda suzuvchi zarrachalar va ularning ranglari. */
   fx: FxKind;
   fxColors: string[];
+  /** Zarrachalar zichligi (1 = oddiy, kichikroq = sokinroq). */
+  fxDensity?: number;
   /** Qorong'i mavzu (oq matn, kulrang rasm emas). */
   dark?: boolean;
   /** Rasm bo'lmaganda qora-oq filtr. */
@@ -36,7 +38,7 @@ export type Theme = {
 
 export const THEMES: Record<Design, Theme> = {
   anor: {
-    frame: "rose",
+    frame: "rose", fxDensity: 0.35,
     fx: "petals", fxColors: ["#b3263a","#d94a5e","#8a1c2b","#f0a0aa"],
     gate: "heart", hero: "rose", layout: "cards", card: "round",
     vars: { "--bg": "#fdf8f4", "--paper": "#ffffff", "--ink": "#4a0f1c", "--muted": "#7a4a54", "--accent": "#7d1228", "--accent2": "#c9a15a", "--on": "#fff4ec" },

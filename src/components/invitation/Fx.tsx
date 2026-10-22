@@ -43,10 +43,10 @@ const MODE: Record<Exclude<FxKind, "none">, "fall" | "rise" | "twinkle" | "fly">
 };
 
 /** Ekran bo'ylab suzuvchi zarrachalar (faqat CSS animatsiya, tashqi rasm yo'q). */
-export function Fx({ kind, colors }: { kind: FxKind; colors: string[] }) {
+export function Fx({ kind, colors, density = 1 }: { kind: FxKind; colors: string[]; density?: number }) {
   if (kind === "none") return null;
   const mode = MODE[kind];
-  const n = mode === "fly" ? 7 : mode === "twinkle" ? 34 : 24;
+  const n = Math.max(2, Math.round((mode === "fly" ? 5 : mode === "twinkle" ? 20 : 12) * density));
   const items = Array.from({ length: n }, (_, i) => {
     const size = mode === "fly" ? 30 + r(i, 1) * 26 : mode === "twinkle" ? 5 + r(i, 1) * 11 : kind === "gold" ? 6 + r(i, 1) * 12 : 12 + r(i, 1) * 16;
     const style = {
@@ -57,8 +57,7 @@ export function Fx({ kind, colors }: { kind: FxKind; colors: string[] }) {
       ["--d" as string]: `${-r(i, 5) * (mode === "fly" ? 24 : 14)}s`,
       ["--x" as string]: `${Math.round((r(i, 6) - 0.5) * 140)}px`,
       ["--r" as string]: `${Math.round(r(i, 7) * 360)}deg`,
-      opacity: kind === "gold" ? 0.9 : 0.85,
-      filter: i % 4 === 0 ? "blur(1.2px)" : undefined,
+      opacity: kind === "gold" ? 0.7 : 0.55,
     } as CSSProperties;
     return (
       <span key={i} className={`iv-fx iv-fx-${mode}`} style={style}>

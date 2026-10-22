@@ -131,12 +131,12 @@ export function Gate({ enabled, kind, groom, bride, dateText, bg, ink, color, co
   } else if (kind === "heart") {
     body = (
       <>
-        <Fx kind="hearts" colors={[color, color2, "#ffffff"]} />
+        {!roses && <Fx kind="hearts" colors={[color, color2, "#ffffff"]} />}
         {roses && (
           <>
-            <Rose className="iv-drift pointer-events-none absolute -left-10 -top-8 h-44 w-44" />
+            <Rose className="pointer-events-none absolute -left-10 -top-8 h-44 w-44" />
             <Rose className="pointer-events-none absolute -right-12 top-16 h-36 w-36" c1="#5d0f1d" c2="#8a1c2b" c3="#c4485b" />
-            <Rose className="iv-drift pointer-events-none absolute -bottom-10 -left-6 h-40 w-40" c1="#5d0f1d" c2="#8a1c2b" c3="#c4485b" />
+            <Rose className="pointer-events-none absolute -bottom-10 -left-6 h-40 w-40" c1="#5d0f1d" c2="#8a1c2b" c3="#c4485b" />
             <Rose className="pointer-events-none absolute -bottom-8 -right-8 h-44 w-44" />
           </>
         )}

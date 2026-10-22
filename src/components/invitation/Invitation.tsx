@@ -6,7 +6,7 @@ import type { PublicInvitation } from "@/lib/types";
 import { Countdown } from "../templates/Countdown";
 import { MusicControl } from "../templates/MusicControl";
 import { MapLink, Photo, delay, initials } from "../templates/parts";
-import { ScrollBar, TapBurst } from "./Extras";
+import { ScrollBar } from "./Extras";
 import { Fx } from "./Fx";
 import { Gallery } from "./Gallery";
 import { Gate } from "./Gate";
@@ -18,11 +18,6 @@ import {
   AtlasBand, Bow, Branch, Clouds, Dove, Heart, LineFlora, OGIVE_PATH, Rose, Silk, Sparkle, Star8, TileBand, TornEdge,
 } from "./Ornaments";
 import { THEMES, type Theme } from "./themes";
-
-const BURST: Record<string, string[]> = {
-  hearts: ["♥", "♡"], petals: ["❀", "✿"], leaves: ["❦", "✦"], stars: ["✦", "★"], sparkles: ["✦", "✧"],
-  gold: ["✦", "•"], butterflies: ["✿", "✦"], confetti: ["■", "●", "▲"], none: ["✦"],
-};
 
 type Parts = NonNullable<ReturnType<typeof dateParts>>;
 
@@ -64,14 +59,14 @@ function Hero({ data, t, p, lang }: { data: PublicInvitation; t: Theme; p: Parts
     case "rose":
       return (
         <header className="relative overflow-hidden px-6 pb-16 pt-14 text-center" style={{ background: t.heroBg ?? "linear-gradient(160deg,#7d1228,#3d0711)" }}>
-          <Rose className="iv-drift absolute -left-12 -top-10 h-52 w-52" />
+          <Rose className="absolute -left-12 -top-10 h-52 w-52" />
           <Rose className="absolute -right-14 top-28 h-44 w-44" c1="#5d0f1d" c2="#8a1c2b" c3="#c4485b" />
-          <Rose className="iv-drift absolute -bottom-12 -left-8 h-48 w-48" c1="#5d0f1d" c2="#8a1c2b" c3="#c4485b" />
+          <Rose className="absolute -bottom-12 -left-8 h-48 w-48" c1="#5d0f1d" c2="#8a1c2b" c3="#c4485b" />
           <Rose className="absolute -bottom-10 -right-10 h-52 w-52" />
           <Dove className="absolute left-8 top-24 h-8 w-12 opacity-80" />
           <Dove className="absolute right-16 top-14 h-6 w-9 opacity-60" />
           <p className="iv-in relative text-[14px] uppercase tracking-[0.5em] text-white">{d.nikohDay}</p>
-          <RoseFrame className="iv-float relative mx-auto mt-8 w-[300px]">
+          <RoseFrame className="relative mx-auto mt-8 w-[300px]">
             {photoUrl ? (
               <Photo url={photoUrl} alt={alt} className="iv-ken h-[360px] w-full" />
             ) : (
@@ -122,11 +117,11 @@ function Hero({ data, t, p, lang }: { data: PublicInvitation; t: Theme; p: Parts
           <div className="relative mx-auto w-[310px] rounded-t-[155px] rounded-b-[28px] px-6 pb-10 pt-8 shadow-xl" style={{ background: t.vars["--paper"] }}>
             <Bow className="mx-auto h-16 w-24" color={olive ? "#8ea16b" : t.vars["--accent2"]} dark={olive ? "#5f7040" : t.vars["--accent"]} />
             {photoUrl ? (
-              <Photo url={photoUrl} alt={alt} className="iv-float mx-auto mt-3 h-[260px] w-[220px] rounded-t-[110px] rounded-b-2xl" />
+              <Photo url={photoUrl} alt={alt} className="mx-auto mt-3 h-[260px] w-[220px] rounded-t-[110px] rounded-b-2xl" />
             ) : (
               <Monogram a={a} b={b} className="mx-auto mt-3 h-[150px] w-[150px] iv-line iv-accent" />
             )}
-            <p className="mt-5 text-[13px] uppercase tracking-[0.35em] iv-muted">{d.invitedYou}</p>
+            <p className="mt-5 text-[14px] uppercase tracking-[0.35em] iv-muted">{d.invitedYou}</p>
             <Names a={a} b={b} size="text-[53px]" className="mt-2 iv-accent" />
             <DateLine lang={lang} p={p} className="mt-3 iv-muted" />
           </div>
@@ -139,9 +134,9 @@ function Hero({ data, t, p, lang }: { data: PublicInvitation; t: Theme; p: Parts
           <Clouds className="iv-drift absolute left-0 top-4 h-24 w-full" />
           <Sparkle className="absolute left-10 top-32 h-5 w-5" />
           <Sparkle className="absolute right-12 top-24 h-4 w-4" />
-          <p className="iv-in relative text-[13px] uppercase tracking-[0.45em] iv-muted">{d.invitation}</p>
+          <p className="iv-in relative text-[14px] uppercase tracking-[0.3em] iv-muted">{d.invitation}</p>
           {photoUrl ? (
-            <Photo url={photoUrl} alt={alt} className="iv-float iv-ring relative mx-auto mt-6 h-[230px] w-[230px] rounded-full ring-8 ring-white/80" />
+            <Photo url={photoUrl} alt={alt} className="iv-ring relative mx-auto mt-6 h-[230px] w-[230px] rounded-full ring-8 ring-white/80" />
           ) : (
             <Monogram a={a} b={b} className="relative mx-auto mt-6 h-[170px] w-[170px] bg-white/70 iv-accent iv-line" />
           )}
@@ -154,7 +149,7 @@ function Hero({ data, t, p, lang }: { data: PublicInvitation; t: Theme; p: Parts
         <header className="relative overflow-hidden px-6 pb-28 pt-16 text-center">
           <Branch className="absolute -left-12 -top-2 h-24 w-40" leaf="#7c8c58" stem="#55663a" />
           <Branch className="absolute -bottom-1 -right-14 h-20 w-32" leaf="#7c8c58" stem="#55663a" flip />
-          <p className="iv-in relative text-[13px] uppercase tracking-[0.45em] iv-muted">{d.ourWedding}</p>
+          <p className="iv-in relative text-[14px] uppercase tracking-[0.3em] iv-muted">{d.ourWedding}</p>
           <div className="relative mx-auto mt-8 w-[250px] -rotate-3 rounded-sm bg-white p-3 pb-12 shadow-[0_14px_30px_-12px_rgba(0,0,0,.4)]">
             {photoUrl ? (
               <Photo url={photoUrl} alt={alt} className="h-[250px] w-full" />
@@ -173,7 +168,7 @@ function Hero({ data, t, p, lang }: { data: PublicInvitation; t: Theme; p: Parts
           <Silk className="absolute inset-x-0 bottom-0 h-40 w-full opacity-70" />
           <p className="iv-in relative text-[14px] uppercase tracking-[0.5em]">{d.weddingInvite}</p>
           {photoUrl ? (
-            <Photo url={photoUrl} alt={alt} className="iv-float relative mx-auto mt-8 h-[250px] w-[210px] rounded-[40px] border-[6px] border-white/70" />
+            <Photo url={photoUrl} alt={alt} className="relative mx-auto mt-8 h-[250px] w-[210px] rounded-[40px] border-[6px] border-white/70" />
           ) : (
             <Monogram a={a} b={b} className="relative mx-auto mt-8 h-[170px] w-[170px] border-white/60 bg-white/10" />
           )}
@@ -193,7 +188,7 @@ function Hero({ data, t, p, lang }: { data: PublicInvitation; t: Theme; p: Parts
               <span>{p.year.slice(2)}</span>
             </div>
           )}
-          <p className="iv-in relative text-[14px] uppercase tracking-[0.4em] iv-muted">{d.weddingInvite}</p>
+          <p className="iv-in relative text-[14px] uppercase tracking-[0.28em] iv-muted">{d.weddingInvite}</p>
           {photoUrl && <Photo url={photoUrl} alt={alt} className="relative mx-auto mt-6 h-[150px] w-[150px] rounded-full" />}
           <Names a={a} b={b} className="relative mt-10" />
           <DateLine lang={lang} p={p} className="relative mt-5 iv-muted" />
@@ -214,7 +209,7 @@ function Hero({ data, t, p, lang }: { data: PublicInvitation; t: Theme; p: Parts
                 <span className="f-script text-[58px] text-[#f5eecf]">{initials(a, b)}</span>
               </div>
             )}
-            <p className="iv-in relative mt-6 text-[13px] uppercase tracking-[0.4em] text-[#f5eecf]">{d.nikohInvite}</p>
+            <p className="iv-in relative mt-6 text-[14px] uppercase tracking-[0.28em] text-[#f5eecf]">{d.nikohInvite}</p>
             <Names a={a} b={b} className="relative mt-2 text-[#f5eecf]" size="text-[57px]" />
             <DateLine lang={lang} p={p} className="relative mt-4 text-[#f5eecf]" />
           </div>
@@ -227,9 +222,9 @@ function Hero({ data, t, p, lang }: { data: PublicInvitation; t: Theme; p: Parts
         <header className="relative overflow-hidden text-center" style={{ background: "#fff8e8" }}>
           <AtlasBand className="h-[70px] w-full" />
           <div className="px-6 pb-10 pt-8">
-            <p className="iv-in text-[14px] uppercase tracking-[0.4em] iv-muted">{d.invitation}</p>
+            <p className="iv-in text-[14px] uppercase tracking-[0.28em] iv-muted">{d.invitation}</p>
             {photoUrl ? (
-              <div className="iv-float mx-auto mt-5 w-[240px] rounded-sm border-[6px] p-1" style={{ borderColor: "#c8281e" }}>
+              <div className="mx-auto mt-5 w-[240px] rounded-sm border-[6px] p-1" style={{ borderColor: "#c8281e" }}>
                 <Photo url={photoUrl} alt={alt} className="h-[290px] w-full" />
               </div>
             ) : (
@@ -273,7 +268,7 @@ function Divider({ t }: { t: Theme }) {
 }
 
 function Card({ t, children, className = "" }: { t: Theme; children: ReactNode; className?: string }) {
-  const shape = "iv-gleam " + (t.card === "arch" ? "rounded-t-[160px] rounded-b-3xl" : t.card === "round" ? "rounded-3xl" : "rounded-sm border iv-line");
+  const shape = "iv-gleam iv-frame " + (t.card === "arch" ? "rounded-t-[160px] rounded-b-3xl" : t.card === "round" ? "rounded-3xl" : "rounded-sm border iv-line");
   return <section className={`iv-paper mx-5 px-6 py-9 text-center shadow-sm ${shape} ${className}`}>{children}</section>;
 }
 
@@ -289,7 +284,7 @@ function Calendar({ iso, lang, selected }: { iso: string | null; lang: Lang; sel
       <p className="f-display text-[21px] iv-accent">{g.title}, {g.year}</p>
       <div className="mx-auto mt-3 grid max-w-[300px] grid-cols-7 gap-y-1 text-[16px]" role="grid" aria-label={`${g.title} ${g.year}`}>
         {weekdayShort(lang).map((w) => (
-          <span key={w} className="text-[13px] uppercase tracking-wider iv-muted">{w}</span>
+          <span key={w} className="text-[14px] uppercase tracking-wider iv-muted">{w}</span>
         ))}
         {g.cells.map((c, i) => (
           <span key={i} className="relative flex h-9 items-center justify-center">
@@ -298,16 +293,6 @@ function Calendar({ iso, lang, selected }: { iso: string | null; lang: Lang; sel
           </span>
         ))}
       </div>
-    </div>
-  );
-}
-
-function Aurora() {
-  return (
-    <div aria-hidden className="iv-aurora pointer-events-none absolute inset-0 overflow-hidden">
-      {[8, 32, 58, 84].map((top, i) => (
-        <i key={i} style={{ top: `${top}%`, [i % 2 ? "right" : "left"]: "-90px", animationDelay: `${-i * 4}s`, background: i % 2 ? "var(--accent2)" : "var(--accent)" }} />
-      ))}
     </div>
   );
 }
@@ -326,7 +311,7 @@ function buildSections(data: PublicInvitation, t: Theme, p: Parts | null, lang: 
     pre: (
       <>
         {t.hero === "arch" && t.layout === "cards" && <Bow className="mx-auto -mt-1 mb-3 h-12 w-16" color="#8ea16b" dark="#5f7040" />}
-        {data.parents && <p className="iv-in mb-4 text-[13.5px] uppercase tracking-[0.25em] iv-muted">{data.parents}</p>}
+        {data.parents && <p className="iv-in mb-4 text-[14.5px] uppercase tracking-[0.25em] iv-muted">{data.parents}</p>}
         {guest && <p className="f-display mb-3 break-words text-[21px] iv-accent">{d.dear(guest)}</p>}
       </>
     ),
@@ -363,7 +348,7 @@ function buildSections(data: PublicInvitation, t: Theme, p: Parts | null, lang: 
             iso={data.weddingAt}
             boxClass="iv-accent"
             numClass="f-display text-[39px] leading-none"
-            labelClass="mt-1 text-[13px] uppercase tracking-[0.2em] iv-muted"
+            labelClass="mt-1 text-[14px] uppercase tracking-[0.2em] iv-muted"
             pastClass="f-body iv-muted"
             labels={d.units}
             pastText={d.started}
@@ -425,10 +410,10 @@ function Body({ data, t, p, lang, slug, guest, inlineMusic, motion }: { data: Pu
   if (t.layout === "story") {
     return (
       <div className="relative pb-12 pt-2">
-        <Aurora />
+        
         {sections.map((s, i) => (
           <Reveal as="section" kind="left" enabled={motion} key={s.key} className="border-t px-8 py-12 text-left iv-line first:border-t-0">
-            <p className="f-display text-[13px] uppercase tracking-[0.4em] iv-muted">{String(i + 1).padStart(2, "0")}</p>
+            <p className="f-display text-[14px] uppercase tracking-[0.28em] iv-muted">{String(i + 1).padStart(2, "0")}</p>
             {s.pre && <div className="mt-3">{s.pre}</div>}
             <h2 className="f-script iv-ttl iv-accent mt-1 text-[53px] leading-none">{s.title}</h2>
             {s.node}
@@ -442,10 +427,10 @@ function Body({ data, t, p, lang, slug, guest, inlineMusic, motion }: { data: Pu
   if (t.layout === "slides") {
     return (
       <div className="relative">
-        <Aurora />
+        
         {sections.map((s, i) => (
           <Reveal as="section" kind="zoom" enabled={motion} key={s.key} className={`flex min-h-[86svh] flex-col items-center justify-center px-8 py-16 text-center ${i % 2 ? "iv-paper" : ""}`}>
-            <span className="f-display mb-8 text-[13px] tracking-[0.5em] iv-muted">{i + 1} / {sections.length}</span>
+            <span className="f-display mb-8 text-[14px] tracking-[0.5em] iv-muted">{i + 1} / {sections.length}</span>
             <div className="w-full max-w-[340px]">
               {s.pre}
               <h2 className="f-script iv-ttl iv-accent text-[51px] leading-none">{s.title}</h2>
@@ -460,7 +445,7 @@ function Body({ data, t, p, lang, slug, guest, inlineMusic, motion }: { data: Pu
 
   return (
     <div className="relative space-y-6 pb-10 pt-8">
-      <Aurora />
+      
       {sections.map((s) => (
         <Reveal key={s.key} kind="up" enabled={motion}>
           <Card t={t}>
@@ -497,11 +482,10 @@ export function Invitation({ data, gate = false, lang = "uz", slug, guest, langH
       roses={t.frame === "rose"}
     >
       <article className="iv relative mx-auto w-full max-w-[420px] overflow-hidden" style={t.vars as unknown as CSSProperties} lang={lang} data-dark={!!t.dark}>
-        {motion && <Fx kind={t.fx} colors={t.fxColors} />}
+        {motion && <Fx kind={t.fx} colors={t.fxColors} density={t.fxDensity} />}
         {motion && gate && <ScrollBar />}
-        {motion && gate && <TapBurst symbols={BURST[t.fx]} colors={t.fxColors} />}
         {langHref && (
-          <Link href={langHref} prefetch={false} className="absolute right-3 top-3 z-20 rounded-full bg-black/45 px-3 py-1 text-[13.5px] text-white backdrop-blur" hrefLang={lang === "uz" ? "ru" : "uz"}>
+          <Link href={langHref} prefetch={false} className="absolute right-3 top-3 z-20 rounded-full bg-black/45 px-3 py-1 text-[14.5px] text-white backdrop-blur" hrefLang={lang === "uz" ? "ru" : "uz"}>
             {dict(lang).switchTo}
           </Link>
         )}

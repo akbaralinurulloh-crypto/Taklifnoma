@@ -146,3 +146,8 @@ Production deployment qadamlari: README 4-bo‘lim.
 - Sayt ranglari to‘q ko‘k va oltin palitraga (konvert logo, yangi bosh sahifa tuzilmasi) o'tkazildi (taklifnoma dizaynlariga tegilmadi).
 - Yangi sahifalar: /imkoniyatlar, /savollar; matnlar src/lib/site-content.ts'da.
 - Bosh sahifa: gradient fon, ko'rsatkichlar qatori, 12 imkoniyat, 15 dizayn, savol-javob; 4 ustunli footer.
+
+## Yangilanish 10 (taklifnomalar: luxury)
+- Shrift: qo'lyozma o'rniga o'qiladigan Cormorant (ism va matn), sarlavhalar katta harfda, diamantli nafis chiziq.
+- Kartalarda ikki qatlamli oltin ramka; matn kattaroq va to'qroq.
+- Animatsiya sokinlashtirildi: Anor zarrachalari kam (0.35), suzuvchi rasm/gul harakatlari, aurora va bosish zarrachalari olib tashlandi.

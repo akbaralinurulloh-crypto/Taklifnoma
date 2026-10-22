@@ -10,6 +10,13 @@ import "@fontsource/cormorant-garamond/latin-400.css";
 import "@fontsource/cormorant-garamond/latin-ext-400.css";
 import "@fontsource/cormorant-garamond/latin-600.css";
 import "@fontsource/cormorant-garamond/latin-ext-600.css";
+import "@fontsource/cormorant-garamond/latin-500-italic.css";
+import "@fontsource/cormorant-garamond/latin-600-italic.css";
+import "@fontsource/cormorant-garamond/latin-ext-500-italic.css";
+import "@fontsource/cormorant-garamond/latin-ext-600-italic.css";
+import "@fontsource/cormorant-garamond/cyrillic-500-italic.css";
+import "@fontsource/cormorant-garamond/cyrillic-600-italic.css";
+import "@fontsource/cormorant-garamond/cyrillic-600.css";
 import "./globals.css";
 
 function siteBase() {

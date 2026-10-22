@@ -79,10 +79,10 @@ body {
 
 /* ===== Taklifnoma (mehmon ko'radigan sahifa) ===== */
 .iv { background: var(--bg); color: var(--ink); font-family: "Cormorant Garamond", "Playfair Display", Georgia, serif; }
-.f-script { font-family: "Great Vibes", "Snell Roundhand", cursive; font-weight: 400; }
+.f-script { font-family: "Cormorant Garamond", Georgia, serif; font-style: italic; font-weight: 600; letter-spacing: .01em; }
 .f-display { font-family: "Playfair Display", Georgia, serif; }
 .f-body { font-family: "Cormorant Garamond", Georgia, serif; font-weight: 600; }
-.iv-muted { color: var(--muted); }
+.iv-muted { color: color-mix(in srgb, var(--muted) 62%, var(--ink)); }
 .iv-accent { color: var(--accent); }
 .iv-paper { background: var(--paper); }
 .iv-accent-bg { background: var(--accent); color: var(--on); }
@@ -138,7 +138,7 @@ body {
 .iv-beat { animation: iv-beat 1.8s ease-in-out infinite; }
 @keyframes iv-gleam { 0% { transform: translateX(-130%) skewX(-18deg); } 55%, 100% { transform: translateX(260%) skewX(-18deg); } }
 .iv-gleam { position: relative; overflow: hidden; }
-.iv-gleam::after { content: ""; position: absolute; inset: 0 auto 0 0; width: 40%; background: linear-gradient(90deg, transparent, rgb(255 255 255 / .35), transparent); animation: iv-gleam 6.5s ease-in-out infinite; pointer-events: none; }
+.iv-gleam::after { content: ""; position: absolute; inset: 0 auto 0 0; width: 40%; background: linear-gradient(90deg, transparent, rgb(255 255 255 / .16), transparent); animation: iv-gleam 11s ease-in-out infinite; pointer-events: none; }
 @keyframes iv-ring { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 45%, transparent); } 100% { box-shadow: 0 0 0 26px transparent; } }
 .iv-ring { animation: iv-ring 2.8s ease-out infinite; }
 
@@ -155,7 +155,7 @@ body {
 }
 
 /* Orqa fon "aurora" dog'lari */
-.iv-aurora i { position: absolute; width: 300px; height: 300px; border-radius: 50%; opacity: .16; filter: blur(60px); animation: iv-aur 14s ease-in-out infinite alternate; }
+.iv-aurora i { position: absolute; width: 300px; height: 300px; border-radius: 50%; opacity: .07; filter: blur(60px); animation: iv-aur 14s ease-in-out infinite alternate; }
 @keyframes iv-aur { from { transform: translate3d(0,0,0) scale(1); } to { transform: translate3d(70px,50px,0) scale(1.3); } }
 .iv-aurora ~ * { position: relative; }
 
@@ -179,3 +179,41 @@ body {
 @keyframes st-seal { 0%,100% { transform: scale(1); } 50% { transform: scale(1.12); } }
 .st-seal { animation: st-seal 3s ease-in-out infinite; transform-origin: center; }
 @media (prefers-reduced-motion: reduce) { .st-seal { animation: none; } }
+
+/* ---- Luxury: sarlavhalar, nafis bezak va yumshoq animatsiya ---- */
+.iv-ttl { font-family: "Cormorant Garamond", Georgia, serif; font-style: normal !important; font-weight: 600; text-transform: uppercase; letter-spacing: .26em; font-size: 26px !important; line-height: 1.2 !important; padding-bottom: 18px; }
+.iv-ttl::before { content: ""; position: absolute; left: 50%; bottom: -3px; width: 7px; height: 7px; background: var(--accent2, var(--accent)); transform: translateX(-50%) rotate(45deg); opacity: 0; transition: opacity .8s ease 1.2s; }
+.iv-rv-in .iv-ttl::before { opacity: 1; }
+[data-rv="left"] .iv-ttl::before { left: 0; transform: translateX(0) rotate(45deg); }
+.iv-ttl::after { height: 1px; width: 120px; }
+.iv-paper p, .iv-paper li { text-wrap: pretty; }
+@keyframes iv-breathe { 0%, 100% { opacity: .75; transform: scale(1); } 50% { opacity: 1; transform: scale(1.04); } }
+.iv-rv { transition-duration: 1.2s; }
+.iv-rv[data-rv="up"] { transform: translateY(34px); }
+.iv-rv[data-rv="zoom"] { transform: scale(.94); }
+@media (prefers-reduced-motion: reduce) { .iv-ttl::before { transition: none; } }
+
+/* Sarlavhada oltin yaltirash, chiziqlar chizilishi */
+@keyframes iv-shine { from { background-position: 220% 0; } to { background-position: -120% 0; } }
+@supports (-webkit-background-clip: text) or (background-clip: text) {
+  .iv-ttl { color: transparent !important; background-image: linear-gradient(100deg, var(--accent) 38%, var(--accent2, #fff) 50%, var(--accent) 62%); background-size: 240% 100%; -webkit-background-clip: text; background-clip: text; animation: iv-shine 6s ease-in-out infinite; }
+}
+@keyframes iv-draw-x { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.iv-line { transform-origin: center; }
+.iv-rv-in .iv-line { animation: iv-draw-x 1.4s cubic-bezier(.2,.7,.2,1) both .3s; }
+@keyframes iv-sway { 0%, 100% { transform: rotate(-1.2deg); } 50% { transform: rotate(1.2deg); } }
+.iv-sway { animation: iv-sway 8s ease-in-out infinite; transform-origin: 50% 0; }
+@media (prefers-reduced-motion: reduce) { .iv-ttl { animation: none; } .iv-sway, .iv-rv-in .iv-line { animation: none; } }
+
+/* ---- Luxury: ikki qatlamli oltin ramka, nafis sarlavhalar ---- */
+.iv-frame { box-shadow: 0 24px 44px -30px rgb(0 0 0 / .4), inset 0 0 0 7px var(--paper), inset 0 0 0 8px color-mix(in srgb, var(--accent2, var(--accent)) 60%, transparent); }
+.iv-ttl { font-family: "Cormorant Garamond", Georgia, serif; font-style: normal !important; font-weight: 600; text-transform: uppercase; letter-spacing: .26em; font-size: 26px !important; line-height: 1.25 !important; padding-bottom: 20px; }
+.iv-ttl::before { content: ""; position: absolute; left: 50%; bottom: -3px; width: 7px; height: 7px; background: var(--accent2, var(--accent)); transform: translateX(-50%) rotate(45deg); opacity: 0; transition: opacity 1s ease 1.2s; }
+.iv-rv-in .iv-ttl::before { opacity: 1; }
+[data-rv="left"] .iv-ttl::before { left: 0; transform: translateX(0) rotate(45deg); }
+.iv-ttl::after { height: 1px; width: 120px; }
+.iv-paper p, .iv-paper li { text-wrap: pretty; }
+.iv-rv { transition-duration: 1.2s; }
+.iv-rv[data-rv="up"] { transform: translateY(30px); }
+.iv-rv[data-rv="zoom"] { transform: scale(.96); }
+@media (prefers-reduced-motion: reduce) { .iv-ttl::before { transition: none; } }
